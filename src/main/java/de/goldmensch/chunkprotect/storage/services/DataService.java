@@ -97,6 +97,11 @@ public class DataService {
         return chunk.isClaimed();
     }
 
+    public void updateChunk(ClaimedChunk chunk) {
+        chunkRepository.update(chunk);
+        cache.getChunkCache().put(chunk.getLocation(), new ClaimableChunk(chunk));
+    }
+
     // Holder
     public void createOrUpdate(UUID uuid, String name, boolean player) {
         var holderOptional = chunkHolderRepository.read(uuid);
@@ -115,5 +120,9 @@ public class DataService {
     private void updateHolder(ChunkHolder holder) {
         cache.getHolderCache().put(holder.getUuid(), Optional.of(holder));
         chunkHolderRepository.update(holder);
+    }
+
+    public ChunkHolder holderFromUUID(UUID uuid) {
+        return cache.getHolder(uuid);
     }
 }

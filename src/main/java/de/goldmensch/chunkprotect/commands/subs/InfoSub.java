@@ -5,6 +5,7 @@ import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
+import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
 import de.goldmensch.chunkprotect.utils.message.MessageBuilder;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -24,9 +25,7 @@ public class InfoSub extends ChunkProtectSubCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player player = toPlayer(sender);
-
-        ClaimableChunk claimableChunk = getDataService().getChunkAt(ChunkLocation.fromChunk(player.getChunk()));
+        ClaimableChunk claimableChunk = ChunkUtil.chunkFromSenderUnsafe(sender, getDataService());
         if(claimableChunk.isClaimed()) {
             ClaimedChunk chunk = claimableChunk.getChunk();
 

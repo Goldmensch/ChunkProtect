@@ -1,9 +1,6 @@
 package de.goldmensch.chunkprotect.commands;
 
-import de.goldmensch.chunkprotect.commands.subs.AboutSub;
-import de.goldmensch.chunkprotect.commands.subs.ClaimSub;
-import de.goldmensch.chunkprotect.commands.subs.InfoSub;
-import de.goldmensch.chunkprotect.commands.subs.UnclaimSub;
+import de.goldmensch.chunkprotect.commands.subs.*;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.commanddispatcher.command.ArgValuedSubCommand;
 import de.goldmensch.commanddispatcher.command.SmartCommand;
@@ -24,6 +21,8 @@ public class ChunkProtectCommand extends SmartCommand {
         registerSubCommand(new ClaimSub(chunkProtect), "claim");
         registerSubCommand(new InfoSub(chunkProtect), "info");
         registerSubCommand(new UnclaimSub(chunkProtect), "unclaim");
+        registerSubCommand(new TrustSub(chunkProtect), "trust");
+        registerSubCommand(new UntrustSub(chunkProtect), "untrust");
     }
 
     @Override
