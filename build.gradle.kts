@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "de.goldmensch"
-version = "1.0-SNAPSHOT"
+version = "0.1.3"
 
 java.sourceCompatibility = JavaVersion.VERSION_16
 java.targetCompatibility = JavaVersion.VERSION_16
