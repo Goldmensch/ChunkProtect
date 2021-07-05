@@ -8,13 +8,11 @@ import de.goldmensch.chunkprotect.listener.ChunkLoadListener;
 import de.goldmensch.chunkprotect.listener.ProtectListeners;
 import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
 import de.goldmensch.chunkprotect.message.Messenger;
-import de.goldmensch.chunkprotect.storage.StorageType;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.chunkprotect.utils.PermissionUtil;
 import de.goldmensch.chunkprotect.utils.SafeExceptions;
 import de.goldmensch.smartutils.plugin.SmartPlugin;
 
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -84,5 +82,9 @@ public class ChunkProtect extends SmartPlugin {
 
     public ExecutorService getService() {
         return service;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
     }
 }

@@ -28,12 +28,12 @@ public class DataService extends ChunkService{
         HolderDao holderDao = new JsonHolderDao(Files.createDirectories(path.resolve("holders")));
         DataService dataService = new DataService(Cache.init(holderDao), holderDao,
                 new JsonChunkDao(Files.createDirectories(path.resolve("chunks"))));
-        dataService.initWriteScheduler(protect);
+        dataService.initWriteScheduler(protect, protect.getConfiguration().getConfigFile().getStorage().getSaveInterval());
         return dataService;
     }
 
-    private void initWriteScheduler(Plugin plugin) {
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::safeAll, 0, 6000);
+    private void initWriteScheduler(Plugin plugin, int interval) {
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::safeAll, 0, interval*60*20L);
     }
 
     public void safeAll() {
