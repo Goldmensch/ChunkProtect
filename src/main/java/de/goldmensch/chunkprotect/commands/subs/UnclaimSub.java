@@ -1,6 +1,7 @@
 package de.goldmensch.chunkprotect.commands.subs;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
+import de.goldmensch.chunkprotect.commands.util.CmdUtil;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
@@ -28,15 +29,9 @@ public class UnclaimSub extends ChunkProtectSubCommand {
 
         ClaimableChunk claimableChunk = ChunkUtil.chunkFromSenderUnsafe(sender, getDataService());
 
-        if(!claimableChunk.isClaimed()) {
-            getMessenger().send(sender, "chunk-not-claimed");
-            return true;
-        }
+        if(CmdUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
         ClaimedChunk claimedChunk = claimableChunk.getChunk();
-        if(!ChunkUtil.isHolder(claimedChunk, player.getUniqueId())) {
-            getMessenger().send(sender, "not-owner-from-chunk", Replacement.create("holder",
-                    claimedChunk.getHolder().getName()));
-        }
+
         getDataService().unclaimChunk(claimedChunk.getLocation());
         getMessenger().send(sender, "chunk-unclaimed");
         return true;

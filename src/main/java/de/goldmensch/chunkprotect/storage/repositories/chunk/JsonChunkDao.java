@@ -10,31 +10,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-public class JsonChunkRepository implements ChunkRepository {
+public class JsonChunkDao implements ChunkDao {
 
     private final Path path;
 
-    public JsonChunkRepository(Path path) {
+    public JsonChunkDao(Path path) {
         this.path = path;
     }
 
     @Override
-    public RawClaimedChunk create(RawClaimedChunk chunk) {
+    public void write(RawClaimedChunk chunk) {
         Path local = buildPath(chunk.getLocation());
-
         try {
-            Files.createFile(local);
-            Files.writeString(local, JsonStream.serialize(chunk));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return chunk;
-    }
-
-    @Override
-    public void update(RawClaimedChunk chunk) {
-        try {
-            Files.writeString(buildPath(chunk.getLocation()), JsonStream.serialize(chunk));
+            if(Files.notExists(local)) {
+                Files.createFile(local);
+            }
+            if(Files.isWritable(local)) {
+                Files.writeString(local, JsonStream.serialize(chunk));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,8 +35,11 @@ public class JsonChunkRepository implements ChunkRepository {
 
     @Override
     public void delete(ChunkLocation location) {
+        Path local = buildPath(location);
         try {
-            Files.delete(buildPath(location));
+            if(Files.isWritable(local)) {
+                Files.delete(local);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

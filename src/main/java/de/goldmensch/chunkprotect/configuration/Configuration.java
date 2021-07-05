@@ -30,6 +30,7 @@ public class Configuration {
 
     private void buildOfNotExist() throws IOException {
         if(Files.notExists(path)) {
+            Files.createDirectories(path.getParent());
             configFile = new ConfigFile();
             mapper.writeValue(Files.newBufferedWriter(path), configFile);
         }

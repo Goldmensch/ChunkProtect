@@ -1,4 +1,4 @@
-package de.goldmensch.chunkprotect.storage.repositories.chunkholder;
+package de.goldmensch.chunkprotect.storage.repositories.holder;
 
 import com.jsoniter.JsonIterator;
 import com.jsoniter.output.JsonStream;
@@ -10,31 +10,24 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
-public class JsonHolderRepository implements ChunkHolderRepository{
+public class JsonHolderDao implements HolderDao {
 
     private final Path path;
 
-    public JsonHolderRepository(Path path) {
+    public JsonHolderDao(Path path) {
         this.path = path;
     }
 
     @Override
-    public ChunkHolder create(ChunkHolder holder) {
+    public void write(ChunkHolder holder) {
         Path local = buildPath(holder.getUuid());
-
         try {
-            Files.createFile(local);
-            Files.writeString(local, JsonStream.serialize(holder));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return holder;
-    }
-
-    @Override
-    public void update(ChunkHolder holder) {
-        try {
-            Files.writeString(buildPath(holder.getUuid()), JsonStream.serialize(holder));
+            if(Files.notExists(local)) {
+                Files.createFile(local);
+            }
+            if(Files.isWritable(local)) {
+                Files.writeString(local, JsonStream.serialize(holder));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,8 +35,11 @@ public class JsonHolderRepository implements ChunkHolderRepository{
 
     @Override
     public void delete(UUID uuid) {
+        Path local = buildPath(uuid);
         try {
-            Files.delete(buildPath(uuid));
+            if(Files.isWritable(local)) {
+                Files.delete(local);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

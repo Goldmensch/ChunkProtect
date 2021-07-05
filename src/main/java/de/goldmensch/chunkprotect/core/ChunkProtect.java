@@ -3,8 +3,10 @@ package de.goldmensch.chunkprotect.core;
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.configuration.ConfigFile;
 import de.goldmensch.chunkprotect.configuration.Configuration;
+import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
+import de.goldmensch.chunkprotect.listener.ChunkLoadListener;
 import de.goldmensch.chunkprotect.listener.ProtectListeners;
-import de.goldmensch.chunkprotect.listener.PlayerJoinListener;
+import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
 import de.goldmensch.chunkprotect.message.Messenger;
 import de.goldmensch.chunkprotect.storage.StorageType;
 import de.goldmensch.chunkprotect.storage.services.DataService;
@@ -12,39 +14,49 @@ import de.goldmensch.chunkprotect.utils.PermissionUtil;
 import de.goldmensch.chunkprotect.utils.SafeExceptions;
 import de.goldmensch.smartutils.plugin.SmartPlugin;
 
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ChunkProtect extends SmartPlugin {
     private DataService dataService;
     private Messenger messenger;
     private ConfigFile config;
     private Configuration configuration;
 
+    private ExecutorService service;
+
     @Override
     public void onLoad() {
-        initConfig();
-        initData();
-        initMessenger();
+        service = Executors.newFixedThreadPool(3);
     }
 
     @Override
     public void onEnable() {
-        if(!getServer().getPluginManager().isPluginEnabled(this)) return;
-        registerListener(new PlayerJoinListener(this), new ProtectListeners(this));
+        initConfig();
+        initMessenger();
+        initData();
+
+        registerListener(new PlayerJoinQuitListener(this),
+                new ProtectListeners(this),
+                new ChunkLoadListener(this));
+
         registerCommand("chunkprotect", new ChunkProtectCommand(this));
     }
 
     @Override
     public void onDisable() {
-        invalidateCached();
-    }
-
-    private void invalidateCached() {
-        dataService.getCache().getChunkCache().invalidateAll();
-        dataService.getCache().getHolderCache().invalidateAll();
+        dataService.safeAll();
     }
 
     private void initData() {
         dataService = SafeExceptions.safeIOException(this,
-                () -> DataService.loadService(getDataFolder().toPath().resolve("data"), StorageType.JSON));
+                () -> DataService.loadService(this));
+
+        getServer().getWorlds().forEach(world ->
+                Arrays.stream(world.getLoadedChunks()).forEach(chunk ->
+                        dataService.loadChunk(ChunkLocation.fromChunk(chunk))));
     }
 
     private void initConfig() {
@@ -68,5 +80,9 @@ public class ChunkProtect extends SmartPlugin {
 
     public Messenger getMessenger() {
         return messenger;
+    }
+
+    public ExecutorService getService() {
+        return service;
     }
 }

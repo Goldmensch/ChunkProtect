@@ -11,7 +11,7 @@ public final class ChunkHolder {
     private int claimAmount = 0;
     private boolean isPlayer; // no default value
     @JsonIgnore
-    private boolean fallback;
+    private boolean fallback = false;
 
     public ChunkHolder(String name, UUID uuid, int claimAmount, boolean isPlayer) {
         this.name = name;
@@ -20,7 +20,7 @@ public final class ChunkHolder {
         this.isPlayer = isPlayer;
     }
 
-    private ChunkHolder(String name, UUID uuid, int claimAmount, boolean isPlayer, boolean fallback) {
+    public ChunkHolder(String name, UUID uuid, int claimAmount, boolean isPlayer, boolean fallback) {
         this.name = name;
         this.uuid = uuid;
         this.claimAmount = claimAmount;
@@ -29,7 +29,7 @@ public final class ChunkHolder {
     }
 
     public static ChunkHolder fallback(UUID uuid) {
-        return new ChunkHolder("fallback_UUID:" + uuid, uuid, 0, false, true);
+        return new ChunkHolder(uuid.toString(), uuid, 0, false, true);
     }
 
     public ChunkHolder() {} // for json
@@ -67,7 +67,7 @@ public final class ChunkHolder {
         return isPlayer;
     }
 
-    public boolean inNoFallback() {
+    public boolean isNoFallback() {
         return !fallback;
     }
 

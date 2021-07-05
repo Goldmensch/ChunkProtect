@@ -62,12 +62,4 @@ public class Messenger {
                 .append(localizer.localize(key, replacements))
                 .build();
     }
-
-    public SmartLocalizer<Component> getLocalizer() {
-        return localizer;
-    }
-
-    public Component getPrefix() {
-        return prefix;
-    }
 }

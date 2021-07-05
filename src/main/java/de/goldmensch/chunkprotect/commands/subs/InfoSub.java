@@ -29,12 +29,14 @@ public class InfoSub extends ChunkProtectSubCommand {
         if(claimableChunk.isClaimed()) {
             ClaimedChunk chunk = claimableChunk.getChunk();
 
-            String x = String.valueOf(chunk.getLocation().getX());
-            String z = String.valueOf(chunk.getLocation().getZ());
-
             sender.sendMessage(MessageBuilder.builder()
                     .appendLine(getMessenger()
-                            .prepare("chunk-info-location", Replacement.create("x", x), Replacement.create("z", z)))
+                            .prepare("chunk-info-location",
+                                    Replacement.create("x", String.valueOf(chunk.getLocation().getX())),
+                                    Replacement.create("z", String.valueOf(chunk.getLocation().getZ())),
+                                    Replacement.create("world", chunk.getLocation().getWorld())
+                            )
+                    )
                     .appendLine(getMessenger()
                             .prepare("chunk-info-holder", Replacement.create("holder", chunk.getHolder().getName())))
                     .build());
