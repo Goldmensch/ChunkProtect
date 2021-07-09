@@ -34,6 +34,7 @@ public class InteractListener extends EntityListeners{
 
     @EventHandler
     public void handlePlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if(!entitiesConfiguration.getProtection(event.getRightClicked().getType()).interact()) return;
         if(forbidden(event.getPlayer(), event.getRightClicked().getChunk())) {
             event.setCancelled(true);
         }

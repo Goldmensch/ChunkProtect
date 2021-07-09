@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
+import de.goldmensch.chunkprotect.configuration.entities.EntitiesConfiguration;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
@@ -27,9 +28,12 @@ public class ListenerData implements Listener {
     protected final DataService dataService;
     protected final ChunkProtect chunkProtect;
 
+    protected final EntitiesConfiguration entitiesConfiguration;
+
     public ListenerData(DataService dataService, ChunkProtect chunkProtect) {
         this.dataService = dataService;
         this.chunkProtect = chunkProtect;
+        this.entitiesConfiguration = chunkProtect.getEntitiesConfiguration();
     }
 
     protected boolean forbidden(HumanEntity player, Chunk chunk) {

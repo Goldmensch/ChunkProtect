@@ -1,8 +1,9 @@
 package de.goldmensch.chunkprotect.core;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
-import de.goldmensch.chunkprotect.configuration.ConfigFile;
-import de.goldmensch.chunkprotect.configuration.Configuration;
+import de.goldmensch.chunkprotect.configuration.entities.EntitiesConfiguration;
+import de.goldmensch.chunkprotect.configuration.plugin.ConfigFile;
+import de.goldmensch.chunkprotect.configuration.plugin.Configuration;
 import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
 import de.goldmensch.chunkprotect.listener.ChunkLoadListener;
 import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
@@ -22,6 +23,7 @@ public class ChunkProtect extends SmartPlugin {
     private Messenger messenger;
     private ConfigFile config;
     private Configuration configuration;
+    private EntitiesConfiguration entitiesConfiguration;
 
     private ExecutorService service;
 
@@ -62,6 +64,10 @@ public class ChunkProtect extends SmartPlugin {
         configuration = new Configuration(getDataFolder().toPath().resolve("config.yml"));
         SafeExceptions.safeIOException(this, () -> configuration.init());
         config = configuration.getConfigFile();
+
+        entitiesConfiguration = new EntitiesConfiguration(getDataFolder().toPath().resolve("entities.yml"),
+                configuration.getConfigFile().getProtection().getDefaultEntityProtect());
+        SafeExceptions.safeIOException(this, () -> entitiesConfiguration.init());
     }
 
     private void initMessenger() {
@@ -87,5 +93,9 @@ public class ChunkProtect extends SmartPlugin {
 
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    public EntitiesConfiguration getEntitiesConfiguration() {
+        return entitiesConfiguration;
     }
 }

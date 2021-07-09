@@ -2,7 +2,6 @@ package de.goldmensch.chunkprotect.listener.protect;
 
 import com.destroystokyo.paper.event.block.TNTPrimeEvent;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
-import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import org.bukkit.Chunk;
@@ -43,6 +42,7 @@ public class EntityListeners extends BlockListeners{
 
     @EventHandler
     public void handleEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if(!entitiesConfiguration.getProtection(event.getEntityType()).damage()) return;
         Entity damager = event.getDamager();
         Chunk chunk = event.getEntity().getChunk();
         if (damager instanceof Player) {

@@ -1,4 +1,4 @@
-package de.goldmensch.chunkprotect.configuration.elements;
+package de.goldmensch.chunkprotect.configuration.plugin.elements;
 
 public class Storage {
     private int saveInterval = 4;
