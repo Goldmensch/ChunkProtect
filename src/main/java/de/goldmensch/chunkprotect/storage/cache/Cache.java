@@ -68,6 +68,10 @@ public class Cache {
         chunkCache.remove(location);
     }
 
+    public void invalidate(UUID uuid) {
+        holderCache.invalidate(uuid);
+    }
+
     public Set<Map.Entry<UUID, ChunkHolder>> getAllHolder() {
         return holderCache.asMap().entrySet();
     }

@@ -33,11 +33,22 @@ public class DataService extends ChunkService{
     }
 
     private void initWriteScheduler(Plugin plugin, int interval) {
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::safeAll, 0, interval*60*20L);
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, ()-> saveALl(false), 0, interval*60*20L);
     }
 
-    public void safeAll() {
-        cache.getAllChunks().forEach(entry -> write(entry.getValue(), entry.getKey()));
-        cache.getAllHolder().forEach(entry -> write(entry.getValue()));
+    public void saveALl(boolean invalidate) {
+        cache.getAllChunks().forEach(entry -> {
+            if(invalidate) {
+                writeAndInvalidate(entry.getKey());
+            }else {
+                write(entry.getValue(), entry.getKey());
+            }
+        });
+        cache.getAllHolder().forEach(entry -> {
+            write(entry.getValue());
+            if(invalidate) {
+                cache.invalidate(entry.getKey());
+            }
+        });
     }
 }

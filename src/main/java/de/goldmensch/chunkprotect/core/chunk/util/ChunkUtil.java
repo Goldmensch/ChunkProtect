@@ -4,6 +4,7 @@ import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.storage.services.DataService;
+import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -26,5 +27,13 @@ public class ChunkUtil {
 
     public static ClaimableChunk chunkFromPlayer(Player player, DataService service) {
         return chunkFromSenderUnsafe(player, service);
+    }
+
+    public static ClaimableChunk getChunk(Chunk chunk, DataService dataService) {
+        return dataService.getChunkAt(ChunkLocation.fromChunk(chunk));
+    }
+
+    public static boolean sameHolder(ClaimedChunk first, ClaimedChunk second) {
+        return first.getHolderUUID().equals(second.getHolderUUID());
     }
 }

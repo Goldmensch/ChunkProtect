@@ -1,5 +1,7 @@
 package de.goldmensch.chunkprotect.core.chunk;
 
+import java.util.function.Consumer;
+
 public class ClaimableChunk {
 
     private final ClaimedChunk chunk;
@@ -14,6 +16,12 @@ public class ClaimableChunk {
 
     public boolean isClaimed() {
         return chunk != null;
+    }
+
+    public void ifClaimed(Consumer<ClaimedChunk> function) {
+        if(isClaimed()) {
+            function.accept(chunk);
+        }
     }
 
     public ClaimedChunk getChunk() {

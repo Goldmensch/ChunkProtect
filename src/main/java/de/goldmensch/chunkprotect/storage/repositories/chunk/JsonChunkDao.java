@@ -60,9 +60,9 @@ public class JsonChunkDao implements ChunkDao {
     }
 
     private Path buildPath(ChunkLocation location) {
-        return path.resolve("chunk-X" +
-                location.getX() +
-                "Z" +
-                location.getZ() + ".json");
+        return path.resolve(
+                        "X-" + location.getX() +
+                        ".Z-" + location.getZ() +
+                        ".WORLD-" + location.getWorld() + ".json");
     }
 }

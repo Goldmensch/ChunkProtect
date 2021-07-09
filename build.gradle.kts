@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
     implementation("de.goldmensch", "SmartCommandDispatcher", "1.0.2-DEV")
     implementation("de.goldmensch.smartutils", "core", "1.1-DEV")
     implementation("de.goldmensch.smartutils", "minimessage-adapter", "1.1-DEV")

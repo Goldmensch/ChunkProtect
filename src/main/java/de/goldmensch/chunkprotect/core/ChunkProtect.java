@@ -5,8 +5,8 @@ import de.goldmensch.chunkprotect.configuration.ConfigFile;
 import de.goldmensch.chunkprotect.configuration.Configuration;
 import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
 import de.goldmensch.chunkprotect.listener.ChunkLoadListener;
-import de.goldmensch.chunkprotect.listener.ProtectListeners;
 import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
+import de.goldmensch.chunkprotect.listener.protect.ProtectListeners;
 import de.goldmensch.chunkprotect.message.Messenger;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.chunkprotect.utils.PermissionUtil;
@@ -45,7 +45,8 @@ public class ChunkProtect extends SmartPlugin {
 
     @Override
     public void onDisable() {
-        dataService.safeAll();
+        dataService.saveALl(true);
+        service.shutdown();
     }
 
     private void initData() {

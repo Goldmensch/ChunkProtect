@@ -60,6 +60,6 @@ public class JsonHolderDao implements HolderDao {
     }
 
     private Path buildPath(UUID uuid) {
-        return path.resolve("holder-UUID_" + uuid + ".json");
+        return path.resolve(uuid + ".json");
     }
 }

@@ -9,6 +9,7 @@ import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
 import de.goldmensch.chunkprotect.utils.message.MessageBuilder;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,6 +40,7 @@ public class InfoSub extends ChunkProtectSubCommand {
                     )
                     .appendLine(getMessenger()
                             .prepare("chunk-info-holder", Replacement.create("holder", chunk.getHolder().getName())))
+                    .appendLine(Component.text("test: " + chunk.getHolder().getClaimAmount()))
                     .build());
         }else {
             getMessenger().send(sender, "chunk-not-claimed");
