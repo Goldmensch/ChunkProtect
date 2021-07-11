@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.commands.subs;
 
+import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.commands.util.CmdUtil;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
@@ -22,14 +23,14 @@ import java.util.stream.Collectors;
 
 public class UntrustSub extends ChunkProtectSubCommand {
 
-    public UntrustSub(ChunkProtect chunkProtect) {
-        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("untrust"), chunkProtect);
+    public UntrustSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
+        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("untrust"), chunkProtect, command);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if((args.length == 0) || (args.length > 2)) {
-            sender.sendMessage("TODO: help");
+            getChunkProtectCommand().sendHelp(sender);
             return true;
         }
         Player player = (Player)sender;

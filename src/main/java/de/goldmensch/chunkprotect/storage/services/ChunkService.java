@@ -46,7 +46,6 @@ public class ChunkService extends HolderService{
             cache.set(location, new ClaimableChunk(null));
             ChunkHolder holder = chunk.getChunk().getHolder();
             holder.getClaimedChunks().remove(location);
-            System.out.println(holder.getClaimedChunks().size());
             updateHolder(holder);
         }
         return chunk.isClaimed();

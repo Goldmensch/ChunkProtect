@@ -11,10 +11,12 @@ import org.bukkit.entity.Player;
 public abstract class ChunkProtectSubCommand extends SmartSubCommand {
 
     private final ChunkProtect chunkProtect;
+    private final ChunkProtectCommand chunkProtectCommand;
 
-    public ChunkProtectSubCommand(ExecutorLevel executorLevel, String permission, ChunkProtect chunkProtect) {
+    public ChunkProtectSubCommand(ExecutorLevel executorLevel, String permission, ChunkProtect chunkProtect, ChunkProtectCommand chunkProtectCommand) {
         super(executorLevel, permission);
         this.chunkProtect = chunkProtect;
+        this.chunkProtectCommand = chunkProtectCommand;
     }
 
     public ChunkProtect getChunkProtect() {
@@ -31,5 +33,9 @@ public abstract class ChunkProtectSubCommand extends SmartSubCommand {
 
     public Player toPlayer(CommandSender sender) {
         return (Player) sender;
+    }
+
+    public ChunkProtectCommand getChunkProtectCommand() {
+        return chunkProtectCommand;
     }
 }

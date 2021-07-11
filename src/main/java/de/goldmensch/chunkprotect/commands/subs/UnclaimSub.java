@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.commands.subs;
 
+import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.commands.util.CmdUtil;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
@@ -19,8 +20,8 @@ import java.util.List;
 
 public class UnclaimSub extends ChunkProtectSubCommand {
 
-    public UnclaimSub(ChunkProtect chunkProtect) {
-        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("unclaim"), chunkProtect);
+    public UnclaimSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
+        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("unclaim"), chunkProtect, command);
     }
 
     @Override

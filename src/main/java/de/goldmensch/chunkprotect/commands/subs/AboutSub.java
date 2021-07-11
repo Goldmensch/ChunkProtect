@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.commands.subs;
 
+import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.utils.message.MessageBuilder;
@@ -18,13 +19,13 @@ public class AboutSub extends ChunkProtectSubCommand {
 
     private final Component message;
 
-    private AboutSub(ExecutorLevel executorLevel, String permission, ChunkProtect chunkProtect, Component message) {
-        super(executorLevel, permission, chunkProtect);
+    private AboutSub(ExecutorLevel executorLevel, String permission, ChunkProtect chunkProtect, ChunkProtectCommand chunkProtectCommand, Component message) {
+        super(executorLevel, permission, chunkProtect, chunkProtectCommand);
         this.message = message;
     }
 
-    public static AboutSub newAboutSub(ChunkProtect chunkProtect) {
-        return new AboutSub(ExecutorLevel.CONSOLE_PLAYER, "", chunkProtect, MessageBuilder.builder()
+    public static AboutSub newAboutSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
+        return new AboutSub(ExecutorLevel.CONSOLE_PLAYER, "", chunkProtect, command, MessageBuilder.builder()
                 .appendLine(chunkProtect.getMessenger()
                         .prepare("about-name", Replacement.create("name", chunkProtect.getName())))
                 .appendLine(chunkProtect.getMessenger()

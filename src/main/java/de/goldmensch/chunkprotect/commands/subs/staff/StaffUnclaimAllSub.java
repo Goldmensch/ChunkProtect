@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.commands.subs.staff;
 
+import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
@@ -19,14 +20,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class StaffUnclaimAllSub extends ChunkProtectSubCommand {
-    public StaffUnclaimAllSub(ChunkProtect chunkProtect) {
-        super(ExecutorLevel.CONSOLE_PLAYER, chunkProtect.getPermission("staff", "unclaimAll"), chunkProtect);
+    public StaffUnclaimAllSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
+        super(ExecutorLevel.CONSOLE_PLAYER, chunkProtect.getPermission("staff", "unclaimAll"), chunkProtect, command);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(args.length != 1) {
-            sender.sendMessage("TODO: help");
+            getChunkProtectCommand().sendHelp(sender);
             return true;
         }
 

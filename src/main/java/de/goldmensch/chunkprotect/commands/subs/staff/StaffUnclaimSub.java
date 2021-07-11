@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.commands.subs.staff;
 
+import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
@@ -16,8 +17,8 @@ import java.util.List;
 
 public class StaffUnclaimSub extends ChunkProtectSubCommand {
 
-    public StaffUnclaimSub(ChunkProtect chunkProtect) {
-        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("staff", "unclaim"), chunkProtect);
+    public StaffUnclaimSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
+        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("staff", "unclaim"), chunkProtect, command);
     }
 
     @Override

@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
-    implementation("de.goldmensch", "SmartCommandDispatcher", "1.0.2-DEV")
+    implementation("de.goldmensch", "SmartCommandDispatcher", "1.0.5-DEV")
     implementation("de.goldmensch.smartutils", "core", "1.1-DEV")
     implementation("de.goldmensch.smartutils", "minimessage-adapter", "1.1-DEV")
     implementation("com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml", "2.11.1")

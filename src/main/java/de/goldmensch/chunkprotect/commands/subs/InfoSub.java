@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.commands.subs;
 
+import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
@@ -23,8 +24,8 @@ import java.util.stream.Collectors;
 
 public class InfoSub extends ChunkProtectSubCommand {
 
-    public InfoSub(ChunkProtect chunkProtect) {
-        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("info"), chunkProtect);
+    public InfoSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
+        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("info"), chunkProtect, command);
     }
 
     @Override
