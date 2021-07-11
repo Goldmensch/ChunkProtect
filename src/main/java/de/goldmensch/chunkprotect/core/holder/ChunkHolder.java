@@ -1,38 +1,38 @@
 package de.goldmensch.chunkprotect.core.holder;
 
 import com.jsoniter.annotation.JsonIgnore;
+import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class ChunkHolder {
     private String name; // no default value
     private  UUID uuid; // no default value
-    private int claimAmount = 0;
     private boolean isPlayer; // no default value
     private Set<UUID> trustedAllChunks = new HashSet<>();
+    private Set<ChunkLocation> claimedChunks = ConcurrentHashMap.newKeySet();
     @JsonIgnore
     private boolean fallback = false;
 
-    public ChunkHolder(String name, UUID uuid, int claimAmount, boolean isPlayer) {
+    public ChunkHolder(String name, UUID uuid, boolean isPlayer) {
         this.name = name;
         this.uuid = uuid;
-        this.claimAmount = claimAmount;
         this.isPlayer = isPlayer;
     }
 
-    public ChunkHolder(String name, UUID uuid, int claimAmount, boolean isPlayer, boolean fallback) {
+    public ChunkHolder(String name, UUID uuid, boolean isPlayer, boolean fallback) {
         this.name = name;
         this.uuid = uuid;
-        this.claimAmount = claimAmount;
         this.isPlayer = isPlayer;
         this.fallback = fallback;
     }
 
     public static ChunkHolder fallback(UUID uuid) {
-        return new ChunkHolder(uuid.toString(), uuid, 0, false, true);
+        return new ChunkHolder(uuid.toString(), uuid, false, true);
     }
 
     public ChunkHolder() {} // for json
@@ -40,6 +40,10 @@ public final class ChunkHolder {
     // Getter/Setter
     public Set<UUID> getTrustedAllChunks() {
         return trustedAllChunks;
+    }
+
+    public Set<ChunkLocation> getClaimedChunks() {
+        return claimedChunks;
     }
 
     public String getName() {
@@ -50,17 +54,15 @@ public final class ChunkHolder {
         return uuid;
     }
 
+    @JsonIgnore
     public int getClaimAmount() {
-        return claimAmount;
+        return claimedChunks.size();
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setClaimAmount(int claimAmount) {
-        this.claimAmount = claimAmount;
-    }
 
     public void setPlayer(boolean player) {
         isPlayer = player;
@@ -78,30 +80,33 @@ public final class ChunkHolder {
         return !fallback;
     }
 
-    // object stuff
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ChunkHolder) obj;
-        return Objects.equals(this.name, that.name) &&
-                Objects.equals(this.uuid, that.uuid) &&
-                this.claimAmount == that.claimAmount &&
-                this.isPlayer == that.isPlayer;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChunkHolder holder = (ChunkHolder) o;
+        return isPlayer == holder.isPlayer &&
+                fallback == holder.fallback &&
+                Objects.equals(name, holder.name) &&
+                Objects.equals(uuid, holder.uuid) &&
+                Objects.equals(trustedAllChunks, holder.trustedAllChunks) &&
+                Objects.equals(claimedChunks, holder.claimedChunks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, uuid, claimAmount, isPlayer);
+        return Objects.hash(name, uuid, isPlayer, trustedAllChunks, claimedChunks);
     }
 
     @Override
     public String toString() {
-        return "ChunkHolder[" +
-                "name=" + name + ", " +
-                "uuid=" + uuid + ", " +
-                "claimAmount=" + claimAmount + ", " +
-                "isPlayer=" + isPlayer + ']';
+        return "ChunkHolder{" +
+                "name='" + name + '\'' +
+                ", uuid=" + uuid +
+                ", isPlayer=" + isPlayer +
+                ", trustedAllChunks=" + trustedAllChunks +
+                ", claimedChunks=" + claimedChunks +
+                ", fallback=" + fallback +
+                '}';
     }
-
 }

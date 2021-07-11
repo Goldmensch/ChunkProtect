@@ -24,7 +24,7 @@ public class HolderService {
             holder = holderOptional.get();
             holder.setName(name);
         }else {
-            holder = new ChunkHolder(name, uuid, 0, player);
+            holder = new ChunkHolder(name, uuid,  player);
         }
         updateHolder(holder);
     }

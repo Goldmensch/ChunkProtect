@@ -37,6 +37,7 @@ public class ListenerData implements Listener {
     }
 
     protected boolean forbidden(HumanEntity player, Chunk chunk) {
+        if(chunkProtect.getProtectionBypass().hasBypass(player.getUniqueId())) return false;
         ClaimableChunk claimableChunk = dataService.getChunkAt(ChunkLocation.fromChunk(chunk));
         if(claimableChunk.isClaimed()) {
             ClaimedChunk claimedChunk = claimableChunk.getChunk();

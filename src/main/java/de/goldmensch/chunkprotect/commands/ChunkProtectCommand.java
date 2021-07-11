@@ -1,12 +1,16 @@
 package de.goldmensch.chunkprotect.commands;
 
 import de.goldmensch.chunkprotect.commands.subs.*;
+import de.goldmensch.chunkprotect.commands.subs.staff.BypassSub;
+import de.goldmensch.chunkprotect.commands.subs.staff.StaffUnclaimAllSub;
+import de.goldmensch.chunkprotect.commands.subs.staff.StaffUnclaimSub;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.commanddispatcher.command.ArgValuedSubCommand;
 import de.goldmensch.commanddispatcher.command.SmartCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -23,6 +27,15 @@ public class ChunkProtectCommand extends SmartCommand {
         registerSubCommand(new UnclaimSub(chunkProtect), "unclaim");
         registerSubCommand(new TrustSub(chunkProtect), "trust");
         registerSubCommand(new UntrustSub(chunkProtect), "untrust");
+        registerSubCommand(new UnclaimAllSub(chunkProtect), "unclaimAll");
+
+        registerSubCommand(new StaffUnclaimAllSub(chunkProtect), staff("unclaimAll"));
+        registerSubCommand(new BypassSub(chunkProtect), staff("bypass"));
+        registerSubCommand(new StaffUnclaimSub(chunkProtect), staff("unclaim"));
+    }
+
+    private String[] staff(String... sub) {
+        return (String[]) ArrayUtils.addAll(new String[]{"staff"}, sub);
     }
 
     @Override

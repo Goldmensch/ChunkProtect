@@ -35,7 +35,7 @@ public class ChunkService extends HolderService{
         holder = holderFromUUID(holderUUID);
         chunk = new ClaimedChunk(new RawClaimedChunk(location, holderUUID, new HashSet<>()), holder);
         cache.set(location, new ClaimableChunk(chunk));
-        holder.setClaimAmount(holder.getClaimAmount()+1);
+        holder.getClaimedChunks().add(chunk.getLocation());
         updateHolder(holder);
         return true;
     }
@@ -45,13 +45,15 @@ public class ChunkService extends HolderService{
         if(chunk.isClaimed()) {
             cache.set(location, new ClaimableChunk(null));
             ChunkHolder holder = chunk.getChunk().getHolder();
-            holder.setClaimAmount(holder.getClaimAmount()-1);
+            holder.getClaimedChunks().remove(location);
+            System.out.println(holder.getClaimedChunks().size());
             updateHolder(holder);
         }
         return chunk.isClaimed();
     }
 
-    public void loadChunk(ChunkLocation location) {
+    public void loadChunkIfUnloaded(ChunkLocation location) {
+        if(cache.isCached(location)) return;
         ClaimedChunk claimedChunk = null;
         Optional<RawClaimedChunk> rawClaimedChunkOptional = chunkDao.read(location);
         if(rawClaimedChunkOptional.isPresent()) {

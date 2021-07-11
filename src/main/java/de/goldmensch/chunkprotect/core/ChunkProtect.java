@@ -27,6 +27,8 @@ public class ChunkProtect extends SmartPlugin {
 
     private ExecutorService service;
 
+    private final ProtectionBypass protectionBypass = new ProtectionBypass();
+
     @Override
     public void onLoad() {
         service = Executors.newFixedThreadPool(3);
@@ -57,7 +59,7 @@ public class ChunkProtect extends SmartPlugin {
 
         getServer().getWorlds().forEach(world ->
                 Arrays.stream(world.getLoadedChunks()).forEach(chunk ->
-                        dataService.loadChunk(ChunkLocation.fromChunk(chunk))));
+                        dataService.loadChunkIfUnloaded(ChunkLocation.fromChunk(chunk))));
     }
 
     private void initConfig() {
@@ -97,5 +99,9 @@ public class ChunkProtect extends SmartPlugin {
 
     public EntitiesConfiguration getEntitiesConfiguration() {
         return entitiesConfiguration;
+    }
+
+    public ProtectionBypass getProtectionBypass() {
+        return protectionBypass;
     }
 }

@@ -10,7 +10,6 @@ public class ClaimedChunk extends RawClaimedChunk {
 
     private final static ChunkHolder FORCE_HOLDER = new ChunkHolder("chunk_forceClaimed",
             UUID.fromString("8534a7ba-9aa6-4bbe-a93a-3632a9781f53"),
-            0,
             false,
             true);
 

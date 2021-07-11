@@ -15,12 +15,14 @@ import java.util.concurrent.ExecutorService;
 
 public class PlayerJoinQuitListener implements Listener {
 
-    private DataService dataService;
-    private ExecutorService executorService;
+    private final DataService dataService;
+    private final ExecutorService executorService;
+    private final ChunkProtect protect;
 
     public PlayerJoinQuitListener(ChunkProtect protect) {
         this.dataService = protect.getDataService();
         this.executorService = protect.getService();
+        this.protect = protect;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -32,6 +34,7 @@ public class PlayerJoinQuitListener implements Listener {
 
     @EventHandler
     public void handleQuit(PlayerQuitEvent event) {
+        protect.getProtectionBypass().remove(event.getPlayer().getUniqueId());
         executorService.execute(() ->
                 dataService.saveHolder(event.getPlayer().getUniqueId()));
     }

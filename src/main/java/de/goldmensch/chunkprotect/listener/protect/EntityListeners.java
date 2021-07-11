@@ -6,8 +6,6 @@ import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -35,6 +33,7 @@ public class EntityListeners extends BlockListeners{
 
     @EventHandler
     public void handleHangingPlace(HangingPlaceEvent event) {
+        if(event.getPlayer() == null)return;
         if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
             event.setCancelled(true);
         }
@@ -43,15 +42,15 @@ public class EntityListeners extends BlockListeners{
     @EventHandler
     public void handleEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if(!entitiesConfiguration.getProtection(event.getEntityType()).damage()) return;
-        Entity damager = event.getDamager();
         Chunk chunk = event.getEntity().getChunk();
-        if (damager instanceof Player) {
-            if(forbidden((Player) damager, chunk)) {
+
+        unwrapPlayer(event.getDamager()).ifPresentOrElse(player -> {
+            if(forbidden(player, chunk)) {
                 event.setCancelled(true);
             }
-        }else {
+        }, () -> {
             if(ChunkUtil.getChunk(chunk, dataService).isClaimed()) event.setCancelled(true);
-        }
+        });
     }
 
     /*
