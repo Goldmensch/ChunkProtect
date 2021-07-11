@@ -6,6 +6,7 @@ import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
+import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
 import org.bukkit.Bukkit;
@@ -22,31 +23,42 @@ import java.util.stream.Collectors;
 public class UntrustSub extends ChunkProtectSubCommand {
 
     public UntrustSub(ChunkProtect chunkProtect) {
-        super(ExecutorLevel.PLAYER, "untrust", chunkProtect);
+        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("untrust"), chunkProtect);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length != 1) {
+        if((args.length == 0) || (args.length > 2)) {
             sender.sendMessage("TODO: help");
             return true;
         }
         Player player = (Player)sender;
-        ClaimableChunk claimableChunk = ChunkUtil.chunkFromPlayer(player, getDataService());
-
-        if(CmdUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
-        ClaimedChunk claimedChunk = claimableChunk.getChunk();
         OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[0]);
         if(target == null) {
             getMessenger().send(sender, "player-not-found", Replacement.create("player", args[0]));
             return true;
         }
 
-        if(claimedChunk.getTrustedPlayer().remove(target.getUniqueId())) {
-            getMessenger().send(sender, "player-untrusted", Replacement.create("player", target.getName()));
-            getDataService().updateChunk(claimedChunk);
+        if((args.length == 2) && args[1].equalsIgnoreCase("this")) {
+            ClaimableChunk claimableChunk = ChunkUtil.chunkFromPlayer(player, getDataService());
+            if(CmdUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
+            ClaimedChunk claimedChunk = claimableChunk.getChunk();
+
+            if(claimedChunk.getTrustedPlayer().remove(target.getUniqueId())) {
+                getMessenger().send(sender, "player-untrusted", Replacement.create("player", target.getName()));
+                getDataService().updateChunk(claimedChunk);
+            }else {
+                getMessenger().send(sender, "player-not-trusted", Replacement.create("player", target.getName()));
+            }
+            return true;
+        }
+
+        ChunkHolder holder = getDataService().holderFromUUID(player.getUniqueId());
+        if(holder.getTrustedAllChunks().remove(target.getUniqueId())) {
+            getMessenger().send(player, "player-untrusted-all", Replacement.create("player", target.getName()));
+            getDataService().updateHolder(holder);
         }else {
-            getMessenger().send(sender, "player-not-trusted", Replacement.create("player", target.getName()));
+            getMessenger().send(player, "player-not-trusted-all", Replacement.create("player", target.getName()));
         }
         return true;
     }
