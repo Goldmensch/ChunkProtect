@@ -7,6 +7,7 @@ import de.goldmensch.chunkprotect.storage.services.DataService;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -22,7 +23,7 @@ public class EntityListeners extends BlockListeners{
         super(dataService, chunkProtect);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleHangingDestroy(HangingBreakByEntityEvent event) {
         unwrapPlayer(event.getRemover()).ifPresent(player -> {
             if(forbidden(player, event.getEntity().getChunk())) {
@@ -31,7 +32,7 @@ public class EntityListeners extends BlockListeners{
         });
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleHangingPlace(HangingPlaceEvent event) {
         if(event.getPlayer() == null)return;
         if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
@@ -39,7 +40,7 @@ public class EntityListeners extends BlockListeners{
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if(!entitiesConfiguration.getProtection(event.getEntityType()).damage()) return;
         Chunk chunk = event.getEntity().getChunk();
@@ -56,17 +57,17 @@ public class EntityListeners extends BlockListeners{
     /*
     Explosion protection
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleEntityExplosion(EntityExplodeEvent event) {
         onExplodeEvent(event.blockList());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockExplode(BlockExplodeEvent event) {
         onExplodeEvent(event.blockList());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleTntPrime(TNTPrimeEvent event) {
         unwrapPlayer(event.getPrimerEntity()).ifPresent(player -> {
             if(forbidden(player, event.getBlock().getChunk())) {

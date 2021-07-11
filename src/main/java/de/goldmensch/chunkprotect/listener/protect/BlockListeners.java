@@ -5,6 +5,7 @@ import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
 
 
@@ -13,21 +14,21 @@ public class BlockListeners extends ListenerData {
         super(dataService, chunkProtect);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockPlace(BlockPlaceEvent event) {
         if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockBreak(BlockBreakEvent event) {
         if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockTo(BlockFromToEvent event) {
         if(event.getToBlock().getChunk() != event.getBlock().getChunk()) {
             ClaimableChunk from = ChunkUtil.getChunk(event.getBlock().getChunk(), dataService);
@@ -38,7 +39,7 @@ public class BlockListeners extends ListenerData {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handlePistonBlockExtend(BlockPistonExtendEvent event) {
         ClaimableChunk pistonChunk = ChunkUtil.getChunk(event.getBlock().getChunk(), dataService);
         event.getBlocks().forEach(block -> {
@@ -48,7 +49,7 @@ public class BlockListeners extends ListenerData {
         });
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handlePistonBlockRetract(BlockPistonRetractEvent event) {
         ClaimableChunk pistonChunk = ChunkUtil.getChunk(event.getBlock().getChunk(), dataService);
         event.getBlocks().forEach(block -> {

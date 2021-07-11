@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -18,21 +19,21 @@ public class InteractListener extends EntityListeners{
         super(dataService, chunkProtect);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleBucketFill(PlayerBucketFillEvent event) {
         if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handleBucketEmpty(PlayerBucketEmptyEvent event) {
         if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handlePlayerInteractEntity(PlayerInteractEntityEvent event) {
         if(!entitiesConfiguration.getProtection(event.getRightClicked().getType()).interact()) return;
         if(forbidden(event.getPlayer(), event.getRightClicked().getChunk())) {
@@ -40,7 +41,7 @@ public class InteractListener extends EntityListeners{
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void openInventoryEvent(InventoryOpenEvent event) {
         Location location = lastClicked.get(event.getPlayer().getUniqueId());
         if(location != null) {
@@ -50,7 +51,7 @@ public class InteractListener extends EntityListeners{
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void handlePlayerInteract(PlayerInteractEvent event) {
         if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if(event.getInteractionPoint() == null) return;
