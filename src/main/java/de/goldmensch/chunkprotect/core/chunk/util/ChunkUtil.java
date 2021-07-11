@@ -18,7 +18,7 @@ public class ChunkUtil {
 
     public static boolean hasAccess(ClaimedChunk chunk, UUID holder) {
         return chunk.getTrustedPlayer().contains(holder)
-                || chunk.getHolderUUID().equals(holder);
+                || chunk.getHolderUUID().equals(holder) || chunk.getHolder().getTrustedAllChunks().contains(holder);
     }
 
     public static ClaimableChunk chunkFromSenderUnsafe(CommandSender sender, DataService service) {

@@ -2,7 +2,9 @@ package de.goldmensch.chunkprotect.core.holder;
 
 import com.jsoniter.annotation.JsonIgnore;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public final class ChunkHolder {
@@ -10,6 +12,7 @@ public final class ChunkHolder {
     private  UUID uuid; // no default value
     private int claimAmount = 0;
     private boolean isPlayer; // no default value
+    private Set<UUID> trustedAllChunks = new HashSet<>();
     @JsonIgnore
     private boolean fallback = false;
 
@@ -35,6 +38,10 @@ public final class ChunkHolder {
     public ChunkHolder() {} // for json
 
     // Getter/Setter
+    public Set<UUID> getTrustedAllChunks() {
+        return trustedAllChunks;
+    }
+
     public String getName() {
         return name;
     }
