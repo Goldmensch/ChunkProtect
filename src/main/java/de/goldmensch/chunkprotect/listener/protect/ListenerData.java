@@ -9,22 +9,15 @@ import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.smartutils.localizer.Replacement;
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Listener;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 public class ListenerData implements Listener {
-
-    protected final Map<UUID, Location> lastClicked = new HashMap<>();
-
     protected final DataService dataService;
     protected final ChunkProtect chunkProtect;
 

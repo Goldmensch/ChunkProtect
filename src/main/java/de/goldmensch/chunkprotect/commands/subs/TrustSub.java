@@ -45,7 +45,7 @@ public class TrustSub extends ChunkProtectSubCommand {
             if(ChunkUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
             ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
-            if(claimedChunk.getTrustedPlayer().add(player.getUniqueId())) {
+            if(claimedChunk.getTrustedPlayer().add(target.getUniqueId())) {
                 getMessenger().send(sender, "player-trusted", Replacement.create("player", target.getName()));
                 getDataService().updateChunk(claimedChunk);
             }else {
@@ -55,7 +55,7 @@ public class TrustSub extends ChunkProtectSubCommand {
         }
 
         ChunkHolder holder = getDataService().holderFromUUID(player.getUniqueId());
-        if(holder.getTrustedAllChunks().add(player.getUniqueId())) {
+        if(holder.getTrustedAllChunks().add(target.getUniqueId())) {
             getMessenger().send(sender, "player-trusted-on-all", Replacement.create("player", target.getName()));
             getDataService().updateHolder(holder);
         }else {
