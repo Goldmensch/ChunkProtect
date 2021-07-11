@@ -2,14 +2,11 @@ package de.goldmensch.chunkprotect.commands.subs;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.commands.util.CmdUtil;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
-import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
+import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
-import de.goldmensch.smartutils.localizer.Replacement;
-import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,7 +27,7 @@ public class UnclaimSub extends ChunkProtectSubCommand {
 
         ClaimableChunk claimableChunk = ChunkUtil.chunkFromSenderUnsafe(sender, getDataService());
 
-        if(CmdUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
+        if(ChunkUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
         ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
         getDataService().unclaimChunk(claimedChunk.getLocation());

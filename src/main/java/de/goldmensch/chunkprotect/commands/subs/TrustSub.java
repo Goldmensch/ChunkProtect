@@ -2,11 +2,10 @@ package de.goldmensch.chunkprotect.commands.subs;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.commands.util.CmdUtil;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
-import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
+import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.chunkprotect.utils.Util;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
@@ -43,7 +42,7 @@ public class TrustSub extends ChunkProtectSubCommand {
 
         if((args.length == 2) && args[1].equalsIgnoreCase("this")) {
             ClaimableChunk claimableChunk = ChunkUtil.chunkFromPlayer(player, getDataService());
-            if(CmdUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
+            if(ChunkUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
             ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
             if(claimedChunk.getTrustedPlayer().add(player.getUniqueId())) {

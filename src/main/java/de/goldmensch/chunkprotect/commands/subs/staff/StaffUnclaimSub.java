@@ -4,8 +4,6 @@ import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
-import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
-import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

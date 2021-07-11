@@ -2,7 +2,7 @@ package de.goldmensch.chunkprotect.listener.protect;
 
 import com.destroystokyo.paper.event.block.TNTPrimeEvent;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
-import de.goldmensch.chunkprotect.core.chunk.util.ChunkUtil;
+import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;

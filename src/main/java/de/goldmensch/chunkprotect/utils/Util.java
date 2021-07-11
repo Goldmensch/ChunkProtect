@@ -7,6 +7,10 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Consumer;
 
 public class Util {
@@ -37,5 +41,20 @@ public class Util {
                 }, 0, 20);
             }
         }
+    }
+
+    public static void copyResource(String from, Path to) throws IOException {
+        try(InputStream in = Util.class.getResourceAsStream("/" + from)) {
+            Files.copy(in, to);
+        }
+    }
+
+    public static String build(String prefix, String... args) {
+        StringBuilder builder = new StringBuilder(prefix+".");
+        for(String c : args) {
+            builder.append(c);
+            builder.append(".");
+        }
+        return builder.substring(0, builder.length()-1);
     }
 }

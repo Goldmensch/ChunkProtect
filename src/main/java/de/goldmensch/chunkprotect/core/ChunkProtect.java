@@ -10,8 +10,8 @@ import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
 import de.goldmensch.chunkprotect.listener.protect.ProtectListeners;
 import de.goldmensch.chunkprotect.message.Messenger;
 import de.goldmensch.chunkprotect.storage.services.DataService;
-import de.goldmensch.chunkprotect.utils.PermissionUtil;
 import de.goldmensch.chunkprotect.utils.SafeExceptions;
+import de.goldmensch.chunkprotect.utils.Util;
 import de.goldmensch.smartutils.plugin.SmartPlugin;
 
 import java.util.Arrays;
@@ -82,7 +82,7 @@ public class ChunkProtect extends SmartPlugin {
     }
 
     public String getPermission(String... args) {
-        return PermissionUtil.build("chunkprotect", args);
+        return Util.build("chunkprotect", args);
     }
 
     public Messenger getMessenger() {
