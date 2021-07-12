@@ -45,12 +45,10 @@ public class EntityListeners extends BlockListeners{
         if(!entitiesConfiguration.getProtection(event.getEntityType()).damage()) return;
         Chunk chunk = event.getEntity().getChunk();
 
-        unwrapPlayer(event.getDamager()).ifPresentOrElse(player -> {
+        unwrapPlayer(event.getDamager()).ifPresent(player -> {
             if(forbidden(player, chunk)) {
                 event.setCancelled(true);
             }
-        }, () -> {
-            if(ChunkUtil.getChunk(chunk, dataService).isClaimed()) event.setCancelled(true);
         });
     }
 
