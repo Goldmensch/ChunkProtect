@@ -8,6 +8,8 @@ import java.io.IOException;
 
 public class SafeExceptions {
 
+    private SafeExceptions() {}
+
     public static <T> T safeIOException(Plugin plugin, ReturnThrowingFunction<T, IOException> function) {
         try {
             return function.apply();

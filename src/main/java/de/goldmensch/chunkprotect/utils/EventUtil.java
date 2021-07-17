@@ -4,6 +4,9 @@ import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class EventUtil {
+
+    private EventUtil() {}
+
     public static boolean isBucketEvent(PlayerInteractEvent event) {
         return event.hasItem()
                 && ((event.getItem().getType() == Material.WATER_BUCKET)

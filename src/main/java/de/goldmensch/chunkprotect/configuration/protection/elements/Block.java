@@ -10,7 +10,7 @@ public class Block {
     private FromToChunkOption pistonRetract = new FromToChunkOption();
     private FromToChunkOption waterFlow = new FromToChunkOption();
     private FromToChunkOption lavaFlow = new FromToChunkOption();
-    private FromToChunkOption dragonEggTeleport = new FromToChunkOption();;
+    private FromToChunkOption dragonEggTeleport = new FromToChunkOption();
     private ChunkOption tntPrime = new ChunkOption();
     private ChunkOption blockBreakByExplosion = new ChunkOption();
     private ChunkOption playerInteract = new ChunkOption();

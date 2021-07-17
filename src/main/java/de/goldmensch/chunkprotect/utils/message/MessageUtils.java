@@ -23,6 +23,8 @@ import java.util.List;
 
 public class MessageUtils {
 
+    private MessageUtils() {}
+
     public static String formatList(List<String> list) {
         StringBuilder formattedList = new StringBuilder();
         for(int i = 0; i < list.size(); i++) {

@@ -15,6 +15,8 @@ import java.util.UUID;
 
 public class ChunkUtil {
 
+    private ChunkUtil() {}
+
     public static boolean isHolder(ClaimedChunk chunk, UUID holder) {
         return chunk.getHolderUUID().equals(holder);
     }

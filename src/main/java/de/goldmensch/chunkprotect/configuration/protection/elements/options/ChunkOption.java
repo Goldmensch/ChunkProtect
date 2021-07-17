@@ -1,6 +1,8 @@
 package de.goldmensch.chunkprotect.configuration.protection.elements.options;
 
 public class ChunkOption {
+    public static final ChunkOption NO_PROTECTION = new ChunkOption(false, false);
+
     private boolean unclaimed = false;
     private boolean claimed = true;
 

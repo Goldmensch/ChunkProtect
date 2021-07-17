@@ -15,6 +15,8 @@ import java.util.function.Consumer;
 
 public class Util {
 
+    private Util() {}
+
     public static <T> T executeAndReturn(T t, Consumer<T> function) {
         function.accept(t);
         return t;
@@ -23,16 +25,18 @@ public class Util {
     public static void showChunkBorders(Player player, Plugin plugin) {
         Chunk chunk = player.getChunk();
 
-        Location pointer = new Location(chunk.getWorld(),  chunk.getX()*16, player.getLocation().getY()+1, chunk.getZ()*16);
+        Location pointer = new Location(chunk.getWorld(),  chunk.getX()*16D, player.getLocation().getY()+1D, chunk.getZ()*16D);
         int tick = Bukkit.getCurrentTick();
-        for(int i = 0; i < 4; i++) {
+
+        PointerSide side = PointerSide.NORTH;
+        do {
             for(int a = 0; a < 16; a++) {
-                switch (i) {
-                    case 0 -> pointer = pointer.add(1, 0 ,0);
-                    case 1 -> pointer = pointer.add(0, 0, 1);
-                    case 2 -> pointer = pointer.add(-1, 0, 0);
-                    case 3 -> pointer = pointer.add(0, 0, -1);
-                }
+                pointer = switch (side) {
+                    case NORTH -> pointer.add(1, 0 ,0);
+                    case EAST -> pointer.add(0, 0, 1);
+                    case SOUTH -> pointer.add(-1, 0, 0);
+                    case WEST -> pointer.add(0, 0, -1);
+                };
 
                 Location finalPointer = new Location(pointer.getWorld(), pointer.getBlockX(), pointer.getBlockY(), pointer.getBlockZ());
                 Bukkit.getScheduler().runTaskTimer(plugin, bukkitTask -> {
@@ -40,7 +44,9 @@ public class Util {
                     player.spawnParticle(Particle.GLOW, finalPointer, 3);
                 }, 0, 20);
             }
-        }
+            side = PointerSide.next(side);
+        } while (side != PointerSide.NORTH);
+
     }
 
     public static void copyResource(String from, Path to) throws IOException {
@@ -56,5 +62,21 @@ public class Util {
             builder.append(".");
         }
         return builder.substring(0, builder.length()-1);
+    }
+}
+
+enum PointerSide {
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST;
+
+    public static PointerSide next(PointerSide side) {
+        return switch (side) {
+            case NORTH -> PointerSide.EAST;
+            case EAST -> PointerSide.SOUTH;
+            case SOUTH -> PointerSide.WEST;
+            case WEST -> PointerSide.NORTH;
+        };
     }
 }

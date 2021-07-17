@@ -7,13 +7,13 @@ import org.bukkit.entity.EntityType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class EntitiesConfiguration {
     private final EntityProtection defaultProtection;
     private int version = 1;
-    private final Map<EntityType, EntityProtection> protectionMap = new HashMap<>();
+    private final Map<EntityType, EntityProtection> protectionMap = new EnumMap<>(EntityType.class);
     private final Path path;
 
     public EntitiesConfiguration(Path path, EntityProtection defaultProtection) {
@@ -50,10 +50,9 @@ public class EntitiesConfiguration {
     public void reload() throws IOException {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(Files.newBufferedReader(path));
         for(String key : config.getKeys(false)) {
-            if(key.contains("version")) continue;
             String[] rawValues = config.getString(key).split(",");
+            if(rawValues.length != 4 || "version".contains(key)) continue;
             EntityType type = EntityType.valueOf(key.toUpperCase());
-            if(rawValues.length != 4) continue;
 
             boolean[] values = new boolean[4];
             for(int i = 0; i < 4; i++) {

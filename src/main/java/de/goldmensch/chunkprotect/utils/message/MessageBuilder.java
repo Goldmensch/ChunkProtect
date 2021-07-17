@@ -12,9 +12,7 @@ public class MessageBuilder {
     }
 
     public MessageBuilder appendLine(Component component) {
-        if(builder.children().size() != 0) {
-            builder.append(Component.text("\n"));
-        }
+        if(!builder.children().isEmpty()) builder.append(Component.text("\n"));
         builder.append(component);
         return this;
     }

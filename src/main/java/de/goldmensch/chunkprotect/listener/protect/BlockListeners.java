@@ -4,7 +4,6 @@ import com.destroystokyo.paper.event.block.TNTPrimeEvent;
 import de.goldmensch.chunkprotect.configuration.protection.elements.options.FromToChunkOption;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
-import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import org.bukkit.Chunk;
@@ -39,23 +38,13 @@ public class BlockListeners extends ListenerData {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockTo(BlockFromToEvent event) {
-        switch (event.getBlock().getType()) {
-            case LAVA -> {
-                if(fromTo(event.getBlock().getChunk(), event.getToBlock().getChunk(), protectionFile.getBlock().getLavaFlow())) {
-                    event.setCancelled(true);
-                }
-            }
-            case WATER -> {
-                if(fromTo(event.getBlock().getChunk(), event.getToBlock().getChunk(), protectionFile.getBlock().getWaterFlow())) {
-                    event.setCancelled(true);
-                }
-            }
-            case DRAGON_EGG -> {
-                if(fromTo(event.getBlock().getChunk(), event.getToBlock().getChunk(), protectionFile.getBlock().getDragonEggTeleport())) {
-                    event.setCancelled(true);
-                }
-            }
-        }
+        FromToChunkOption option = switch (event.getBlock().getType()) {
+            case LAVA -> protectionFile.getBlock().getLavaFlow();
+            case WATER -> protectionFile.getBlock().getWaterFlow();
+            case DRAGON_EGG -> protectionFile.getBlock().getDragonEggTeleport();
+            default -> FromToChunkOption.NO_PROTECTION;
+        };
+        if(fromTo(event.getBlock().getChunk(), event.getToBlock().getChunk(), option)) event.setCancelled(true);
     }
 
     private boolean fromTo(Chunk fromChunk, Chunk toChunk, FromToChunkOption option) {
@@ -114,18 +103,15 @@ public class BlockListeners extends ListenerData {
 
     @EventHandler(priority = EventPriority.HIGH)
     protected void handleTntPrime(TNTPrimeEvent event) {
-        unwrapPlayer(event.getPrimerEntity()).ifPresent(player -> {
-            ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
-                if(protectionFile.getBlock().getTntPrime().isClaimed()) {
-                    if(forbidden(player, chunk)) {
-                        event.setCancelled(true);
-                    }
-                }
-            }, () -> {
-                if(protectionFile.getBlock().getTntPrime().isUnclaimed()) {
-                    sendYouCantDoThat(player);
-                }
-            });
-        });
+        unwrapPlayer(event.getPrimerEntity()).ifPresent(player ->
+                ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
+            if(protectionFile.getBlock().getTntPrime().isClaimed() && forbidden(player, chunk)) {
+                event.setCancelled(true);
+            }
+        }, () -> {
+            if(protectionFile.getBlock().getTntPrime().isUnclaimed()) {
+                sendYouCantDoThat(player);
+            }
+        }));
     }
 }

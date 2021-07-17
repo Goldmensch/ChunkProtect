@@ -19,8 +19,8 @@ public class InteractListener extends EntityListeners{
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBucketFill(PlayerBucketFillEvent event) {
         ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
-            if(protectionFile.getOther().getBucketFill().isClaimed()) {
-                if(forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
+            if(protectionFile.getOther().getBucketFill().isClaimed() && forbidden(event.getPlayer(), chunk)) {
+                event.setCancelled(true);
             }
         }, () -> {
             if(protectionFile.getOther().getBucketFill().isUnclaimed()) {
@@ -33,9 +33,8 @@ public class InteractListener extends EntityListeners{
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBucketEmpty(PlayerBucketEmptyEvent event) {
         ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
-            System.out.println(protectionFile.getOther().getBucketEmpty().isClaimed());
-            if(protectionFile.getOther().getBucketEmpty().isClaimed()) {
-                if(forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
+            if(protectionFile.getOther().getBucketEmpty().isClaimed() && forbidden(event.getPlayer(), chunk)) {
+                event.setCancelled(true);
             }
         }, () -> {
             if(protectionFile.getOther().getBucketEmpty().isUnclaimed()) {
@@ -48,8 +47,8 @@ public class InteractListener extends EntityListeners{
     @EventHandler(priority = EventPriority.HIGH)
     public void handlePlayerInteractEntity(PlayerInteractEntityEvent event) {
         ChunkUtil.getChunk(event.getRightClicked().getChunk(), dataService).ifClaimedOr(chunk -> {
-            if(protectionFile.getEntity().getPlayerInteract().isClaimed()) {
-                if(forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
+            if(protectionFile.getEntity().getPlayerInteract().isClaimed() && forbidden(event.getPlayer(), chunk)) {
+                event.setCancelled(true);
             }
         }, () -> {
             if(protectionFile.getEntity().getPlayerInteract().isUnclaimed()) sendYouCantDoThat(event.getPlayer());
@@ -58,7 +57,6 @@ public class InteractListener extends EntityListeners{
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handlePlayerInteract(PlayerInteractEvent event) {
-        System.out.println(event.getEventName());
         if (event.getClickedBlock() != null
                 && event.getClickedBlock().getType() != Material.AIR
                 && event.useInteractedBlock() == Event.Result.ALLOW

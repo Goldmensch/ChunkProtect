@@ -49,12 +49,11 @@ public class ChunkProtectCommand extends SmartCommand {
 
     @Override
     public void wrongExecutorLevel(ArgValuedSubCommand argValuedSubCommand, CommandSender commandSender) {
-        Component message;
-        switch (argValuedSubCommand.getCommand().getExecutorLevel()) {
-            case PLAYER -> message = Component.text("Only Player can execute this command.");
-            case CONSOLE -> message = Component.text("Only Console can execute this command.");
-            default -> message = Component.empty();
-        }
+        Component message = switch (argValuedSubCommand.getCommand().getExecutorLevel()) {
+            case PLAYER -> Component.text("Only Player can execute this command.");
+            case CONSOLE -> Component.text("Only Console can execute this command.");
+            default -> Component.empty();
+        };
         commandSender.sendMessage(message.color(NamedTextColor.RED));
     }
 
@@ -67,13 +66,11 @@ public class ChunkProtectCommand extends SmartCommand {
     public void sendHelp(CommandSender sender) {
         MessageBuilder builder = MessageBuilder.builder();
         builder.appendLine(chunkProtect.getMessenger().prepare("help-header"));
-        getAllSubFor(sender).keySet().forEach(cmd -> {
-                    System.out.println(de.goldmensch.commanddispatcher.util.ArrayUtils.buildString(cmd));
-                    builder.appendLine(chunkProtect.getMessenger()
-                            .prepare("help-entry",
-                                    Replacement.create("command",
-                                            "/"+de.goldmensch.commanddispatcher.util.ArrayUtils.buildString(cmd))));
-                }
+        getAllSubFor(sender).keySet().forEach(cmd ->
+                builder.appendLine(chunkProtect.getMessenger()
+                .prepare("help-entry",
+                        Replacement.create("command",
+                                "/"+de.goldmensch.commanddispatcher.util.ArrayUtils.buildString(cmd))))
         );
 
         sender.sendMessage(builder.build());

@@ -30,20 +30,16 @@ public class EntityListeners extends BlockListeners{
 
     private boolean entityDamage(Entity entity, Entity other) {
         AtomicBoolean returnValue = new AtomicBoolean(false);
-        unwrapPlayer(other).ifPresent(player -> {
-            ChunkUtil.getChunk(entity.getChunk(), dataService).ifClaimedOr(chunk -> {
-                if(entitiesConfiguration.getProtection(entity.getType()).getDamage().isClaimed()) {
-                    if(forbidden(player, chunk)) {
-                        returnValue.set(true);
-                    }
-                }
-            }, () -> {
-                if(entitiesConfiguration.getProtection(entity.getType()).getDamage().isUnclaimed()) {
-                    sendYouCantDoThat(player);
-                    returnValue.set(true);
-                }
-            });
-        });
+        unwrapPlayer(other).ifPresent(player -> ChunkUtil.getChunk(entity.getChunk(), dataService).ifClaimedOr(chunk -> {
+            if(entitiesConfiguration.getProtection(entity.getType()).getDamage().isClaimed() && forbidden(player, chunk)) {
+                returnValue.set(true);
+            }
+        }, () -> {
+            if(entitiesConfiguration.getProtection(entity.getType()).getDamage().isUnclaimed()) {
+                sendYouCantDoThat(player);
+                returnValue.set(true);
+            }
+        }));
         return returnValue.get();
     }
 

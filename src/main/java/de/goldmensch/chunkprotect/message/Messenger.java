@@ -18,6 +18,8 @@ import java.util.Locale;
 
 public class Messenger {
 
+    public static final String PLAYER_LITERAL = "player";
+
     private final SmartLocalizer<Component> localizer;
     private final Component prefix;
     private final boolean actionBar;

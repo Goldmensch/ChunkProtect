@@ -50,14 +50,12 @@ public class ListenerData implements Listener {
     }
 
     protected Optional<Player> unwrapPlayer(Entity possiblePlayer) {
-        Player player = null;
-        if(possiblePlayer instanceof Player) {
-            player = (Player) possiblePlayer;
-        }else if (possiblePlayer instanceof Projectile projectile) {
-            if (projectile.getShooter() instanceof Player) {
-                player = (Player) projectile.getShooter();
-            }
+        if(possiblePlayer instanceof Player player) {
+            return Optional.of(player);
+        }else if((possiblePlayer instanceof Projectile projectile) && (projectile.getShooter() instanceof Player player)) {
+            return Optional.of(player);
         }
-        return Optional.ofNullable(player);
+        return Optional.empty();
+
     }
 }

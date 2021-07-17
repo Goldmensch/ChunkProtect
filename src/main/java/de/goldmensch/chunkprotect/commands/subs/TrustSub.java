@@ -5,6 +5,7 @@ import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
+import de.goldmensch.chunkprotect.message.Messenger;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.chunkprotect.utils.Util;
@@ -36,7 +37,7 @@ public class TrustSub extends ChunkProtectSubCommand {
         Player player = (Player)sender;
         Player target = Bukkit.getPlayer(args[0]);
         if(target == null) {
-            getMessenger().send(sender, "player-offline", Replacement.create("player", args[0]));
+            getMessenger().send(sender, "player-offline", Replacement.create(Messenger.PLAYER_LITERAL, args[0]));
             return true;
         }
 
@@ -46,20 +47,20 @@ public class TrustSub extends ChunkProtectSubCommand {
             ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
             if(claimedChunk.getTrustedPlayer().add(target.getUniqueId())) {
-                getMessenger().send(sender, "player-trusted", Replacement.create("player", target.getName()));
+                getMessenger().send(sender, "player-trusted", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
                 getDataService().updateChunk(claimedChunk);
             }else {
-                getMessenger().send(sender, "player-already-trusted", Replacement.create("player", target.getName()));
+                getMessenger().send(sender, "player-already-trusted", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
             }
             return true;
         }
 
         ChunkHolder holder = getDataService().holderFromUUID(player.getUniqueId());
         if(holder.getTrustedAllChunks().add(target.getUniqueId())) {
-            getMessenger().send(sender, "player-trusted-on-all", Replacement.create("player", target.getName()));
+            getMessenger().send(sender, "player-trusted-on-all", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
             getDataService().updateHolder(holder);
         }else {
-            getMessenger().send(sender, "player-already-trusted-all", Replacement.create("player", target.getName()));
+            getMessenger().send(sender, "player-already-trusted-all", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
         }
         return true;
     }
@@ -76,10 +77,8 @@ public class TrustSub extends ChunkProtectSubCommand {
             }
         }
 
-        if(args.length == 2) {
-            if("this".startsWith(args[1])) {
-                return Util.executeAndReturn(new ArrayList<>(), list -> list.add("this"));
-            }
+        if(args.length == 2 && "this".startsWith(args[1])) {
+            return Util.executeAndReturn(new ArrayList<>(), list -> list.add("this"));
         }
         return null;
     }

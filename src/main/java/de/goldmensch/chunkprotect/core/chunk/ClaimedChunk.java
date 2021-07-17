@@ -4,11 +4,12 @@ import com.jsoniter.annotation.JsonIgnore;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ClaimedChunk extends RawClaimedChunk {
 
-    private final static ChunkHolder FORCE_HOLDER = new ChunkHolder("chunk_forceClaimed",
+    private static final ChunkHolder FORCE_HOLDER = new ChunkHolder("chunk_forceClaimed",
             UUID.fromString("8534a7ba-9aa6-4bbe-a93a-3632a9781f53"),
             false,
             true);
@@ -43,5 +44,19 @@ public class ClaimedChunk extends RawClaimedChunk {
     public ClaimedChunk forceClaimed() {
         forceClaimed = true;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ClaimedChunk that = (ClaimedChunk) o;
+        return forceClaimed == that.forceClaimed && Objects.equals(holder, that.holder);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), holder, forceClaimed);
     }
 }
