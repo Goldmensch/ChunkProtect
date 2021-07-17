@@ -28,7 +28,7 @@ public class DataService extends ChunkService{
         HolderDao holderDao = new JsonHolderDao(Files.createDirectories(path.resolve("holders")));
         DataService dataService = new DataService(Cache.init(holderDao), holderDao,
                 new JsonChunkDao(Files.createDirectories(path.resolve("chunks"))));
-        dataService.initWriteScheduler(protect, protect.getConfiguration().getConfigFile().getStorage().getSaveInterval());
+        dataService.initWriteScheduler(protect, protect.getConfigFile().getStorage().getSaveInterval());
         return dataService;
     }
 

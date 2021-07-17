@@ -1,6 +1,7 @@
 plugins {
     java
     id("com.github.johnrengelman.shadow") version "7.0.0"
+    id ("org.sonarqube") version "3.3"
 }
 
 group = "de.goldmensch"

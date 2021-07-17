@@ -1,20 +1,22 @@
-package de.goldmensch.chunkprotect.configuration.plugin;
+package de.goldmensch.chunkprotect.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.IOException;
+import java.lang.invoke.TypeDescriptor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class Configuration {
+public class Configuration<T> {
     private final Path path;
-    private ConfigFile configFile;
+    private T configValues;
     private final ObjectMapper mapper;
 
-    public Configuration(Path path) {
+    public Configuration(Path path, T defaultFile) {
         this.path = path;
         this.mapper = new ObjectMapper(new YAMLFactory());
+        this.configValues = defaultFile;
     }
 
     public void init() throws IOException {
@@ -31,16 +33,15 @@ public class Configuration {
     private void buildOfNotExist() throws IOException {
         if(Files.notExists(path)) {
             Files.createDirectories(path.getParent());
-            configFile = new ConfigFile();
-            mapper.writeValue(Files.newBufferedWriter(path), configFile);
+            mapper.writeValue(Files.newBufferedWriter(path), configValues);
         }
     }
 
     public void reload() throws IOException {
-        configFile = mapper.readValue(path.toFile(), ConfigFile.class);
+        configValues = mapper.readValue(path.toFile(), mapper.constructType(configValues.getClass()));
     }
 
-    public ConfigFile getConfigFile() {
-        return configFile;
+    public T getConfigFile() {
+        return configValues;
     }
 }

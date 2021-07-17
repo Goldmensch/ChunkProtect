@@ -1,14 +1,13 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
 import de.goldmensch.chunkprotect.configuration.entities.EntitiesConfiguration;
+import de.goldmensch.chunkprotect.configuration.protection.ProtectionFile;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
-import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
-import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.smartutils.localizer.Replacement;
-import org.bukkit.Chunk;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -23,21 +22,20 @@ public class ListenerData implements Listener {
 
     protected final EntitiesConfiguration entitiesConfiguration;
 
+    protected final ProtectionFile protectionFile;
+
     public ListenerData(DataService dataService, ChunkProtect chunkProtect) {
         this.dataService = dataService;
         this.chunkProtect = chunkProtect;
         this.entitiesConfiguration = chunkProtect.getEntitiesConfiguration();
+        this.protectionFile = chunkProtect.getProtectionConfig().getConfigFile();
     }
 
-    protected boolean forbidden(HumanEntity player, Chunk chunk) {
+    protected boolean forbidden(HumanEntity player, ClaimedChunk chunk) {
         if(chunkProtect.getProtectionBypass().hasBypass(player.getUniqueId())) return false;
-        ClaimableChunk claimableChunk = dataService.getChunkAt(ChunkLocation.fromChunk(chunk));
-        if(claimableChunk.isClaimed()) {
-            ClaimedChunk claimedChunk = claimableChunk.getChunk();
-            if(!ChunkUtil.hasAccess(claimedChunk, player.getUniqueId())) {
-                sendNoAccess(player, claimedChunk);
-                return true;
-            }
+        if(!ChunkUtil.hasAccess(chunk, player.getUniqueId())) {
+            sendNoAccess(player, chunk);
+            return true;
         }
         return false;
     }
@@ -45,6 +43,10 @@ public class ListenerData implements Listener {
     protected void sendNoAccess(HumanEntity player, ClaimedChunk chunk) {
         chunkProtect.getMessenger().send(player, "chunk-protected",
                 Replacement.create("holder", chunk.getHolder().getName()));
+    }
+
+    protected void sendYouCantDoThat(CommandSender sender) {
+        chunkProtect.getMessenger().send(sender, "you-cant-do-that");
     }
 
     protected Optional<Player> unwrapPlayer(Entity possiblePlayer) {
@@ -57,12 +59,5 @@ public class ListenerData implements Listener {
             }
         }
         return Optional.ofNullable(player);
-    }
-
-    protected boolean checkFromTo(ClaimableChunk from, ClaimableChunk to) {
-        if(to.isClaimed() && from.isClaimed()) {
-            return !ChunkUtil.sameHolder(to.getChunk(), from.getChunk());
-        }
-        return to.isClaimed();
     }
 }

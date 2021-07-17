@@ -1,22 +1,17 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
-import com.destroystokyo.paper.event.block.TNTPrimeEvent;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
-import org.bukkit.Chunk;
-import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.vehicle.VehicleDamageEvent;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EntityListeners extends BlockListeners{
     public EntityListeners(DataService dataService, ChunkProtect chunkProtect) {
@@ -25,31 +20,36 @@ public class EntityListeners extends BlockListeners{
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleHangingDestroy(HangingBreakByEntityEvent event) {
-        unwrapPlayer(event.getRemover()).ifPresent(player -> {
-            if(forbidden(player, event.getEntity().getChunk())) {
-                event.setCancelled(true);
-            }
-        });
-    }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public void handleHangingPlace(HangingPlaceEvent event) {
-        if(event.getPlayer() == null)return;
-        if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
-            event.setCancelled(true);
-        }
+        if (entityDamage(event.getEntity(), event.getRemover())) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if(!entitiesConfiguration.getProtection(event.getEntityType()).damage()) return;
-        Chunk chunk = event.getEntity().getChunk();
+        if(entityDamage(event.getEntity(), event.getDamager())) event.setCancelled(true);
+    }
 
-        unwrapPlayer(event.getDamager()).ifPresent(player -> {
-            if(forbidden(player, chunk)) {
-                event.setCancelled(true);
-            }
+    private boolean entityDamage(Entity entity, Entity other) {
+        AtomicBoolean returnValue = new AtomicBoolean(false);
+        unwrapPlayer(other).ifPresent(player -> {
+            ChunkUtil.getChunk(entity.getChunk(), dataService).ifClaimedOr(chunk -> {
+                if(entitiesConfiguration.getProtection(entity.getType()).getDamage().isClaimed()) {
+                    if(forbidden(player, chunk)) {
+                        returnValue.set(true);
+                    }
+                }
+            }, () -> {
+                if(entitiesConfiguration.getProtection(entity.getType()).getDamage().isUnclaimed()) {
+                    sendYouCantDoThat(player);
+                    returnValue.set(true);
+                }
+            });
         });
+        return returnValue.get();
+    }
+
+    @EventHandler
+    public void handleVehicleDamage(VehicleDamageEvent event) {
+        if(entityDamage(event.getVehicle().getVehicle(), event.getAttacker())) event.setCancelled(true);
     }
 
     /*
@@ -58,28 +58,5 @@ public class EntityListeners extends BlockListeners{
     @EventHandler(priority = EventPriority.HIGH)
     public void handleEntityExplosion(EntityExplodeEvent event) {
         onExplodeEvent(event.blockList());
-    }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public void handleBlockExplode(BlockExplodeEvent event) {
-        onExplodeEvent(event.blockList());
-    }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public void handleTntPrime(TNTPrimeEvent event) {
-        unwrapPlayer(event.getPrimerEntity()).ifPresent(player -> {
-            if(forbidden(player, event.getBlock().getChunk())) {
-                event.setCancelled(true);
-            }
-        });
-    }
-
-    private void onExplodeEvent(List<Block> blockList) {
-        Set<Block> protectedBlocks = new HashSet<>();
-        for(Block block : blockList) {
-            ChunkUtil.getChunk(block.getChunk(), dataService).ifClaimed(claimedChunk ->
-                    protectedBlocks.add(block));
-        }
-        blockList.removeAll(protectedBlocks);
     }
 }

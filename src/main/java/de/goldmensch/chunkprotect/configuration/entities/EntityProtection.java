@@ -1,43 +1,22 @@
 package de.goldmensch.chunkprotect.configuration.entities;
 
-import java.util.Objects;
+import de.goldmensch.chunkprotect.configuration.protection.elements.options.ChunkOption;
 
 public final class EntityProtection {
-    private final boolean damage;
-    private final boolean interact;
+    private final ChunkOption damage;
+    private final ChunkOption playerInteract;
 
-    public EntityProtection(boolean damage, boolean interact) {
+    public EntityProtection(ChunkOption damage, ChunkOption playerInteract) {
         this.damage = damage;
-        this.interact = interact;
+        this.playerInteract = playerInteract;
     }
 
-    public boolean damage() {
+    public ChunkOption getDamage() {
         return damage;
     }
 
-    public boolean interact() {
-        return interact;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (EntityProtection) obj;
-        return this.damage == that.damage &&
-                this.interact == that.interact;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(damage, interact);
-    }
-
-    @Override
-    public String toString() {
-        return "EntityProtection[" +
-                "damage=" + damage + ", " +
-                "interact=" + interact + ']';
+    public ChunkOption getPlayerInteract() {
+        return playerInteract;
     }
 
 }

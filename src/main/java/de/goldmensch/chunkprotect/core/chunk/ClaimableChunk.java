@@ -24,6 +24,14 @@ public class ClaimableChunk {
         }
     }
 
+    public void ifClaimedOr(Consumer<ClaimedChunk> function, Runnable or) {
+        if(isClaimed()) {
+            function.accept(chunk);
+        }else {
+            or.run();
+        }
+    }
+
     public ClaimedChunk getChunk() {
         return chunk;
     }

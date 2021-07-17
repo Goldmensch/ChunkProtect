@@ -1,12 +1,21 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
+import com.destroystokyo.paper.event.block.TNTPrimeEvent;
+import de.goldmensch.chunkprotect.configuration.protection.elements.options.FromToChunkOption;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
+import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
+import org.bukkit.Chunk;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class BlockListeners extends ListenerData {
@@ -16,34 +25,58 @@ public class BlockListeners extends ListenerData {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockPlace(BlockPlaceEvent event) {
-        if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
-            event.setCancelled(true);
-        }
+        ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimed(chunk -> {
+            if(forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
+        });
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockBreak(BlockBreakEvent event) {
-        if(forbidden(event.getPlayer(), event.getBlock().getChunk())) {
-            event.setCancelled(true);
-        }
+        ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimed(chunk -> {
+            if(forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
+        });
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockTo(BlockFromToEvent event) {
-        if(event.getToBlock().getChunk() != event.getBlock().getChunk()) {
-            ClaimableChunk from = ChunkUtil.getChunk(event.getBlock().getChunk(), dataService);
-            ClaimableChunk to = ChunkUtil.getChunk(event.getToBlock().getChunk(), dataService);
-            if(checkFromTo(from, to)) {
-                event.setCancelled(true);
+        switch (event.getBlock().getType()) {
+            case LAVA -> {
+                if(fromTo(event.getBlock().getChunk(), event.getToBlock().getChunk(), protectionFile.getBlock().getLavaFlow())) {
+                    event.setCancelled(true);
+                }
             }
+            case WATER -> {
+                if(fromTo(event.getBlock().getChunk(), event.getToBlock().getChunk(), protectionFile.getBlock().getWaterFlow())) {
+                    event.setCancelled(true);
+                }
+            }
+            case DRAGON_EGG -> {
+                if(fromTo(event.getBlock().getChunk(), event.getToBlock().getChunk(), protectionFile.getBlock().getDragonEggTeleport())) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    private boolean fromTo(Chunk fromChunk, Chunk toChunk, FromToChunkOption option) {
+        if(fromChunk.equals(toChunk)) return false;
+        ClaimableChunk from = ChunkUtil.getChunk(fromChunk, dataService);
+        ClaimableChunk to = ChunkUtil.getChunk(toChunk, dataService);
+        if(from.isClaimed()) {
+            if (option.getFromClaimedInto().isClaimed() && to.isClaimed()) {
+                return !ChunkUtil.sameHolder(from.getChunk(), to.getChunk());
+            }else return option.getFromClaimedInto().isUnclaimed() && !to.isClaimed();
+        }else {
+            if (option.getFromUnclaimedInto().isClaimed() && to.isClaimed()) {
+                return true;
+            }else return option.getFromUnclaimedInto().isUnclaimed() && !to.isClaimed();
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handlePistonBlockExtend(BlockPistonExtendEvent event) {
-        ClaimableChunk pistonChunk = ChunkUtil.getChunk(event.getBlock().getChunk(), dataService);
         event.getBlocks().forEach(block -> {
-            if(checkFromTo(pistonChunk, ChunkUtil.getChunk(block.getRelative(event.getDirection()).getChunk(), dataService))) {
+            if(fromTo(block.getChunk(), block.getRelative(event.getDirection()).getChunk(), protectionFile.getBlock().getPistonExtend())) {
                 event.setCancelled(true);
             }
         });
@@ -51,11 +84,48 @@ public class BlockListeners extends ListenerData {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handlePistonBlockRetract(BlockPistonRetractEvent event) {
-        ClaimableChunk pistonChunk = ChunkUtil.getChunk(event.getBlock().getChunk(), dataService);
         event.getBlocks().forEach(block -> {
-            if(checkFromTo(pistonChunk, ChunkUtil.getChunk(block.getChunk(), dataService))) {
+            if(fromTo(block.getChunk(), block.getChunk(), protectionFile.getBlock().getPistonRetract())) {
                 event.setCancelled(true);
             }
+        });
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void handleBlockExplode(BlockExplodeEvent event) {
+        onExplodeEvent(event.blockList());
+    }
+
+    protected void onExplodeEvent(List<Block> blockList) {
+        Set<Block> protectedBlocks = new HashSet<>();
+        for(Block block : blockList) {
+            ChunkUtil.getChunk(block.getChunk(), dataService).ifClaimedOr(chunk -> {
+                if(protectionFile.getBlock().getBlockBreakByExplosion().isClaimed()) {
+                    protectedBlocks.add(block);
+                }
+            }, () -> {
+                if(protectionFile.getBlock().getBlockBreakByExplosion().isUnclaimed()) {
+                    protectedBlocks.add(block);
+                }
+            });
+        }
+        blockList.removeAll(protectedBlocks);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    protected void handleTntPrime(TNTPrimeEvent event) {
+        unwrapPlayer(event.getPrimerEntity()).ifPresent(player -> {
+            ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
+                if(protectionFile.getBlock().getTntPrime().isClaimed()) {
+                    if(forbidden(player, chunk)) {
+                        event.setCancelled(true);
+                    }
+                }
+            }, () -> {
+                if(protectionFile.getBlock().getTntPrime().isUnclaimed()) {
+                    sendYouCantDoThat(player);
+                }
+            });
         });
     }
 }

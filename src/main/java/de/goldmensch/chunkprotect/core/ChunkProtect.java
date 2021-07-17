@@ -2,8 +2,10 @@ package de.goldmensch.chunkprotect.core;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.configuration.entities.EntitiesConfiguration;
+import de.goldmensch.chunkprotect.configuration.entities.EntityProtection;
 import de.goldmensch.chunkprotect.configuration.plugin.ConfigFile;
-import de.goldmensch.chunkprotect.configuration.plugin.Configuration;
+import de.goldmensch.chunkprotect.configuration.plugin.PluginConfig;
+import de.goldmensch.chunkprotect.configuration.protection.ProtectionConfig;
 import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
 import de.goldmensch.chunkprotect.listener.ChunkLoadListener;
 import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
@@ -14,6 +16,7 @@ import de.goldmensch.chunkprotect.utils.SafeExceptions;
 import de.goldmensch.chunkprotect.utils.Util;
 import de.goldmensch.smartutils.plugin.SmartPlugin;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,9 +24,9 @@ import java.util.concurrent.Executors;
 public class ChunkProtect extends SmartPlugin {
     private DataService dataService;
     private Messenger messenger;
-    private ConfigFile config;
-    private Configuration configuration;
+    private PluginConfig pluginConfig;
     private EntitiesConfiguration entitiesConfiguration;
+    private ProtectionConfig protectionConfig;
 
     private ExecutorService service;
 
@@ -63,18 +66,23 @@ public class ChunkProtect extends SmartPlugin {
     }
 
     private void initConfig() {
-        configuration = new Configuration(getDataFolder().toPath().resolve("config.yml"));
-        SafeExceptions.safeIOException(this, () -> configuration.init());
-        config = configuration.getConfigFile();
+        Path pluginDir = getDataFolder().toPath();
+        Path protectionDir = pluginDir.resolve("protection");
+        pluginConfig = new PluginConfig(getDataFolder().toPath().resolve("config.yml"));
+        SafeExceptions.safeIOException(this, () -> pluginConfig.init());
 
-        entitiesConfiguration = new EntitiesConfiguration(getDataFolder().toPath().resolve("entities.yml"),
-                configuration.getConfigFile().getProtection().getDefaultEntityProtect());
+        protectionConfig = new ProtectionConfig(protectionDir.resolve("protection.yml"));
+        SafeExceptions.safeIOException(this, () -> protectionConfig.init());
+
+        entitiesConfiguration = new EntitiesConfiguration(protectionDir.resolve("entities.yml"),
+                new EntityProtection(getProtectionConfig().getConfigFile().getEntity().getDamage(),
+                        getProtectionConfig().getConfigFile().getEntity().getPlayerInteract()));
         SafeExceptions.safeIOException(this, () -> entitiesConfiguration.init());
     }
 
     private void initMessenger() {
         messenger = SafeExceptions.safeIOException(this, () -> Messenger.setupMessenger(this,
-                config.getLocalization().isMiniMessage(), config.getLocalization().isUseActionBar()));
+                getConfigFile().getLocalization().isMiniMessage(), getConfigFile().getLocalization().isUseActionBar()));
     }
 
     public DataService getDataService() {
@@ -93,15 +101,23 @@ public class ChunkProtect extends SmartPlugin {
         return service;
     }
 
-    public Configuration getConfiguration() {
-        return configuration;
-    }
-
     public EntitiesConfiguration getEntitiesConfiguration() {
         return entitiesConfiguration;
     }
 
     public ProtectionBypass getProtectionBypass() {
         return protectionBypass;
+    }
+
+    public PluginConfig getPluginConfig() {
+        return pluginConfig;
+    }
+
+    public ConfigFile getConfigFile() {
+        return pluginConfig.getConfigFile();
+    }
+
+    public ProtectionConfig getProtectionConfig() {
+        return protectionConfig;
     }
 }
