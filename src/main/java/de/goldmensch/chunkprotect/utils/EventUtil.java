@@ -3,9 +3,10 @@ package de.goldmensch.chunkprotect.utils;
 import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class EventUtil {
+public final class EventUtil {
 
-    private EventUtil() {}
+    private EventUtil() {
+    }
 
     public static boolean isBucketEvent(PlayerInteractEvent event) {
         return event.hasItem()

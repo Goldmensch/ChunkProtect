@@ -19,15 +19,15 @@ public class ClaimableChunk {
     }
 
     public void ifClaimed(Consumer<ClaimedChunk> function) {
-        if(isClaimed()) {
+        if (isClaimed()) {
             function.accept(chunk);
         }
     }
 
     public void ifClaimedOr(Consumer<ClaimedChunk> function, Runnable or) {
-        if(isClaimed()) {
+        if (isClaimed()) {
             function.accept(chunk);
-        }else {
+        } else {
             or.run();
         }
     }

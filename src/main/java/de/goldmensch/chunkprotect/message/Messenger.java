@@ -16,7 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 
-public class Messenger {
+public final class Messenger {
 
     public static final String PLAYER_LITERAL = "player";
 
@@ -33,14 +33,14 @@ public class Messenger {
     public static Messenger setupMessenger(Plugin plugin, boolean miniMessage, boolean actionBar) throws IOException {
         Path path = plugin.getDataFolder().toPath().resolve("messages.properties");
 
-        if(Files.notExists(path)) {
+        if (Files.notExists(path)) {
             Util.copyResource("messages.properties", path);
         }
 
         LocalizerAdapter<Component> adapter;
-        if(miniMessage) {
+        if (miniMessage) {
             adapter = new MiniMessageAdapter();
-        }else {
+        } else {
             adapter = new ComponentLocalizerAdapter();
         }
 
@@ -51,9 +51,9 @@ public class Messenger {
     }
 
     public void send(CommandSender receiver, String key, Replacement... replacements) {
-        if(actionBar) {
+        if (actionBar) {
             receiver.sendActionBar(prepare(key, replacements));
-        }else {
+        } else {
             receiver.sendMessage(prepare(key, replacements));
         }
     }

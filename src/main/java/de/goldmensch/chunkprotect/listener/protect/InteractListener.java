@@ -9,9 +9,12 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-public class InteractListener extends EntityListeners{
+public class InteractListener extends EntityListeners {
     public InteractListener(DataService dataService, ChunkProtect chunkProtect) {
         super(dataService, chunkProtect);
     }
@@ -19,11 +22,11 @@ public class InteractListener extends EntityListeners{
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBucketFill(PlayerBucketFillEvent event) {
         ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
-            if(protectionFile.getOther().getBucketFill().isClaimed() && forbidden(event.getPlayer(), chunk)) {
+            if (protectionFile.getOther().getBucketFill().isClaimed() && forbidden(event.getPlayer(), chunk)) {
                 event.setCancelled(true);
             }
         }, () -> {
-            if(protectionFile.getOther().getBucketFill().isUnclaimed()) {
+            if (protectionFile.getOther().getBucketFill().isUnclaimed()) {
                 sendYouCantDoThat(event.getPlayer());
                 event.setCancelled(true);
             }
@@ -33,11 +36,11 @@ public class InteractListener extends EntityListeners{
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBucketEmpty(PlayerBucketEmptyEvent event) {
         ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
-            if(protectionFile.getOther().getBucketEmpty().isClaimed() && forbidden(event.getPlayer(), chunk)) {
+            if (protectionFile.getOther().getBucketEmpty().isClaimed() && forbidden(event.getPlayer(), chunk)) {
                 event.setCancelled(true);
             }
         }, () -> {
-            if(protectionFile.getOther().getBucketEmpty().isUnclaimed()) {
+            if (protectionFile.getOther().getBucketEmpty().isUnclaimed()) {
                 sendYouCantDoThat(event.getPlayer());
                 event.setCancelled(true);
             }
@@ -47,11 +50,11 @@ public class InteractListener extends EntityListeners{
     @EventHandler(priority = EventPriority.HIGH)
     public void handlePlayerInteractEntity(PlayerInteractEntityEvent event) {
         ChunkUtil.getChunk(event.getRightClicked().getChunk(), dataService).ifClaimedOr(chunk -> {
-            if(protectionFile.getEntity().getPlayerInteract().isClaimed() && forbidden(event.getPlayer(), chunk)) {
+            if (entitiesConfiguration.getProtection(event.getRightClicked().getType()).getPlayerInteract().isClaimed() && forbidden(event.getPlayer(), chunk)) {
                 event.setCancelled(true);
             }
         }, () -> {
-            if(protectionFile.getEntity().getPlayerInteract().isUnclaimed()) sendYouCantDoThat(event.getPlayer());
+            if (entitiesConfiguration.getProtection(event.getRightClicked().getType()).getPlayerInteract().isUnclaimed()) sendYouCantDoThat(event.getPlayer());
         });
     }
 
@@ -68,7 +71,7 @@ public class InteractListener extends EntityListeners{
                 || event.getAction() == Action.PHYSICAL)) {
 
             ChunkUtil.getChunk(event.getClickedBlock().getChunk(), dataService).ifClaimed(chunk -> {
-                if(forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
+                if (forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
             });
         }
     }

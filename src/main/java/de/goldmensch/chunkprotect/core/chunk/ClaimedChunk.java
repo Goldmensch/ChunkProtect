@@ -17,7 +17,7 @@ public class ClaimedChunk extends RawClaimedChunk {
     @JsonIgnore
     private final ChunkHolder holder;
     @JsonIgnore
-    private boolean forceClaimed = false;
+    private boolean forceClaimed;
 
     public ClaimedChunk(RawClaimedChunk chunk, ChunkHolder holder) {
         super(chunk.getLocation(), chunk.getHolderUUID(), chunk.getTrustedPlayer());
@@ -51,8 +51,8 @@ public class ClaimedChunk extends RawClaimedChunk {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        ClaimedChunk that = (ClaimedChunk) o;
-        return forceClaimed == that.forceClaimed && Objects.equals(holder, that.holder);
+        ClaimedChunk claimedChunk = (ClaimedChunk) o;
+        return forceClaimed == claimedChunk.forceClaimed && Objects.equals(holder, claimedChunk.holder);
     }
 
     @Override

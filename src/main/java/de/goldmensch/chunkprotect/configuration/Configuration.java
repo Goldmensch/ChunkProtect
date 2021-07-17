@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.IOException;
-import java.lang.invoke.TypeDescriptor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Configuration<T> {
     private final Path path;
-    private T configValues;
     private final ObjectMapper mapper;
+    private T configValues;
 
     public Configuration(Path path, T defaultFile) {
         this.path = path;
@@ -31,7 +30,7 @@ public class Configuration<T> {
     }
 
     private void buildOfNotExist() throws IOException {
-        if(Files.notExists(path)) {
+        if (Files.notExists(path)) {
             Files.createDirectories(path.getParent());
             mapper.writeValue(Files.newBufferedWriter(path), configValues);
         }

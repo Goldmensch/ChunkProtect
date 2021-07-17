@@ -1,8 +1,8 @@
-package de.goldmensch.chunkprotect.storage.repositories.holder;
+package de.goldmensch.chunkprotect.storage.dao.holder;
 
 
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
-import de.goldmensch.chunkprotect.storage.repositories.Dao;
+import de.goldmensch.chunkprotect.storage.dao.Dao;
 
 import java.util.UUID;
 

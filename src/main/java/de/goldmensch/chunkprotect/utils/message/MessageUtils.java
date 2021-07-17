@@ -21,15 +21,16 @@ package de.goldmensch.chunkprotect.utils.message;
 
 import java.util.List;
 
-public class MessageUtils {
+public final class MessageUtils {
 
-    private MessageUtils() {}
+    private MessageUtils() {
+    }
 
     public static String formatList(List<String> list) {
         StringBuilder formattedList = new StringBuilder();
-        for(int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             formattedList.append(list.get(i));
-            if((i+1) != list.size()) {
+            if ((i + 1) != list.size()) {
                 formattedList.append(", ");
             }
         }

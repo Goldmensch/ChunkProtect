@@ -15,7 +15,8 @@ public final class ChunkLocation {
         this.world = world;
     }
 
-    public ChunkLocation() {} // for json
+    public ChunkLocation() {
+    } // for json
 
     public static ChunkLocation fromChunk(Chunk chunk) {
         return new ChunkLocation(chunk.getX(), chunk.getZ(), chunk.getWorld().getName());
@@ -26,20 +27,20 @@ public final class ChunkLocation {
         return x;
     }
 
-    public int getZ() {
-        return z;
-    }
-
-    public String getWorld() {
-        return world;
-    }
-
     public void setX(int x) {
         this.x = x;
     }
 
+    public int getZ() {
+        return z;
+    }
+
     public void setZ(int z) {
         this.z = z;
+    }
+
+    public String getWorld() {
+        return world;
     }
 
     public void setWorld(String world) {
@@ -51,10 +52,10 @@ public final class ChunkLocation {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ChunkLocation) obj;
-        return this.x == that.x &&
-                this.z == that.z &&
-                this.world.equals(that.world);
+        var chunkLocation = (ChunkLocation) obj;
+        return this.x == chunkLocation.x &&
+                this.z == chunkLocation.z &&
+                this.world.equals(chunkLocation.world);
     }
 
     @Override

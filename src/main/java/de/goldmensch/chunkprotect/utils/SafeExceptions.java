@@ -6,9 +6,10 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 
-public class SafeExceptions {
+public final class SafeExceptions {
 
-    private SafeExceptions() {}
+    private SafeExceptions() {
+    }
 
     public static <T> T safeIOException(Plugin plugin, ReturnThrowingFunction<T, IOException> function) {
         try {

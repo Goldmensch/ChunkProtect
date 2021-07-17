@@ -1,4 +1,4 @@
-package de.goldmensch.chunkprotect.storage.repositories;
+package de.goldmensch.chunkprotect.storage.dao;
 
 import java.util.Optional;
 

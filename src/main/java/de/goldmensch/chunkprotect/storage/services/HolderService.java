@@ -2,7 +2,7 @@ package de.goldmensch.chunkprotect.storage.services;
 
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.chunkprotect.storage.cache.Cache;
-import de.goldmensch.chunkprotect.storage.repositories.holder.HolderDao;
+import de.goldmensch.chunkprotect.storage.dao.holder.HolderDao;
 
 import java.util.UUID;
 
@@ -20,18 +20,18 @@ public class HolderService {
         ChunkHolder holder;
 
         var holderOptional = holderDao.read(uuid);
-        if(holderOptional.isPresent()) {
+        if (holderOptional.isPresent()) {
             holder = holderOptional.get();
             holder.setName(name);
-        }else {
-            holder = new ChunkHolder(name, uuid,  player);
+        } else {
+            holder = new ChunkHolder(name, uuid, player);
         }
         updateHolder(holder);
     }
 
     public void saveHolder(UUID uuid) {
         var holder = holderFromUUID(uuid);
-        if(holder.isNoFallback()) {
+        if (holder.isNoFallback()) {
             holderDao.write(holder);
         }
     }
@@ -45,7 +45,7 @@ public class HolderService {
     }
 
     public void write(ChunkHolder holder) {
-        if(cache.isCached(holder.getUuid()) && holder.isNoFallback()) {
+        if (cache.isCached(holder.getUuid()) && holder.isNoFallback()) {
             holderDao.write(holder);
         }
     }

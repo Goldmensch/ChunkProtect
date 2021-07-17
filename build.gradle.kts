@@ -1,7 +1,7 @@
 plugins {
     java
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id ("org.sonarqube") version "3.3"
+    id("org.sonarqube") version "3.3"
 }
 
 group = "de.goldmensch"
@@ -31,7 +31,7 @@ dependencies {
     testImplementation("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
 }
 
-tasks{
+tasks {
     getByName<Test>("test") {
         useJUnitPlatform()
     }
@@ -47,11 +47,11 @@ tasks{
 
     shadowJar {
         relocateAll("de.goldmensch.smartutils.core",
-            "de.goldmensch.commanddispatcher",
-            "de.goldmensch.smartutils.minimessage-adapter",
-            "com.fasterxml.jackson",
-            "com.jsoniter",
-            "org.yaml.snakeyaml"
+                "de.goldmensch.commanddispatcher",
+                "de.goldmensch.smartutils.minimessage-adapter",
+                "com.fasterxml.jackson",
+                "com.jsoniter",
+                "org.yaml.snakeyaml"
         )
         minimize {
             exclude(dependency("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.1"))

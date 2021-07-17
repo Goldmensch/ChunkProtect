@@ -26,13 +26,13 @@ public class StaffUnclaimAllSub extends ChunkProtectSubCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length != 1) {
+        if (args.length != 1) {
             getChunkProtectCommand().sendHelp(sender);
             return true;
         }
 
         OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[0]);
-        if(target == null) {
+        if (target == null) {
             getMessenger().send(sender, "player-not-found", Replacement.create("player", args[0]));
             return true;
         }
@@ -54,7 +54,7 @@ public class StaffUnclaimAllSub extends ChunkProtectSubCommand {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if(args.length == 1) {
+        if (args.length == 1) {
             return Arrays.stream(Bukkit.getOfflinePlayers())
                     .map(OfflinePlayer::getName)
                     .filter(Objects::nonNull)

@@ -60,7 +60,7 @@ public class ChunkProtectCommand extends SmartCommand {
     @Override
     public void noPermission(ArgValuedSubCommand argValuedSubCommand, CommandSender commandSender) {
         String msg = chunkProtect.getServer().spigot().getPaperConfig().getString("messages.no-permission");
-        commandSender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(msg));
+        commandSender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(msg != null ? msg : "no message found"));
     }
 
     public void sendHelp(CommandSender sender) {
@@ -68,9 +68,9 @@ public class ChunkProtectCommand extends SmartCommand {
         builder.appendLine(chunkProtect.getMessenger().prepare("help-header"));
         getAllSubFor(sender).keySet().forEach(cmd ->
                 builder.appendLine(chunkProtect.getMessenger()
-                .prepare("help-entry",
-                        Replacement.create("command",
-                                "/"+de.goldmensch.commanddispatcher.util.ArrayUtils.buildString(cmd))))
+                        .prepare("help-entry",
+                                Replacement.create("command",
+                                        "/" + de.goldmensch.commanddispatcher.util.ArrayUtils.buildString(cmd))))
         );
 
         sender.sendMessage(builder.build());

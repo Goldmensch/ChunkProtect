@@ -8,9 +8,9 @@ public class ProtectionBypass {
     private final Set<UUID> players = new HashSet<>();
 
     public boolean toggle(UUID uuid) {
-        if(players.contains(uuid)) {
+        if (players.contains(uuid)) {
             players.remove(uuid);
-        }else {
+        } else {
             players.add(uuid);
         }
         return players.contains(uuid);

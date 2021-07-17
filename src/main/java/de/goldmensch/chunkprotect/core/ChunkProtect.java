@@ -22,15 +22,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ChunkProtect extends SmartPlugin {
+    private final ProtectionBypass protectionBypass = new ProtectionBypass();
     private DataService dataService;
     private Messenger messenger;
     private PluginConfig pluginConfig;
     private EntitiesConfiguration entitiesConfiguration;
     private ProtectionConfig protectionConfig;
-
     private ExecutorService service;
-
-    private final ProtectionBypass protectionBypass = new ProtectionBypass();
 
     @Override
     public void onLoad() {

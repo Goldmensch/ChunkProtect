@@ -20,9 +20,9 @@ public class BypassSub extends ChunkProtectSubCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(getChunkProtect().getProtectionBypass().toggle(((Player)sender).getUniqueId())) {
+        if (getChunkProtect().getProtectionBypass().toggle(((Player) sender).getUniqueId())) {
             getMessenger().send(sender, "stuff-bypass-enable");
-        }else {
+        } else {
             getMessenger().send(sender, "stuff-bypass-disable");
         }
         return true;

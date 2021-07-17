@@ -11,12 +11,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ChunkHolder {
     private String name; // no default value
-    private  UUID uuid; // no default value
+    private UUID uuid; // no default value
     private boolean isPlayer; // no default value
     private Set<UUID> trustedAllChunks = new HashSet<>();
     private Set<ChunkLocation> claimedChunks = ConcurrentHashMap.newKeySet();
     @JsonIgnore
-    private boolean fallback = false;
+    private boolean fallback;
 
     public ChunkHolder(String name, UUID uuid, boolean isPlayer) {
         this.name = name;
@@ -31,11 +31,12 @@ public final class ChunkHolder {
         this.fallback = fallback;
     }
 
+    public ChunkHolder() {
+    } // for json
+
     public static ChunkHolder fallback(UUID uuid) {
         return new ChunkHolder(uuid.toString(), uuid, false, true);
     }
-
-    public ChunkHolder() {} // for json
 
     // Getter/Setter
     public Set<UUID> getTrustedAllChunks() {
@@ -50,8 +51,16 @@ public final class ChunkHolder {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public UUID getUuid() {
         return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     @JsonIgnore
@@ -59,21 +68,12 @@ public final class ChunkHolder {
         return claimedChunks.size();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean isPlayer() {
+        return isPlayer;
     }
-
 
     public void setPlayer(boolean player) {
         isPlayer = player;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public boolean isPlayer() {
-        return isPlayer;
     }
 
     public boolean isNoFallback() {

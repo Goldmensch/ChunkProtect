@@ -21,7 +21,7 @@ public class ChunkLoadListener implements Listener {
     }
 
     @EventHandler
-    public void handleChunkLoad(ChunkLoadEvent event) { 
+    public void handleChunkLoad(ChunkLoadEvent event) {
         executorService.execute(() ->
                 dataService.loadChunkIfUnloaded(ChunkLocation.fromChunk(event.getChunk())));
     }

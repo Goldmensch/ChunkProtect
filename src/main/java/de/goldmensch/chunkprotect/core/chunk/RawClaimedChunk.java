@@ -16,15 +16,24 @@ public class RawClaimedChunk {
         this.trustedPlayer = trustedPlayer;
     }
 
-    public RawClaimedChunk() {}
+    public RawClaimedChunk() {
+    }
 
     // Getter/Setter
     public ChunkLocation getLocation() {
         return location;
     }
 
+    public void setLocation(ChunkLocation location) {
+        this.location = location;
+    }
+
     public Set<UUID> getTrustedPlayer() {
         return trustedPlayer;
+    }
+
+    public void setTrustedPlayer(Set<UUID> trustedPlayer) {
+        this.trustedPlayer = trustedPlayer;
     }
 
     public UUID getHolderUUID() {
@@ -35,22 +44,14 @@ public class RawClaimedChunk {
         this.holderUUID = holder;
     }
 
-    public void setLocation(ChunkLocation location) {
-        this.location = location;
-    }
-
-    public void setTrustedPlayer(Set<UUID> trustedPlayer) {
-        this.trustedPlayer = trustedPlayer;
-    }
-
     //Object stuff
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (RawClaimedChunk) obj;
-        return Objects.equals(this.location, that.location) &&
-                Objects.equals(this.holderUUID, that.holderUUID);
+        var rawClaimedChunk = (RawClaimedChunk) obj;
+        return Objects.equals(this.location, rawClaimedChunk.location) &&
+                Objects.equals(this.holderUUID, rawClaimedChunk.holderUUID);
     }
 
     @Override

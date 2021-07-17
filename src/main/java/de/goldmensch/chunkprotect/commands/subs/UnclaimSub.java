@@ -27,7 +27,7 @@ public class UnclaimSub extends ChunkProtectSubCommand {
 
         ClaimableChunk claimableChunk = ChunkUtil.chunkFromSenderUnsafe(sender, getDataService());
 
-        if(ChunkUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
+        if (ChunkUtil.isClaimedAndHolder(claimableChunk, player, getChunkProtect())) return true;
         ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
         getDataService().unclaimChunk(claimedChunk.getLocation());

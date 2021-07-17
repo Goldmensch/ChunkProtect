@@ -1,8 +1,8 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
 import de.goldmensch.chunkprotect.core.ChunkProtect;
-import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
+import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,7 +13,7 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class EntityListeners extends BlockListeners{
+public class EntityListeners extends BlockListeners {
     public EntityListeners(DataService dataService, ChunkProtect chunkProtect) {
         super(dataService, chunkProtect);
     }
@@ -25,17 +25,17 @@ public class EntityListeners extends BlockListeners{
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if(entityDamage(event.getEntity(), event.getDamager())) event.setCancelled(true);
+        if (entityDamage(event.getEntity(), event.getDamager())) event.setCancelled(true);
     }
 
     private boolean entityDamage(Entity entity, Entity other) {
         AtomicBoolean returnValue = new AtomicBoolean(false);
         unwrapPlayer(other).ifPresent(player -> ChunkUtil.getChunk(entity.getChunk(), dataService).ifClaimedOr(chunk -> {
-            if(entitiesConfiguration.getProtection(entity.getType()).getDamage().isClaimed() && forbidden(player, chunk)) {
+            if (entitiesConfiguration.getProtection(entity.getType()).getDamage().isClaimed() && forbidden(player, chunk)) {
                 returnValue.set(true);
             }
         }, () -> {
-            if(entitiesConfiguration.getProtection(entity.getType()).getDamage().isUnclaimed()) {
+            if (entitiesConfiguration.getProtection(entity.getType()).getDamage().isUnclaimed()) {
                 sendYouCantDoThat(player);
                 returnValue.set(true);
             }
@@ -45,7 +45,7 @@ public class EntityListeners extends BlockListeners{
 
     @EventHandler
     public void handleVehicleDamage(VehicleDamageEvent event) {
-        if(entityDamage(event.getVehicle().getVehicle(), event.getAttacker())) event.setCancelled(true);
+        if (entityDamage(event.getVehicle().getVehicle(), event.getAttacker())) event.setCancelled(true);
     }
 
     /*

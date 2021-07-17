@@ -1,4 +1,4 @@
-package de.goldmensch.chunkprotect.storage.repositories.chunk;
+package de.goldmensch.chunkprotect.storage.dao.chunk;
 
 import com.jsoniter.JsonIterator;
 import com.jsoniter.output.JsonStream;
@@ -8,7 +8,7 @@ import de.goldmensch.chunkprotect.core.chunk.RawClaimedChunk;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Optional;
 
 public class JsonChunkDao implements ChunkDao {
 
@@ -22,10 +22,10 @@ public class JsonChunkDao implements ChunkDao {
     public void write(RawClaimedChunk chunk) {
         Path local = buildPath(chunk.getLocation());
         try {
-            if(Files.notExists(local)) {
+            if (Files.notExists(local)) {
                 Files.createFile(local);
             }
-            if(Files.isWritable(local)) {
+            if (Files.isWritable(local)) {
                 Files.writeString(local, JsonStream.serialize(chunk));
             }
         } catch (IOException e) {
@@ -37,7 +37,7 @@ public class JsonChunkDao implements ChunkDao {
     public void delete(ChunkLocation location) {
         Path local = buildPath(location);
         try {
-            if(Files.isWritable(local)) {
+            if (Files.isWritable(local)) {
                 Files.delete(local);
             }
         } catch (IOException e) {
@@ -49,7 +49,7 @@ public class JsonChunkDao implements ChunkDao {
     public Optional<RawClaimedChunk> read(ChunkLocation location) {
         Path local = buildPath(location);
 
-        if(Files.exists(local)) {
+        if (Files.exists(local)) {
             try {
                 return Optional.of(JsonIterator.deserialize(Files.readAllBytes(local), RawClaimedChunk.class));
             } catch (IOException e) {
@@ -61,7 +61,7 @@ public class JsonChunkDao implements ChunkDao {
 
     private Path buildPath(ChunkLocation location) {
         return path.resolve(
-                        "X-" + location.getX() +
+                "X-" + location.getX() +
                         ".Z-" + location.getZ() +
                         ".WORLD-" + location.getWorld() + ".json");
     }

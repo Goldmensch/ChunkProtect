@@ -3,18 +3,21 @@ package de.goldmensch.chunkprotect.storage.cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
-import de.goldmensch.chunkprotect.core.chunk.ChunkLocation;
-import de.goldmensch.chunkprotect.storage.repositories.holder.HolderDao;
+import de.goldmensch.chunkprotect.storage.dao.holder.HolderDao;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-public class Cache {
+public final class Cache {
 
     private final LoadingCache<UUID, ChunkHolder> holderCache;
     private final Map<ChunkLocation, ClaimableChunk> chunkCache = new ConcurrentHashMap<>();
@@ -26,12 +29,7 @@ public class Cache {
     public static Cache init(HolderDao repository) {
         return new Cache(CacheBuilder.newBuilder()
                 .expireAfterAccess(30, TimeUnit.MINUTES)
-                .build(new CacheLoader<>() {
-                    @Override
-                    public ChunkHolder load(@NotNull UUID key){
-                        return repository.read(key).orElse(ChunkHolder.fallback(key));
-                    }
-                })
+                .build(new UUIDChunkHolderCacheLoader(repository))
         );
     }
 
@@ -78,5 +76,18 @@ public class Cache {
 
     public Set<Map.Entry<ChunkLocation, ClaimableChunk>> getAllChunks() {
         return chunkCache.entrySet();
+    }
+
+    private static final class UUIDChunkHolderCacheLoader extends CacheLoader<UUID, ChunkHolder> {
+        private final HolderDao repository;
+
+        private UUIDChunkHolderCacheLoader(HolderDao repository) {
+            this.repository = repository;
+        }
+
+        @Override
+        public ChunkHolder load(@NotNull UUID key) {
+            return repository.read(key).orElse(ChunkHolder.fallback(key));
+        }
     }
 }

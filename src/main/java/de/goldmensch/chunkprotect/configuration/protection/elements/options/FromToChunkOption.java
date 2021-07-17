@@ -6,19 +6,19 @@ public class FromToChunkOption {
     private ChunkOption fromUnclaimedInto = new ChunkOption();
     private ChunkOption fromClaimedInto = new ChunkOption();
 
-    public ChunkOption getFromUnclaimedInto() {
-        return fromUnclaimedInto;
-    }
-
-    public ChunkOption getFromClaimedInto() {
-        return fromClaimedInto;
-    }
-
     public FromToChunkOption(ChunkOption fromUnclaimedInto, ChunkOption fromClaimedInto) {
         this.fromUnclaimedInto = fromUnclaimedInto;
         this.fromClaimedInto = fromClaimedInto;
     }
 
     public FromToChunkOption() {
+    }
+
+    public ChunkOption getFromUnclaimedInto() {
+        return fromUnclaimedInto;
+    }
+
+    public ChunkOption getFromClaimedInto() {
+        return fromClaimedInto;
     }
 }

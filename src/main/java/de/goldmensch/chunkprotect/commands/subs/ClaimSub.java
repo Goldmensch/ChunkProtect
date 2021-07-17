@@ -28,10 +28,10 @@ public class ClaimSub extends ChunkProtectSubCommand {
         Chunk chunk = player.getChunk();
 
         ChunkLocation location = ChunkLocation.fromChunk(chunk);
-        if(getDataService().claimChunk(location, player.getUniqueId())) {
+        if (getDataService().claimChunk(location, player.getUniqueId())) {
             getMessenger().send(sender, "chunk-claimed");
             Util.showChunkBorders(player, getChunkProtect());
-        }else {
+        } else {
             getMessenger().send(sender, "chunk-already-claimed", Replacement.create("holder",
                     getDataService().getChunkAt(location).getChunk().getHolder().getName()));
         }

@@ -1,4 +1,4 @@
-package de.goldmensch.chunkprotect.storage.repositories.holder;
+package de.goldmensch.chunkprotect.storage.dao.holder;
 
 import com.jsoniter.JsonIterator;
 import com.jsoniter.output.JsonStream;
@@ -22,10 +22,10 @@ public class JsonHolderDao implements HolderDao {
     public void write(ChunkHolder holder) {
         Path local = buildPath(holder.getUuid());
         try {
-            if(Files.notExists(local)) {
+            if (Files.notExists(local)) {
                 Files.createFile(local);
             }
-            if(Files.isWritable(local)) {
+            if (Files.isWritable(local)) {
                 Files.writeString(local, JsonStream.serialize(holder));
             }
         } catch (IOException e) {
@@ -37,7 +37,7 @@ public class JsonHolderDao implements HolderDao {
     public void delete(UUID uuid) {
         Path local = buildPath(uuid);
         try {
-            if(Files.isWritable(local)) {
+            if (Files.isWritable(local)) {
                 Files.delete(local);
             }
         } catch (IOException e) {
@@ -49,7 +49,7 @@ public class JsonHolderDao implements HolderDao {
     public Optional<ChunkHolder> read(UUID uuid) {
         Path local = buildPath(uuid);
 
-        if(Files.exists(local)) {
+        if (Files.exists(local)) {
             try {
                 return Optional.of(JsonIterator.deserialize(Files.readAllBytes(local), ChunkHolder.class));
             } catch (IOException e) {

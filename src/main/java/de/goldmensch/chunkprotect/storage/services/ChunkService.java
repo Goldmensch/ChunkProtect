@@ -6,14 +6,14 @@ import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.core.chunk.RawClaimedChunk;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.chunkprotect.storage.cache.Cache;
-import de.goldmensch.chunkprotect.storage.repositories.chunk.ChunkDao;
-import de.goldmensch.chunkprotect.storage.repositories.holder.HolderDao;
+import de.goldmensch.chunkprotect.storage.dao.chunk.ChunkDao;
+import de.goldmensch.chunkprotect.storage.dao.holder.HolderDao;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ChunkService extends HolderService{
+public class ChunkService extends HolderService {
 
     final ChunkDao chunkDao;
 
@@ -27,22 +27,21 @@ public class ChunkService extends HolderService{
     }
 
     public boolean claimChunk(ChunkLocation location, UUID holderUUID) {
-        ChunkHolder holder;
-        ClaimedChunk chunk;
-        if(getChunkAt(location).isClaimed()) {
+        if (getChunkAt(location).isClaimed()) {
             return false;
         }
-        holder = holderFromUUID(holderUUID);
-        chunk = new ClaimedChunk(new RawClaimedChunk(location, holderUUID, new HashSet<>()), holder);
+        ChunkHolder holder = holderFromUUID(holderUUID);
+        ClaimedChunk chunk = new ClaimedChunk(new RawClaimedChunk(location, holderUUID, new HashSet<>()), holder);
         cache.set(location, new ClaimableChunk(chunk));
         holder.getClaimedChunks().add(chunk.getLocation());
         updateHolder(holder);
         return true;
     }
 
+
     public boolean unclaimChunk(ChunkLocation location) {
         ClaimableChunk chunk = getChunkAt(location);
-        if(chunk.isClaimed()) {
+        if (chunk.isClaimed()) {
             cache.set(location, new ClaimableChunk(null));
             ChunkHolder holder = chunk.getChunk().getHolder();
             holder.getClaimedChunks().remove(location);
@@ -52,10 +51,10 @@ public class ChunkService extends HolderService{
     }
 
     public void loadChunkIfUnloaded(ChunkLocation location) {
-        if(cache.isCached(location)) return;
+        if (cache.isCached(location)) return;
         ClaimedChunk claimedChunk = null;
         Optional<RawClaimedChunk> rawClaimedChunkOptional = chunkDao.read(location);
-        if(rawClaimedChunkOptional.isPresent()) {
+        if (rawClaimedChunkOptional.isPresent()) {
             RawClaimedChunk rawClaimedChunk = rawClaimedChunkOptional.get();
             ChunkHolder chunkHolder = holderFromUUID(rawClaimedChunk.getHolderUUID());
             claimedChunk = new ClaimedChunk(rawClaimedChunk, chunkHolder);
@@ -75,12 +74,12 @@ public class ChunkService extends HolderService{
     }
 
     public void write(ClaimableChunk claimableChunk, ChunkLocation location) {
-        if(claimableChunk.isClaimed()) {
+        if (claimableChunk.isClaimed()) {
             ClaimedChunk chunk = claimableChunk.getChunk();
-            if(cache.isCached(location) && chunk.notForceClaimed()) {
+            if (cache.isCached(location) && chunk.notForceClaimed()) {
                 chunkDao.write(chunk);
             }
-        }else {
+        } else {
             chunkDao.delete(location);
         }
     }

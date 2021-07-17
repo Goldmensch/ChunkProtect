@@ -13,9 +13,10 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class ChunkUtil {
+public final class ChunkUtil {
 
-    private ChunkUtil() {}
+    private ChunkUtil() {
+    }
 
     public static boolean isHolder(ClaimedChunk chunk, UUID holder) {
         return chunk.getHolderUUID().equals(holder);
@@ -27,7 +28,7 @@ public class ChunkUtil {
     }
 
     public static ClaimableChunk chunkFromSenderUnsafe(CommandSender sender, DataService service) {
-        return service.getChunkAt(ChunkLocation.fromChunk(((Player)sender).getChunk()));
+        return service.getChunkAt(ChunkLocation.fromChunk(((Player) sender).getChunk()));
     }
 
     public static ClaimableChunk chunkFromPlayer(Player player, DataService service) {
@@ -44,12 +45,12 @@ public class ChunkUtil {
 
     public static boolean isClaimedAndHolder(ClaimableChunk chunk, Player sender, ChunkProtect protect) {
         Messenger messenger = protect.getMessenger();
-        if(!chunk.isClaimed()) {
+        if (!chunk.isClaimed()) {
             messenger.send(sender, "chunk-not-claimed");
             return true;
         }
         ClaimedChunk claimedChunk = chunk.getChunk();
-        if(!ChunkUtil.isHolder(claimedChunk, sender.getUniqueId())) {
+        if (!ChunkUtil.isHolder(claimedChunk, sender.getUniqueId())) {
             messenger.send(sender, "not-owner-from-chunk", Replacement.create("holder",
                     claimedChunk.getHolder().getName()));
             return true;

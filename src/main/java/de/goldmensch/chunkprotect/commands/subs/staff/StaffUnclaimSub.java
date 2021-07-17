@@ -22,9 +22,9 @@ public class StaffUnclaimSub extends ChunkProtectSubCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = toPlayer(sender);
-        if(getDataService().unclaimChunk(ChunkLocation.fromChunk(player.getChunk()))) {
+        if (getDataService().unclaimChunk(ChunkLocation.fromChunk(player.getChunk()))) {
             getMessenger().send(sender, "chunk-unclaimed");
-        }else {
+        } else {
             getMessenger().send(sender, "chunk-not-claimed");
         }
         return true;

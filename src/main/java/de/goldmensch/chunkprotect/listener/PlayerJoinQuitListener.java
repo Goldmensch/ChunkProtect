@@ -24,7 +24,7 @@ public class PlayerJoinQuitListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleJoin(AsyncPlayerPreLoginEvent event) {
-        if(event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
+        if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
             dataService.setupHolder(event.getUniqueId(), event.getName(), true);
         }
     }

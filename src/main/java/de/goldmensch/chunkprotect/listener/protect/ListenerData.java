@@ -4,8 +4,8 @@ import de.goldmensch.chunkprotect.configuration.entities.EntitiesConfiguration;
 import de.goldmensch.chunkprotect.configuration.protection.ProtectionFile;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
-import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.storage.services.DataService;
+import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.smartutils.localizer.Replacement;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -32,16 +32,16 @@ public class ListenerData implements Listener {
     }
 
     protected boolean forbidden(HumanEntity player, ClaimedChunk chunk) {
-        if(chunkProtect.getProtectionBypass().hasBypass(player.getUniqueId())) return false;
-        if(!ChunkUtil.hasAccess(chunk, player.getUniqueId())) {
+        if (chunkProtect.getProtectionBypass().hasBypass(player.getUniqueId())) return false;
+        if (!ChunkUtil.hasAccess(chunk, player.getUniqueId())) {
             sendNoAccess(player, chunk);
             return true;
         }
         return false;
     }
 
-    protected void sendNoAccess(HumanEntity player, ClaimedChunk chunk) {
-        chunkProtect.getMessenger().send(player, "chunk-protected",
+    protected void sendNoAccess(CommandSender sender, ClaimedChunk chunk) {
+        chunkProtect.getMessenger().send(sender, "chunk-protected",
                 Replacement.create("holder", chunk.getHolder().getName()));
     }
 
@@ -50,12 +50,12 @@ public class ListenerData implements Listener {
     }
 
     protected Optional<Player> unwrapPlayer(Entity possiblePlayer) {
-        if(possiblePlayer instanceof Player player) {
+        if (possiblePlayer instanceof Player player) {
             return Optional.of(player);
-        }else if((possiblePlayer instanceof Projectile projectile) && (projectile.getShooter() instanceof Player player)) {
+        }
+        if ((possiblePlayer instanceof Projectile projectile) && (projectile.getShooter() instanceof Player player)) {
             return Optional.of(player);
         }
         return Optional.empty();
-
     }
 }

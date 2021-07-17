@@ -5,8 +5,8 @@ import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
-import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
+import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.utils.message.MessageBuilder;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -30,9 +30,9 @@ public class InfoSub extends ChunkProtectSubCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length == 1) {
+        if (args.length == 1) {
             OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(args[0]);
-            if(player != null) {
+            if (player != null) {
                 CompletableFuture.supplyAsync(() -> {
                     ChunkHolder holder = getDataService().holderFromUUID(player.getUniqueId());
                     return new InfoValue(holder, holder.getTrustedAllChunks().stream().map(uuid ->
@@ -50,14 +50,14 @@ public class InfoSub extends ChunkProtectSubCommand {
                                     .prepare("player-info-on-all-trusted", Replacement.create("names", infoValue.getTrusted().toString())))
                             .build());
                 });
-            }else {
+            } else {
                 getMessenger().send(sender, "player-not-found", Replacement.create("player", args[0]));
             }
             return true;
         }
 
         ClaimableChunk claimableChunk = ChunkUtil.chunkFromSenderUnsafe(sender, getDataService());
-        if(claimableChunk.isClaimed()) {
+        if (claimableChunk.isClaimed()) {
             ClaimedChunk chunk = claimableChunk.getChunk();
 
             CompletableFuture.supplyAsync(() ->
@@ -77,7 +77,7 @@ public class InfoSub extends ChunkProtectSubCommand {
                                     .prepare("chunk-info-trusted", Replacement.create("playerlist", chunkHolders.toString())))
                             .build())
             );
-        }else {
+        } else {
             getMessenger().send(sender, "chunk-not-claimed");
         }
         return true;
@@ -87,22 +87,22 @@ public class InfoSub extends ChunkProtectSubCommand {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         return null;
     }
-}
 
-class InfoValue {
-    private final ChunkHolder holder;
-    private final Set<String> trusted;
+    private static class InfoValue {
+        private final ChunkHolder holder;
+        private final Set<String> trusted;
 
-    public InfoValue(ChunkHolder holder, Set<String> trusted) {
-        this.holder = holder;
-        this.trusted = trusted;
-    }
+        InfoValue(ChunkHolder holder, Set<String> trusted) {
+            this.holder = holder;
+            this.trusted = trusted;
+        }
 
-    public ChunkHolder getHolder() {
-        return holder;
-    }
+        public ChunkHolder getHolder() {
+            return holder;
+        }
 
-    public Set<String> getTrusted() {
-        return trusted;
+        public Set<String> getTrusted() {
+            return trusted;
+        }
     }
 }

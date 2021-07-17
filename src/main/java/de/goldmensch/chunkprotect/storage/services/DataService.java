@@ -3,18 +3,18 @@ package de.goldmensch.chunkprotect.storage.services;
 import com.jsoniter.spi.JsoniterSpi;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.storage.cache.Cache;
-import de.goldmensch.chunkprotect.storage.repositories.chunk.ChunkDao;
-import de.goldmensch.chunkprotect.storage.repositories.chunk.JsonChunkDao;
-import de.goldmensch.chunkprotect.storage.repositories.holder.HolderDao;
-import de.goldmensch.chunkprotect.storage.repositories.holder.JsonHolderDao;
+import de.goldmensch.chunkprotect.storage.dao.chunk.ChunkDao;
+import de.goldmensch.chunkprotect.storage.dao.chunk.JsonChunkDao;
+import de.goldmensch.chunkprotect.storage.dao.holder.HolderDao;
+import de.goldmensch.chunkprotect.storage.dao.holder.JsonHolderDao;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.UUID;
 
-public class DataService extends ChunkService{
+public class DataService extends ChunkService {
 
     public DataService(Cache cache, HolderDao holderDao, ChunkDao chunkDao) {
         super(cache, holderDao, chunkDao);
@@ -33,20 +33,20 @@ public class DataService extends ChunkService{
     }
 
     private void initWriteScheduler(Plugin plugin, int interval) {
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, ()-> saveALl(false), 0, interval*60*20L);
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> saveALl(false), 0, interval * 60 * 20L);
     }
 
     public void saveALl(boolean invalidate) {
         cache.getAllChunks().forEach(entry -> {
-            if(invalidate) {
+            if (invalidate) {
                 writeAndInvalidate(entry.getKey());
-            }else {
+            } else {
                 write(entry.getValue(), entry.getKey());
             }
         });
         cache.getAllHolder().forEach(entry -> {
             write(entry.getValue());
-            if(invalidate) {
+            if (invalidate) {
                 cache.invalidate(entry.getKey());
             }
         });

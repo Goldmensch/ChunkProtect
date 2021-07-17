@@ -12,9 +12,9 @@ import java.util.Map;
 
 public class EntitiesConfiguration {
     private final EntityProtection defaultProtection;
-    private int version = 1;
     private final Map<EntityType, EntityProtection> protectionMap = new EnumMap<>(EntityType.class);
     private final Path path;
+    private int version = 1;
 
     public EntitiesConfiguration(Path path, EntityProtection defaultProtection) {
         this.path = path;
@@ -27,35 +27,37 @@ public class EntitiesConfiguration {
     }
 
     private void build() throws IOException {
-        if(Files.notExists(path)) {
+        if (Files.notExists(path)) {
             Files.createFile(path);
             Files.writeString(path,
                     "# Schema: TYPE: damageInClaimed, playerInteractInClaimed, damageInUnclaimed, playerInteractInUnclaimed"
-                    + System.lineSeparator() + "# true=protected; false=not protected"
-                    + System.lineSeparator() + "# Example: SHEEP: true, false, false, false"
-                    + System.lineSeparator() + "# Entity Types(TYPE): https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"
-                    + System.lineSeparator()+ "version: " + version);
+                            + System.lineSeparator() + "# true=protected; false=not protected"
+                            + System.lineSeparator() + "# Example: SHEEP: true, false, false, false"
+                            + System.lineSeparator() + "# Entity Types(TYPE): https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"
+                            + System.lineSeparator() + "version: " + version);
         }
         version = getVersionFromFile();
     }
 
     private int getVersionFromFile() throws IOException {
-        for(String line : Files.readAllLines(path)) {
+        for (String line : Files.readAllLines(path)) {
             String[] data = line.split(":");
-            if(data[0].equalsIgnoreCase("version")) return Integer.parseInt(data[1].trim());
+            if ("version".equalsIgnoreCase(data[0])) return Integer.parseInt(data[1].trim());
         }
         return 1;
     }
 
     public void reload() throws IOException {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(Files.newBufferedReader(path));
-        for(String key : config.getKeys(false)) {
-            String[] rawValues = config.getString(key).split(",");
-            if(rawValues.length != 4 || "version".contains(key)) continue;
+        for (Map.Entry<String, Object> entry : config.getValues(false).entrySet()) {
+            String key = entry.getKey();
+            String value = String.valueOf(entry.getValue());
+            String[] rawValues = value.split(",");
+            if (rawValues.length != 4 || "version".contains(key)) continue;
             EntityType type = EntityType.valueOf(key.toUpperCase());
 
             boolean[] values = new boolean[4];
-            for(int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++) {
                 values[i] = Boolean.parseBoolean(rawValues[i]);
             }
 

@@ -15,17 +15,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class AboutSub extends ChunkProtectSubCommand {
+public final class AboutSub extends ChunkProtectSubCommand {
 
     private final Component message;
 
-    private AboutSub(ExecutorLevel executorLevel, String permission, ChunkProtect chunkProtect, ChunkProtectCommand chunkProtectCommand, Component message) {
-        super(executorLevel, permission, chunkProtect, chunkProtectCommand);
+    private AboutSub(ChunkProtect chunkProtect, ChunkProtectCommand chunkProtectCommand, Component message) {
+        super(ExecutorLevel.CONSOLE_PLAYER, "", chunkProtect, chunkProtectCommand);
         this.message = message;
     }
 
     public static AboutSub newAboutSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
-        return new AboutSub(ExecutorLevel.CONSOLE_PLAYER, "", chunkProtect, command, MessageBuilder.builder()
+        return new AboutSub(chunkProtect, command, MessageBuilder.builder()
                 .appendLine(chunkProtect.getMessenger()
                         .prepare("about-name", Replacement.create("name", chunkProtect.getName())))
                 .appendLine(chunkProtect.getMessenger()
