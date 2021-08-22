@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 public final class Cache {
 
@@ -28,7 +27,6 @@ public final class Cache {
 
     public static Cache init(HolderDao repository) {
         return new Cache(CacheBuilder.newBuilder()
-                .expireAfterAccess(30, TimeUnit.MINUTES)
                 .build(new UUIDChunkHolderCacheLoader(repository))
         );
     }

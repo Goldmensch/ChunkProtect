@@ -1,6 +1,7 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
 import com.destroystokyo.paper.event.block.TNTPrimeEvent;
+import de.goldmensch.chunkprotect.configuration.protection.elements.options.ChunkOption;
 import de.goldmensch.chunkprotect.configuration.protection.elements.options.FromToChunkOption;
 import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
@@ -8,6 +9,7 @@ import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
@@ -17,23 +19,32 @@ import java.util.List;
 import java.util.Set;
 
 
-public class BlockListeners extends ListenerData {
+public class BlockListeners extends ProtectListener {
+
+    private final de.goldmensch.chunkprotect.configuration.protection.elements.Block blockConfig = protectionFile.getBlock();
+
     public BlockListeners(DataService dataService, ChunkProtect chunkProtect) {
         super(dataService, chunkProtect);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockPlace(BlockPlaceEvent event) {
-        ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimed(chunk -> {
-            if (forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
-        });
+        if (handleBlock(blockConfig.getPlaceBlock(), event.getPlayer(), event.getBlock().getChunk()))
+            event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBlockBreak(BlockBreakEvent event) {
-        ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimed(chunk -> {
-            if (forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
-        });
+        if (handleBlock(blockConfig.getBreakBlock(), event.getPlayer(), event.getBlock().getChunk()))
+            event.setCancelled(true);
+    }
+
+    private boolean handleBlock(ChunkOption option, Player player, Chunk chunk) {
+        ClaimableChunk claimableChunk = ChunkUtil.getChunk(chunk, dataService);
+        if(claimableChunk.isClaimed() && option.isClaimed()) {
+            return forbidden(player, claimableChunk.getChunk());
+        }
+        return !claimableChunk.isClaimed() && option.isUnclaimed();
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -75,7 +86,7 @@ public class BlockListeners extends ListenerData {
     @EventHandler(priority = EventPriority.HIGH)
     public void handlePistonBlockRetract(BlockPistonRetractEvent event) {
         event.getBlocks().forEach(block -> {
-            if (fromTo(block.getChunk(), block.getChunk(), protectionFile.getBlock().getPistonRetract())) {
+            if (fromTo(block.getChunk(), block.getRelative(event.getDirection()).getChunk(), protectionFile.getBlock().getPistonRetract())) {
                 event.setCancelled(true);
             }
         });

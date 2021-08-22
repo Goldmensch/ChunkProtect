@@ -4,6 +4,7 @@ import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.utils.EventUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -14,8 +15,8 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class InteractListener extends EntityListeners {
-    public InteractListener(DataService dataService, ChunkProtect chunkProtect) {
+public class InteractProtectListener extends EntityListeners {
+    public InteractProtectListener(DataService dataService, ChunkProtect chunkProtect) {
         super(dataService, chunkProtect);
     }
 
@@ -64,12 +65,14 @@ public class InteractListener extends EntityListeners {
                 && event.getClickedBlock().getType() != Material.AIR
                 && event.useInteractedBlock() == Event.Result.ALLOW
                 && (((event.getAction() == Action.RIGHT_CLICK_BLOCK
-                && (!event.isBlockInHand() || !event.getPlayer().isSneaking())
-                && event.useInteractedBlock() == Event.Result.ALLOW)
+                    && (!event.isBlockInHand() || !event.getPlayer().isSneaking())
+                    && event.getClickedBlock().getType().isInteractable()
+                    && event.useInteractedBlock() == Event.Result.ALLOW)
                 && event.getClickedBlock().getType() != Material.ENDER_CHEST)
                 && !EventUtil.isBucketEvent(event)
                 || event.getAction() == Action.PHYSICAL)) {
 
+            System.out.println("interact" + Bukkit.getCurrentTick());
             ChunkUtil.getChunk(event.getClickedBlock().getChunk(), dataService).ifClaimed(chunk -> {
                 if (forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
             });

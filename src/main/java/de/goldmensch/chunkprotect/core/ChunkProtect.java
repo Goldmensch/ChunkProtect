@@ -50,7 +50,7 @@ public class ChunkProtect extends SmartPlugin {
 
     @Override
     public void onDisable() {
-        dataService.saveALl(true);
+        dataService.saveAll(true);
         service.shutdown();
     }
 

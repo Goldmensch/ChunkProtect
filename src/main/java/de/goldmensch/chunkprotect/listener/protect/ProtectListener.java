@@ -16,7 +16,7 @@ import org.bukkit.event.Listener;
 
 import java.util.Optional;
 
-public class ListenerData implements Listener {
+public class ProtectListener implements Listener {
     protected final DataService dataService;
     protected final ChunkProtect chunkProtect;
 
@@ -24,7 +24,7 @@ public class ListenerData implements Listener {
 
     protected final ProtectionFile protectionFile;
 
-    public ListenerData(DataService dataService, ChunkProtect chunkProtect) {
+    public ProtectListener(DataService dataService, ChunkProtect chunkProtect) {
         this.dataService = dataService;
         this.chunkProtect = chunkProtect;
         this.entitiesConfiguration = chunkProtect.getEntitiesConfiguration();

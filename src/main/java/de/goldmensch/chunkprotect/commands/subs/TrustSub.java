@@ -58,7 +58,7 @@ public class TrustSub extends ChunkProtectSubCommand {
         ChunkHolder holder = getDataService().holderFromUUID(player.getUniqueId());
         if (holder.getTrustedAllChunks().add(target.getUniqueId())) {
             getMessenger().send(sender, "player-trusted-on-all", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
-            getDataService().updateHolder(holder);
+            //getDataService().updateHolder(holder);
         } else {
             getMessenger().send(sender, "player-already-trusted-all", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
         }
