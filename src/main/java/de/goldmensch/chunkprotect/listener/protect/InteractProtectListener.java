@@ -27,7 +27,7 @@ public class InteractProtectListener extends EntityListeners {
                 event.setCancelled(true);
             }
         }, () -> {
-            if (protectionFile.getOther().getBucketFill().isUnclaimed()) {
+            if (protectionFile.getOther().getBucketFill().isUnclaimed() && hasNoBypass(event.getPlayer())) {
                 sendYouCantDoThat(event.getPlayer());
                 event.setCancelled(true);
             }
@@ -41,7 +41,7 @@ public class InteractProtectListener extends EntityListeners {
                 event.setCancelled(true);
             }
         }, () -> {
-            if (protectionFile.getOther().getBucketEmpty().isUnclaimed()) {
+            if (protectionFile.getOther().getBucketEmpty().isUnclaimed() && hasNoBypass(event.getPlayer())) {
                 sendYouCantDoThat(event.getPlayer());
                 event.setCancelled(true);
             }
@@ -55,7 +55,10 @@ public class InteractProtectListener extends EntityListeners {
                 event.setCancelled(true);
             }
         }, () -> {
-            if (entitiesConfiguration.getProtection(event.getRightClicked().getType()).getPlayerInteract().isUnclaimed()) sendYouCantDoThat(event.getPlayer());
+            if (entitiesConfiguration.getProtection(event.getRightClicked().getType()).getPlayerInteract().isUnclaimed()
+                    && hasNoBypass(event.getPlayer())) {
+                sendYouCantDoThat(event.getPlayer());
+            }
         });
     }
 

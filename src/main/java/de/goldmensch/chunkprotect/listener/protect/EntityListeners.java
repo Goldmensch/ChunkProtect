@@ -35,7 +35,7 @@ public class EntityListeners extends BlockListeners {
                 returnValue.set(true);
             }
         }, () -> {
-            if (entitiesConfiguration.getProtection(entity.getType()).getDamage().isUnclaimed()) {
+            if (entitiesConfiguration.getProtection(entity.getType()).getDamage().isUnclaimed() && hasNoBypass(player)) {
                 sendYouCantDoThat(player);
                 returnValue.set(true);
             }

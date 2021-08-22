@@ -32,12 +32,16 @@ public class ProtectListener implements Listener {
     }
 
     protected boolean forbidden(HumanEntity player, ClaimedChunk chunk) {
-        if (chunkProtect.getProtectionBypass().hasBypass(player.getUniqueId())) return false;
+        if (!hasNoBypass(player)) return false;
         if (!ChunkUtil.hasAccess(chunk, player.getUniqueId())) {
             sendNoAccess(player, chunk);
             return true;
         }
         return false;
+    }
+
+    protected boolean hasNoBypass(HumanEntity player) {
+        return !chunkProtect.getProtectionBypass().hasBypass(player.getUniqueId());
     }
 
     protected void sendNoAccess(CommandSender sender, ClaimedChunk chunk) {

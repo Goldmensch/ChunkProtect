@@ -44,7 +44,7 @@ public class BlockListeners extends ProtectListener {
         if(claimableChunk.isClaimed() && option.isClaimed()) {
             return forbidden(player, claimableChunk.getChunk());
         }
-        return !claimableChunk.isClaimed() && option.isUnclaimed();
+        return !claimableChunk.isClaimed() && option.isUnclaimed() && hasNoBypass(player);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
