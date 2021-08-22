@@ -4,7 +4,6 @@ import de.goldmensch.chunkprotect.core.ChunkProtect;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.chunkprotect.utils.ChunkUtil;
 import de.goldmensch.chunkprotect.utils.EventUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -75,10 +74,9 @@ public class InteractProtectListener extends EntityListeners {
                 && !EventUtil.isBucketEvent(event)
                 || event.getAction() == Action.PHYSICAL)) {
 
-            System.out.println("interact" + Bukkit.getCurrentTick());
-            ChunkUtil.getChunk(event.getClickedBlock().getChunk(), dataService).ifClaimed(chunk -> {
-                if (forbidden(event.getPlayer(), chunk)) event.setCancelled(true);
-            });
+            if(handleBlock(protectionFile.getBlock().getPlayerInteract(), event.getPlayer(), event.getClickedBlock().getChunk())) {
+                event.setCancelled(true);
+            }
         }
     }
 }

@@ -39,12 +39,16 @@ public class BlockListeners extends ProtectListener {
             event.setCancelled(true);
     }
 
-    private boolean handleBlock(ChunkOption option, Player player, Chunk chunk) {
+    protected boolean handleBlock(ChunkOption option, Player player, Chunk chunk) {
         ClaimableChunk claimableChunk = ChunkUtil.getChunk(chunk, dataService);
         if(claimableChunk.isClaimed() && option.isClaimed()) {
             return forbidden(player, claimableChunk.getChunk());
         }
-        return !claimableChunk.isClaimed() && option.isUnclaimed() && hasNoBypass(player);
+        if(!claimableChunk.isClaimed() && option.isUnclaimed() && hasNoBypass(player)) {
+            sendYouCantDoThat(player);
+            return true;
+        }
+        return false;
     }
 
     @EventHandler(priority = EventPriority.HIGH)
