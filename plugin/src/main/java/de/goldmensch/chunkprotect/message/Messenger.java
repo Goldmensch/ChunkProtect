@@ -1,6 +1,5 @@
 package de.goldmensch.chunkprotect.message;
 
-import de.goldmensch.chunkprotect.Resources;
 import de.goldmensch.smartutils.localizer.MiniMessageAdapter;
 import de.goldmensch.smartutils.localizer.Replacement;
 import de.goldmensch.smartutils.localizer.SmartLocalizer;
@@ -15,6 +14,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.Map;
+import java.util.PropertyResourceBundle;
+import java.util.stream.Collectors;
 
 public final class Messenger implements IMessenger {
     private final SmartLocalizer<Component> localizer;
@@ -30,9 +32,7 @@ public final class Messenger implements IMessenger {
     public static IMessenger setupMessenger(Plugin plugin, boolean miniMessage, boolean actionBar) throws IOException {
         Path path = plugin.getDataFolder().toPath().resolve("messages.properties");
 
-        if (Files.notExists(path)) {
-            Resources.copyResource("messages.properties", path);
-        }
+        updateResources(path, "messages.properties");
 
         LocalizerAdapter<Component> adapter;
         if (miniMessage) {
@@ -45,6 +45,22 @@ public final class Messenger implements IMessenger {
                 .fromReader(ResourceBundleReader.fromPropertiesFile(path));
 
         return new Messenger(localizer.localize("prefix"), localizer, actionBar);
+    }
+
+    private static void updateResources(Path path, String resource) throws IOException {
+        Map<String, String> oldLocalizations = ResourceBundleReader.fromPropertiesFile(path).getLocalizations();
+        Map<String, String> newLocalizations = ResourceBundleReader.fromBundle(
+                new PropertyResourceBundle(Messenger.class.getResourceAsStream("/messages.properties"))).getLocalizations();
+
+        oldLocalizations.entrySet()
+                .stream()
+                .filter(entry -> newLocalizations.containsKey(entry.getKey()))
+                .forEach(entry -> newLocalizations.put(entry.getKey(), entry.getValue()));
+
+        Files.write(path, newLocalizations.entrySet()
+                .stream()
+                .map(entry -> entry.getKey()+"="+entry.getValue())
+                .collect(Collectors.toUnmodifiableSet()));
     }
 
     @Override

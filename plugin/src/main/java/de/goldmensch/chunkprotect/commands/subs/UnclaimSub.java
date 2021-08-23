@@ -31,7 +31,7 @@ public class UnclaimSub extends ChunkProtectSubCommand {
         ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
         getDataService().unclaimChunk(claimedChunk.getLocation());
-        getMessenger().send(sender, "chunk-unclaimed");
+        getMessenger().send(sender, "chunk.unclaimed");
         return true;
     }
 

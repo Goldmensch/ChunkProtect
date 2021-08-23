@@ -41,17 +41,17 @@ public class InfoSub extends ChunkProtectSubCommand {
                     ChunkHolder holder = infoValue.getHolder();
                     sender.sendMessage(MessageBuilder.builder()
                             .appendLine(getMessenger()
-                                    .prepare("player-info-name", Replacement.create("name", holder.getName())))
+                                    .prepare("player.info.name", Replacement.create("name", holder.getName())))
                             .appendLine(getMessenger()
-                                    .prepare("player-info-uuid", Replacement.create("uuid", holder.getUuid().toString())))
+                                    .prepare("player.info.uuid", Replacement.create("uuid", holder.getUuid().toString())))
                             .appendLine(getMessenger()
-                                    .prepare("player-info-claimamount", Replacement.create("amount", String.valueOf(holder.getClaimAmount()))))
+                                    .prepare("player.info.claimamount", Replacement.create("amount", String.valueOf(holder.getClaimAmount()))))
                             .appendLine(getMessenger()
-                                    .prepare("player-info-on-all-trusted", Replacement.create("names", infoValue.getTrusted().toString())))
+                                    .prepare("player.info.onAllTrusted", Replacement.create("names", infoValue.getTrusted().toString())))
                             .build());
                 });
             } else {
-                getMessenger().send(sender, "player-not-found", Replacement.create("player", args[0]));
+                getMessenger().send(sender, "player.notFound", Replacement.create("player", args[0]));
             }
             return true;
         }
@@ -66,19 +66,19 @@ public class InfoSub extends ChunkProtectSubCommand {
                     getChunkProtect().getService()).thenAccept(chunkHolders ->
                     sender.sendMessage(MessageBuilder.builder()
                             .appendLine(getMessenger()
-                                    .prepare("chunk-info-location",
+                                    .prepare("chunk.info.location",
                                             Replacement.create("x", String.valueOf(chunk.getLocation().getX())),
                                             Replacement.create("z", String.valueOf(chunk.getLocation().getZ())),
                                             Replacement.create("world", chunk.getLocation().getWorld())
                                     ))
                             .appendLine(getMessenger()
-                                    .prepare("chunk-info-holder", Replacement.create("holder", chunk.getHolder().getName())))
+                                    .prepare("chunk.info.holder", Replacement.create("holder", chunk.getHolder().getName())))
                             .appendLine(getMessenger()
-                                    .prepare("chunk-info-trusted", Replacement.create("playerlist", chunkHolders.toString())))
+                                    .prepare("chunk.info.trusted", Replacement.create("playerlist", chunkHolders.toString())))
                             .build())
             );
         } else {
-            getMessenger().send(sender, "chunk-not-claimed");
+            getMessenger().send(sender, "chunk.notClaimed");
         }
         return true;
     }

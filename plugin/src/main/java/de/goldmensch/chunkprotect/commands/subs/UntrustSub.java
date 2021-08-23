@@ -36,7 +36,7 @@ public class UntrustSub extends ChunkProtectSubCommand {
         Player player = (Player) sender;
         OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[0]);
         if (target == null) {
-            getMessenger().send(sender, "player-not-found", Replacement.create(IMessenger.PLAYER_LITERAL, args[0]));
+            getMessenger().send(sender, "player.notFound", Replacement.create(IMessenger.PLAYER_LITERAL, args[0]));
             return true;
         }
 
@@ -46,18 +46,18 @@ public class UntrustSub extends ChunkProtectSubCommand {
             ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
             if (claimedChunk.getTrustedPlayer().remove(target.getUniqueId())) {
-                getMessenger().send(sender, "player-untrusted", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
+                getMessenger().send(sender, "player.untrusted", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
             } else {
-                getMessenger().send(sender, "player-not-trusted", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
+                getMessenger().send(sender, "player.not.trusted", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
             }
             return true;
         }
 
         ChunkHolder holder = getDataService().holderFromUUID(player.getUniqueId());
         if (holder.getTrustedAllChunks().remove(target.getUniqueId())) {
-            getMessenger().send(player, "player-untrusted-all", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
+            getMessenger().send(player, "player.untrustedOnAll", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
         } else {
-            getMessenger().send(player, "player-not-trusted-all", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
+            getMessenger().send(player, "player.not.trustedOnAll", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
         }
         return true;
     }

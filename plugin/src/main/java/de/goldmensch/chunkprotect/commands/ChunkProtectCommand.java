@@ -65,10 +65,10 @@ public class ChunkProtectCommand extends SmartCommand {
 
     public void sendHelp(CommandSender sender) {
         MessageBuilder builder = MessageBuilder.builder();
-        builder.appendLine(chunkProtectPlugin.getMessenger().prepare("help-header"));
+        builder.appendLine(chunkProtectPlugin.getMessenger().prepare("help.header"));
         getAllSubFor(sender).keySet().forEach(cmd ->
                 builder.appendLine(chunkProtectPlugin.getMessenger()
-                        .prepare("help-entry",
+                        .prepare("help.entry",
                                 Replacement.create("command",
                                         "/" + de.goldmensch.commanddispatcher.util.ArrayUtils.buildString(cmd))))
         );

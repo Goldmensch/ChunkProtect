@@ -32,10 +32,10 @@ public class ClaimSub extends ChunkProtectSubCommand {
         Status status = getDataService().claimChunk(location, player.getUniqueId());
         if(status == Status.CANCELLED) return true;
         if (status == Status.POSITIVE) {
-            getMessenger().send(sender, "chunk-claimed");
+            getMessenger().send(sender, "chunk.claimed");
             Borders.showChunkBorders(player, getChunkProtect());
         } else {
-            getMessenger().send(sender, "chunk-already-claimed", Replacement.create("holder",
+            getMessenger().send(sender, "chunk.alreadyClaimed", Replacement.create("holder",
                     getDataService().getChunkAt(location).getChunk().getHolder().getName()));
         }
         return true;

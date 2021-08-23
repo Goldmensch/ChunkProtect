@@ -33,7 +33,7 @@ public class StaffUnclaimAllSub extends ChunkProtectSubCommand {
 
         OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[0]);
         if (target == null) {
-            getMessenger().send(sender, "player-not-found", Replacement.create("player", args[0]));
+            getMessenger().send(sender, "player.notFound", Replacement.create("player", args[0]));
             return true;
         }
 
@@ -46,7 +46,7 @@ public class StaffUnclaimAllSub extends ChunkProtectSubCommand {
             });
             return originalClaims;
         }).thenAccept(unclaims ->
-                getMessenger().send(sender, "stuff-all-unclaimed",
+                getMessenger().send(sender, "stuff.allUnclaimed",
                         Replacement.create("amount", String.valueOf(unclaims)),
                         Replacement.create("player", target.getName())));
         return true;

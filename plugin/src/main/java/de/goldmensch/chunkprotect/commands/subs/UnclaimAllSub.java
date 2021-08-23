@@ -31,7 +31,7 @@ public class UnclaimAllSub extends ChunkProtectSubCommand {
             });
             return originalClaims;
         }).thenAccept(unclaims ->
-                getMessenger().send(sender, "all-chunks-unclaimed", Replacement.create("amount", String.valueOf(unclaims))));
+                getMessenger().send(sender, "chunk.allUnclaimed", Replacement.create("amount", String.valueOf(unclaims))));
         return true;
     }
 

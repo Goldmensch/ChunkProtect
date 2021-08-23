@@ -27,11 +27,11 @@ public final class AboutSub extends ChunkProtectSubCommand {
     public static AboutSub newAboutSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand command) {
         return new AboutSub(chunkProtectPlugin, command, MessageBuilder.builder()
                 .appendLine(chunkProtectPlugin.getMessenger()
-                        .prepare("about-name", Replacement.create("name", chunkProtectPlugin.getName())))
+                        .prepare("about.name", Replacement.create("name", chunkProtectPlugin.getName())))
                 .appendLine(chunkProtectPlugin.getMessenger()
-                        .prepare("about-version", Replacement.create("version", chunkProtectPlugin.getDescription().getVersion())))
+                        .prepare("about.version", Replacement.create("version", chunkProtectPlugin.getDescription().getVersion())))
                 .appendLine(chunkProtectPlugin.getMessenger()
-                        .prepare("about-authors", Replacement.create("authors",
+                        .prepare("about.authors", Replacement.create("authors",
                                 Messages.formatList(chunkProtectPlugin.getDescription().getAuthors()))))
                 .build()
         );

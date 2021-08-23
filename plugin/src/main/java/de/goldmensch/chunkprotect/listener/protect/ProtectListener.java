@@ -45,12 +45,12 @@ public class ProtectListener implements Listener {
     }
 
     protected void sendNoAccess(CommandSender sender, ClaimedChunk chunk) {
-        chunkProtectPlugin.getMessenger().send(sender, "chunk-protected",
+        chunkProtectPlugin.getMessenger().send(sender, "chunk.protected",
                 Replacement.create("holder", chunk.getHolder().getName()));
     }
 
     protected void sendYouCantDoThat(CommandSender sender) {
-        chunkProtectPlugin.getMessenger().send(sender, "you-cant-do-that");
+        chunkProtectPlugin.getMessenger().send(sender, "youCantDoThat");
     }
 
     protected Optional<Player> unwrapPlayer(Entity possiblePlayer) {

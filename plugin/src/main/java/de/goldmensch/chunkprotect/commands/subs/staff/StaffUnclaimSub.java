@@ -26,9 +26,9 @@ public class StaffUnclaimSub extends ChunkProtectSubCommand {
         Status status = getDataService().unclaimChunk(ChunkLocation.fromChunk(player.getChunk()));
         if(status == Status.CANCELLED) return true;
         if (status == Status.POSITIVE) {
-            getMessenger().send(sender, "chunk-unclaimed");
+            getMessenger().send(sender, "chunk.unclaimed");
         } else {
-            getMessenger().send(sender, "chunk-not-claimed");
+            getMessenger().send(sender, "chunk.notClaimed");
         }
         return true;
     }

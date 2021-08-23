@@ -44,12 +44,12 @@ public final class Chunks {
     public static boolean isClaimedAndHolder(ClaimableChunk chunk, Player sender, ChunkProtectPlugin protect) {
         IMessenger messenger = protect.getMessenger();
         if (!chunk.isClaimed()) {
-            messenger.send(sender, "chunk-not-claimed");
+            messenger.send(sender, "chunk.notClaimed");
             return true;
         }
         ClaimedChunk claimedChunk = chunk.getChunk();
         if (!Chunks.isHolder(claimedChunk, sender.getUniqueId())) {
-            messenger.send(sender, "not-owner-from-chunk", Replacement.create("holder",
+            messenger.send(sender, "chunk.notOwner", Replacement.create("holder",
                     claimedChunk.getHolder().getName()));
             return true;
         }
