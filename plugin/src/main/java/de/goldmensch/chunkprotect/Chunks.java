@@ -2,7 +2,7 @@ package de.goldmensch.chunkprotect;
 
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
-import de.goldmensch.chunkprotect.message.Messenger;
+import de.goldmensch.chunkprotect.message.IMessenger;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.smartutils.localizer.Replacement;
 import org.bukkit.Chunk;
@@ -42,7 +42,7 @@ public final class Chunks {
     }
 
     public static boolean isClaimedAndHolder(ClaimableChunk chunk, Player sender, ChunkProtectPlugin protect) {
-        Messenger messenger = protect.getMessenger();
+        IMessenger messenger = protect.getMessenger();
         if (!chunk.isClaimed()) {
             messenger.send(sender, "chunk-not-claimed");
             return true;

@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.commands.subs.staff;
 
+import de.goldmensch.chunkprotect.Status;
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.ChunkProtectPlugin;
@@ -22,7 +23,9 @@ public class StaffUnclaimSub extends ChunkProtectSubCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = toPlayer(sender);
-        if (getDataService().unclaimChunk(ChunkLocation.fromChunk(player.getChunk()))) {
+        Status status = getDataService().unclaimChunk(ChunkLocation.fromChunk(player.getChunk()));
+        if(status == Status.CANCELLED) return true;
+        if (status == Status.POSITIVE) {
             getMessenger().send(sender, "chunk-unclaimed");
         } else {
             getMessenger().send(sender, "chunk-not-claimed");

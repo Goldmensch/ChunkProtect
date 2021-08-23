@@ -10,6 +10,7 @@ import de.goldmensch.chunkprotect.configuration.protection.ProtectionConfig;
 import de.goldmensch.chunkprotect.listener.ChunkLoadListener;
 import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
 import de.goldmensch.chunkprotect.listener.protect.ProtectListeners;
+import de.goldmensch.chunkprotect.message.IMessenger;
 import de.goldmensch.chunkprotect.message.Messenger;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.smartutils.plugin.SmartPlugin;
@@ -23,7 +24,7 @@ import java.util.concurrent.Executors;
 public class ChunkProtectPlugin extends SmartPlugin {
     private final ChunkProtectionBypass protectionBypass = new ChunkProtectionBypass();
     private DataService dataService;
-    private Messenger messenger;
+    private IMessenger messenger;
     private PluginConfig pluginConfig;
     private EntitiesConfiguration entitiesConfiguration;
     private ProtectionConfig protectionConfig;
@@ -97,7 +98,7 @@ public class ChunkProtectPlugin extends SmartPlugin {
         return builder.substring(0, builder.length() - 1);
     }
 
-    public Messenger getMessenger() {
+    public IMessenger getMessenger() {
         return messenger;
     }
 

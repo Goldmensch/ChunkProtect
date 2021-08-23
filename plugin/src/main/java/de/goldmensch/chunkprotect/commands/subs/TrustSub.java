@@ -7,7 +7,7 @@ import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
-import de.goldmensch.chunkprotect.message.Messenger;
+import de.goldmensch.chunkprotect.message.IMessenger;
 import de.goldmensch.chunkprotect.Chunks;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -36,7 +36,7 @@ public class TrustSub extends ChunkProtectSubCommand {
         Player player = (Player) sender;
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            getMessenger().send(sender, "player-offline", Replacement.create(Messenger.PLAYER_LITERAL, args[0]));
+            getMessenger().send(sender, "player-offline", Replacement.create(IMessenger.PLAYER_LITERAL, args[0]));
             return true;
         }
 
@@ -46,18 +46,18 @@ public class TrustSub extends ChunkProtectSubCommand {
             ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
             if (claimedChunk.getTrustedPlayer().add(target.getUniqueId())) {
-                getMessenger().send(sender, "player-trusted", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
+                getMessenger().send(sender, "player-trusted", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
             } else {
-                getMessenger().send(sender, "player-already-trusted", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
+                getMessenger().send(sender, "player-already-trusted", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
             }
             return true;
         }
 
         ChunkHolder holder = getDataService().holderFromUUID(player.getUniqueId());
         if (holder.getTrustedAllChunks().add(target.getUniqueId())) {
-            getMessenger().send(sender, "player-trusted-on-all", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
+            getMessenger().send(sender, "player-trusted-on-all", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
         } else {
-            getMessenger().send(sender, "player-already-trusted-all", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
+            getMessenger().send(sender, "player-already-trusted-all", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
         }
         return true;
     }

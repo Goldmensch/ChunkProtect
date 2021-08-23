@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.commands.subs;
 
+import de.goldmensch.chunkprotect.Status;
 import de.goldmensch.chunkprotect.Borders;
 import de.goldmensch.chunkprotect.ChunkLocation;
 import de.goldmensch.chunkprotect.ChunkProtectPlugin;
@@ -28,7 +29,9 @@ public class ClaimSub extends ChunkProtectSubCommand {
         Chunk chunk = player.getChunk();
 
         ChunkLocation location = ChunkLocation.fromChunk(chunk);
-        if (getDataService().claimChunk(location, player.getUniqueId())) {
+        Status status = getDataService().claimChunk(location, player.getUniqueId());
+        if(status == Status.CANCELLED) return true;
+        if (status == Status.POSITIVE) {
             getMessenger().send(sender, "chunk-claimed");
             Borders.showChunkBorders(player, getChunkProtect());
         } else {

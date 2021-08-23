@@ -3,7 +3,7 @@ package de.goldmensch.chunkprotect.listener.protect;
 import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.chunkprotect.Chunks;
-import de.goldmensch.chunkprotect.listener.Events;
+import de.goldmensch.chunkprotect.Events;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;

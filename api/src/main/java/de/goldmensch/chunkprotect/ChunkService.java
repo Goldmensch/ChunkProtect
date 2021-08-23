@@ -8,8 +8,8 @@ import java.util.concurrent.CompletableFuture;
 public interface ChunkService {
     ClaimableChunk getChunkAt(ChunkLocation location);
     boolean isCached(ChunkLocation location);
-    boolean claimChunk(ChunkLocation location, UUID holderUUID);
-    boolean unclaimChunk(ChunkLocation location);
+    Status claimChunk(ChunkLocation location, UUID holderUUID);
+    Status unclaimChunk(ChunkLocation location);
     CompletableFuture<Boolean> loadChunkIfUnloaded(ChunkLocation location);
     CompletableFuture<Void> forceDiscWrite(ClaimableChunk chunk);
 }

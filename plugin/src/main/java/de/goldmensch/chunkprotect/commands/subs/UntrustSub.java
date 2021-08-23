@@ -6,7 +6,7 @@ import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
-import de.goldmensch.chunkprotect.message.Messenger;
+import de.goldmensch.chunkprotect.message.IMessenger;
 import de.goldmensch.chunkprotect.Chunks;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -36,7 +36,7 @@ public class UntrustSub extends ChunkProtectSubCommand {
         Player player = (Player) sender;
         OfflinePlayer target = Bukkit.getOfflinePlayerIfCached(args[0]);
         if (target == null) {
-            getMessenger().send(sender, "player-not-found", Replacement.create(Messenger.PLAYER_LITERAL, args[0]));
+            getMessenger().send(sender, "player-not-found", Replacement.create(IMessenger.PLAYER_LITERAL, args[0]));
             return true;
         }
 
@@ -46,18 +46,18 @@ public class UntrustSub extends ChunkProtectSubCommand {
             ClaimedChunk claimedChunk = claimableChunk.getChunk();
 
             if (claimedChunk.getTrustedPlayer().remove(target.getUniqueId())) {
-                getMessenger().send(sender, "player-untrusted", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
+                getMessenger().send(sender, "player-untrusted", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
             } else {
-                getMessenger().send(sender, "player-not-trusted", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
+                getMessenger().send(sender, "player-not-trusted", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
             }
             return true;
         }
 
         ChunkHolder holder = getDataService().holderFromUUID(player.getUniqueId());
         if (holder.getTrustedAllChunks().remove(target.getUniqueId())) {
-            getMessenger().send(player, "player-untrusted-all", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
+            getMessenger().send(player, "player-untrusted-all", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
         } else {
-            getMessenger().send(player, "player-not-trusted-all", Replacement.create(Messenger.PLAYER_LITERAL, target.getName()));
+            getMessenger().send(player, "player-not-trusted-all", Replacement.create(IMessenger.PLAYER_LITERAL, target.getName()));
         }
         return true;
     }

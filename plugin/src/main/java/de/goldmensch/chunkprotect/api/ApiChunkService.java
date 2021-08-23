@@ -1,5 +1,6 @@
 package de.goldmensch.chunkprotect.api;
 
+import de.goldmensch.chunkprotect.Status;
 import de.goldmensch.chunkprotect.ChunkLocation;
 import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.ChunkService;
@@ -29,12 +30,12 @@ public class ApiChunkService implements ChunkService {
     }
 
     @Override
-    public boolean claimChunk(ChunkLocation location, UUID holderUUID) {
+    public Status claimChunk(ChunkLocation location, UUID holderUUID) {
         return chunkService.claimChunk(location, holderUUID);
     }
 
     @Override
-    public boolean unclaimChunk(ChunkLocation location) {
+    public Status unclaimChunk(ChunkLocation location) {
         return chunkService.unclaimChunk(location);
     }
 

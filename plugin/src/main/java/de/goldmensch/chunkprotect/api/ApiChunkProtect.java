@@ -10,7 +10,11 @@ public class ApiChunkProtect extends ChunkProtect {
     private final ChunkProtectPlugin chunkProtect;
 
     public ApiChunkProtect(ChunkProtectPlugin chunkProtect) {
-        super(new ApiChunkService(chunkProtect), new ApiHolderService(chunkProtect), chunkProtect.getProtectionBypass());
+        super(new ApiChunkService(chunkProtect),
+                new ApiHolderService(chunkProtect),
+                chunkProtect.getProtectionBypass(),
+                chunkProtect.getMessenger());
+
         this.chunkProtect = chunkProtect;
     }
 

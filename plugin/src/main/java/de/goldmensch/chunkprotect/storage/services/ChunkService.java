@@ -1,10 +1,14 @@
 package de.goldmensch.chunkprotect.storage.services;
 
+import de.goldmensch.chunkprotect.Status;
 import de.goldmensch.chunkprotect.ChunkLocation;
+import de.goldmensch.chunkprotect.Events;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.core.chunk.RawClaimedChunk;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
+import de.goldmensch.chunkprotect.events.ChunkClaimEvent;
+import de.goldmensch.chunkprotect.events.ChunkUnclaimEvent;
 import de.goldmensch.chunkprotect.storage.cache.Cache;
 import de.goldmensch.chunkprotect.storage.dao.chunk.ChunkDao;
 import de.goldmensch.chunkprotect.storage.dao.holder.HolderDao;
@@ -26,26 +30,31 @@ public class ChunkService extends HolderService {
         return cache.get(location).orElse(ClaimableChunk.forceClaimed(location));
     }
 
-    public boolean claimChunk(ChunkLocation location, UUID holderUUID) {
+    public Status claimChunk(ChunkLocation location, UUID holderUUID) {
         if (getChunkAt(location).isClaimed()) {
-            return false;
+            return Status.NEGATIVE;
         }
         ChunkHolder holder = holderFromUUID(holderUUID);
+        if(Events.callAndCheckCancelled(new ChunkClaimEvent(holder, location))) return Status.CANCELLED;
+
         ClaimedChunk chunk = new ClaimedChunk(new RawClaimedChunk(location, holderUUID, new HashSet<>()), holder);
         cache.set(location, new ClaimableChunk(chunk, location));
         holder.getClaimedChunks().add(chunk.getLocation());
-        return true;
+        return Status.POSITIVE;
     }
 
 
-    public boolean unclaimChunk(ChunkLocation location) {
+    public Status unclaimChunk(ChunkLocation location) {
         ClaimableChunk chunk = getChunkAt(location);
         if (chunk.isClaimed()) {
+            if(Events.callAndCheckCancelled(new ChunkUnclaimEvent(chunk.getChunk()))) return Status.CANCELLED;
+
             cache.set(location, new ClaimableChunk(null, location));
             ChunkHolder holder = chunk.getChunk().getHolder();
             holder.getClaimedChunks().remove(location);
+            return Status.POSITIVE;
         }
-        return chunk.isClaimed();
+        return Status.NEGATIVE;
     }
 
     public boolean loadChunkIfUnloaded(ChunkLocation location) {

@@ -1,7 +1,7 @@
 package de.goldmensch.chunkprotect.commands;
 
 import de.goldmensch.chunkprotect.ChunkProtectPlugin;
-import de.goldmensch.chunkprotect.message.Messenger;
+import de.goldmensch.chunkprotect.message.IMessenger;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.commanddispatcher.subcommand.SmartSubCommand;
@@ -27,7 +27,7 @@ public abstract class ChunkProtectSubCommand extends SmartSubCommand {
         return chunkProtectPlugin.getDataService();
     }
 
-    public Messenger getMessenger() {
+    public IMessenger getMessenger() {
         return chunkProtectPlugin.getMessenger();
     }
 
