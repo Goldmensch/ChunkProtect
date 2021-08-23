@@ -1,6 +1,6 @@
 package de.goldmensch.chunkprotect.commands;
 
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.message.Messenger;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
@@ -10,25 +10,25 @@ import org.bukkit.entity.Player;
 
 public abstract class ChunkProtectSubCommand extends SmartSubCommand {
 
-    private final ChunkProtect chunkProtect;
+    private final ChunkProtectPlugin chunkProtectPlugin;
     private final ChunkProtectCommand chunkProtectCommand;
 
-    protected ChunkProtectSubCommand(ExecutorLevel executorLevel, String permission, ChunkProtect chunkProtect, ChunkProtectCommand chunkProtectCommand) {
+    protected ChunkProtectSubCommand(ExecutorLevel executorLevel, String permission, ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand chunkProtectCommand) {
         super(executorLevel, permission);
-        this.chunkProtect = chunkProtect;
+        this.chunkProtectPlugin = chunkProtectPlugin;
         this.chunkProtectCommand = chunkProtectCommand;
     }
 
-    public ChunkProtect getChunkProtect() {
-        return chunkProtect;
+    public ChunkProtectPlugin getChunkProtect() {
+        return chunkProtectPlugin;
     }
 
     public DataService getDataService() {
-        return chunkProtect.getDataService();
+        return chunkProtectPlugin.getDataService();
     }
 
     public Messenger getMessenger() {
-        return chunkProtect.getMessenger();
+        return chunkProtectPlugin.getMessenger();
     }
 
     public Player toPlayer(CommandSender sender) {

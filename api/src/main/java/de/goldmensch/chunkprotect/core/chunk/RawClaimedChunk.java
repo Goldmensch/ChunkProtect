@@ -67,6 +67,4 @@ public class RawClaimedChunk {
                 "location=" + location + ", " +
                 "holder=" + holderUUID + ']';
     }
-
-
 }

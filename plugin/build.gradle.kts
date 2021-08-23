@@ -3,7 +3,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
-group = "de.goldmensch.chunkprotect"
+group = "de.goldmensch"
 version = "0.1.3"
 
 java.sourceCompatibility = JavaVersion.VERSION_16
@@ -49,7 +49,7 @@ tasks {
         archiveBaseName.set("ChunkProtect")
         relocateAll("de.goldmensch.smartutils.core",
                 "de.goldmensch.commanddispatcher",
-                "de.goldmensch.smartutils.minimessage-adapter",
+                "de.goldmensch.smartutils",
                 "com.fasterxml.jackson",
                 "com.jsoniter",
                 "org.yaml.snakeyaml"
@@ -62,6 +62,6 @@ tasks {
 
 fun com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar.relocateAll(vararg names: String) {
     names.forEach { name ->
-        relocate(name, "${rootProject.group}.${rootProject.name}.libs.$name")
+        relocate(name, "${project.group}.${rootProject.name.toLowerCase()}.libs.$name")
     }
 }

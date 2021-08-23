@@ -1,6 +1,6 @@
 package de.goldmensch.chunkprotect.message;
 
-import de.goldmensch.chunkprotect.utils.Util;
+import de.goldmensch.chunkprotect.Resources;
 import de.goldmensch.smartutils.localizer.MiniMessageAdapter;
 import de.goldmensch.smartutils.localizer.Replacement;
 import de.goldmensch.smartutils.localizer.SmartLocalizer;
@@ -34,7 +34,7 @@ public final class Messenger {
         Path path = plugin.getDataFolder().toPath().resolve("messages.properties");
 
         if (Files.notExists(path)) {
-            Util.copyResource("messages.properties", path);
+            Resources.copyResource("messages.properties", path);
         }
 
         LocalizerAdapter<Component> adapter;

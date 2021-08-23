@@ -1,8 +1,8 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.storage.services.DataService;
-import de.goldmensch.chunkprotect.utils.ChunkUtil;
+import de.goldmensch.chunkprotect.Chunks;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,8 +14,8 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EntityListeners extends BlockListeners {
-    public EntityListeners(DataService dataService, ChunkProtect chunkProtect) {
-        super(dataService, chunkProtect);
+    public EntityListeners(DataService dataService, ChunkProtectPlugin chunkProtectPlugin) {
+        super(dataService, chunkProtectPlugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -30,7 +30,7 @@ public class EntityListeners extends BlockListeners {
 
     private boolean entityDamage(Entity entity, Entity other) {
         AtomicBoolean returnValue = new AtomicBoolean(false);
-        unwrapPlayer(other).ifPresent(player -> ChunkUtil.getChunk(entity.getChunk(), dataService).ifClaimedOr(chunk -> {
+        unwrapPlayer(other).ifPresent(player -> Chunks.getChunk(entity.getChunk(), dataService).ifClaimedOr(chunk -> {
             if (entitiesConfiguration.getProtection(entity.getType()).getDamage().isClaimed() && forbidden(player, chunk)) {
                 returnValue.set(true);
             }

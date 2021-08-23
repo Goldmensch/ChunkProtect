@@ -3,10 +3,10 @@ package de.goldmensch.chunkprotect.listener.protect;
 import com.destroystokyo.paper.event.block.TNTPrimeEvent;
 import de.goldmensch.chunkprotect.configuration.protection.elements.options.ChunkOption;
 import de.goldmensch.chunkprotect.configuration.protection.elements.options.FromToChunkOption;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.storage.services.DataService;
-import de.goldmensch.chunkprotect.utils.ChunkUtil;
+import de.goldmensch.chunkprotect.Chunks;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -23,8 +23,8 @@ public class BlockListeners extends ProtectListener {
 
     private final de.goldmensch.chunkprotect.configuration.protection.elements.Block blockConfig = protectionFile.getBlock();
 
-    public BlockListeners(DataService dataService, ChunkProtect chunkProtect) {
-        super(dataService, chunkProtect);
+    public BlockListeners(DataService dataService, ChunkProtectPlugin chunkProtectPlugin) {
+        super(dataService, chunkProtectPlugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -40,7 +40,7 @@ public class BlockListeners extends ProtectListener {
     }
 
     protected boolean handleBlock(ChunkOption option, Player player, Chunk chunk) {
-        ClaimableChunk claimableChunk = ChunkUtil.getChunk(chunk, dataService);
+        ClaimableChunk claimableChunk = Chunks.getChunk(chunk, dataService);
         if(claimableChunk.isClaimed() && option.isClaimed()) {
             return forbidden(player, claimableChunk.getChunk());
         }
@@ -64,11 +64,11 @@ public class BlockListeners extends ProtectListener {
 
     private boolean fromTo(Chunk fromChunk, Chunk toChunk, FromToChunkOption option) {
         if (fromChunk.equals(toChunk)) return false;
-        ClaimableChunk from = ChunkUtil.getChunk(fromChunk, dataService);
-        ClaimableChunk to = ChunkUtil.getChunk(toChunk, dataService);
+        ClaimableChunk from = Chunks.getChunk(fromChunk, dataService);
+        ClaimableChunk to = Chunks.getChunk(toChunk, dataService);
         if (from.isClaimed()) {
             if (option.getFromClaimedInto().isClaimed() && to.isClaimed()) {
-                return !ChunkUtil.sameHolder(from.getChunk(), to.getChunk());
+                return !Chunks.sameHolder(from.getChunk(), to.getChunk());
             }
             return option.getFromClaimedInto().isUnclaimed() && !to.isClaimed();
         }
@@ -104,7 +104,7 @@ public class BlockListeners extends ProtectListener {
     protected void onExplodeEvent(List<Block> blockList) {
         Set<Block> protectedBlocks = new HashSet<>();
         for (Block block : blockList) {
-            ChunkUtil.getChunk(block.getChunk(), dataService).ifClaimedOr(chunk -> {
+            Chunks.getChunk(block.getChunk(), dataService).ifClaimedOr(chunk -> {
                 if (protectionFile.getBlock().getBlockBreakByExplosion().isClaimed()) {
                     protectedBlocks.add(block);
                 }
@@ -120,7 +120,7 @@ public class BlockListeners extends ProtectListener {
     @EventHandler(priority = EventPriority.HIGH)
     protected void handleTntPrime(TNTPrimeEvent event) {
         unwrapPlayer(event.getPrimerEntity()).ifPresent(player ->
-                ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
+                Chunks.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
                     if (protectionFile.getBlock().getTntPrime().isClaimed() && forbidden(player, chunk)) {
                         event.setCancelled(true);
                     }

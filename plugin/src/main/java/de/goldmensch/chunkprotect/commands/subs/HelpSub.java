@@ -2,7 +2,7 @@ package de.goldmensch.chunkprotect.commands.subs;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,8 +13,8 @@ import java.util.List;
 
 public class HelpSub extends ChunkProtectSubCommand {
 
-    public HelpSub(ChunkProtect chunkProtect, ChunkProtectCommand chunkProtectCommand) {
-        super(ExecutorLevel.CONSOLE_PLAYER, chunkProtect.getPermission("help"), chunkProtect, chunkProtectCommand);
+    public HelpSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand chunkProtectCommand) {
+        super(ExecutorLevel.CONSOLE_PLAYER, chunkProtectPlugin.getPermission("help"), chunkProtectPlugin, chunkProtectCommand);
     }
 
     @Override

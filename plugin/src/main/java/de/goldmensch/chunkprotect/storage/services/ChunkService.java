@@ -32,9 +32,8 @@ public class ChunkService extends HolderService {
         }
         ChunkHolder holder = holderFromUUID(holderUUID);
         ClaimedChunk chunk = new ClaimedChunk(new RawClaimedChunk(location, holderUUID, new HashSet<>()), holder);
-        cache.set(location, new ClaimableChunk(chunk));
+        cache.set(location, new ClaimableChunk(chunk, location));
         holder.getClaimedChunks().add(chunk.getLocation());
-        updateHolder(holder);
         return true;
     }
 
@@ -42,16 +41,15 @@ public class ChunkService extends HolderService {
     public boolean unclaimChunk(ChunkLocation location) {
         ClaimableChunk chunk = getChunkAt(location);
         if (chunk.isClaimed()) {
-            cache.set(location, new ClaimableChunk(null));
+            cache.set(location, new ClaimableChunk(null, location));
             ChunkHolder holder = chunk.getChunk().getHolder();
             holder.getClaimedChunks().remove(location);
-            updateHolder(holder);
         }
         return chunk.isClaimed();
     }
 
-    public void loadChunkIfUnloaded(ChunkLocation location) {
-        if (cache.isCached(location)) return;
+    public boolean loadChunkIfUnloaded(ChunkLocation location) {
+        if (cache.isCached(location)) return false;
         ClaimedChunk claimedChunk = null;
         Optional<RawClaimedChunk> rawClaimedChunkOptional = chunkDao.read(location);
         if (rawClaimedChunkOptional.isPresent()) {
@@ -59,21 +57,18 @@ public class ChunkService extends HolderService {
             ChunkHolder chunkHolder = holderFromUUID(rawClaimedChunk.getHolderUUID());
             claimedChunk = new ClaimedChunk(rawClaimedChunk, chunkHolder);
         }
-        ClaimableChunk claimableChunk = new ClaimableChunk(claimedChunk);
+        ClaimableChunk claimableChunk = new ClaimableChunk(claimedChunk, location);
         cache.set(location, claimableChunk);
-    }
-
-    public void updateChunk(ClaimedChunk chunk) {
-        cache.set(chunk.getLocation(), new ClaimableChunk(chunk));
+        return true;
     }
 
     public void writeAndInvalidate(ChunkLocation location) {
-        ClaimableChunk chunk = getChunkAt(location);
-        write(chunk, location);
+        write(getChunkAt(location));
         cache.invalidate(location);
     }
 
-    public void write(ClaimableChunk claimableChunk, ChunkLocation location) {
+    public void write(ClaimableChunk claimableChunk) {
+        ChunkLocation location = claimableChunk.getLocation();
         if (claimableChunk.isClaimed()) {
             ClaimedChunk chunk = claimableChunk.getChunk();
             if (cache.isCached(location) && chunk.notForceClaimed()) {

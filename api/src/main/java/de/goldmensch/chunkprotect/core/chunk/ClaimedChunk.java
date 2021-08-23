@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ClaimedChunk extends RawClaimedChunk {
+public final class ClaimedChunk extends RawClaimedChunk {
 
     private static final ChunkHolder FORCE_HOLDER = new ChunkHolder("chunk_forceClaimed",
             UUID.fromString("8534a7ba-9aa6-4bbe-a93a-3632a9781f53"),
@@ -42,7 +42,7 @@ public class ClaimedChunk extends RawClaimedChunk {
         return !forceClaimed;
     }
 
-    public ClaimedChunk forceClaimed() {
+    private ClaimedChunk forceClaimed() {
         forceClaimed = true;
         return this;
     }

@@ -1,28 +1,27 @@
-package de.goldmensch.chunkprotect.core;
+package de.goldmensch.chunkprotect;
 
+import de.goldmensch.chunkprotect.api.ApiChunkProtect;
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.configuration.entities.EntitiesConfiguration;
 import de.goldmensch.chunkprotect.configuration.entities.EntityProtection;
 import de.goldmensch.chunkprotect.configuration.plugin.ConfigFile;
 import de.goldmensch.chunkprotect.configuration.plugin.PluginConfig;
 import de.goldmensch.chunkprotect.configuration.protection.ProtectionConfig;
-import de.goldmensch.chunkprotect.ChunkLocation;
 import de.goldmensch.chunkprotect.listener.ChunkLoadListener;
 import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
 import de.goldmensch.chunkprotect.listener.protect.ProtectListeners;
 import de.goldmensch.chunkprotect.message.Messenger;
 import de.goldmensch.chunkprotect.storage.services.DataService;
-import de.goldmensch.chunkprotect.utils.SafeExceptions;
-import de.goldmensch.chunkprotect.utils.Util;
 import de.goldmensch.smartutils.plugin.SmartPlugin;
+import org.bukkit.plugin.ServicePriority;
 
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ChunkProtect extends SmartPlugin {
-    private final ProtectionBypass protectionBypass = new ProtectionBypass();
+public class ChunkProtectPlugin extends SmartPlugin {
+    private final ChunkProtectionBypass protectionBypass = new ChunkProtectionBypass();
     private DataService dataService;
     private Messenger messenger;
     private PluginConfig pluginConfig;
@@ -46,6 +45,8 @@ public class ChunkProtect extends SmartPlugin {
                 new ChunkLoadListener(this));
 
         registerCommand("chunkprotect", new ChunkProtectCommand(this));
+
+        getServer().getServicesManager().register(ChunkProtect.class, new ApiChunkProtect(this), this, ServicePriority.High);
     }
 
     @Override
@@ -88,7 +89,12 @@ public class ChunkProtect extends SmartPlugin {
     }
 
     public String getPermission(String... args) {
-        return Util.build("chunkprotect", args);
+        StringBuilder builder = new StringBuilder("chunkprotect.");
+        for (String c : args) {
+            builder.append(c);
+            builder.append(".");
+        }
+        return builder.substring(0, builder.length() - 1);
     }
 
     public Messenger getMessenger() {
@@ -103,7 +109,7 @@ public class ChunkProtect extends SmartPlugin {
         return entitiesConfiguration;
     }
 
-    public ProtectionBypass getProtectionBypass() {
+    public ChunkProtectionBypass getProtectionBypass() {
         return protectionBypass;
     }
 

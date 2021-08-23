@@ -1,9 +1,9 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.storage.services.DataService;
-import de.goldmensch.chunkprotect.utils.ChunkUtil;
-import de.goldmensch.chunkprotect.utils.EventUtil;
+import de.goldmensch.chunkprotect.Chunks;
+import de.goldmensch.chunkprotect.listener.Events;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -15,13 +15,13 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class InteractProtectListener extends EntityListeners {
-    public InteractProtectListener(DataService dataService, ChunkProtect chunkProtect) {
-        super(dataService, chunkProtect);
+    public InteractProtectListener(DataService dataService, ChunkProtectPlugin chunkProtectPlugin) {
+        super(dataService, chunkProtectPlugin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBucketFill(PlayerBucketFillEvent event) {
-        ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
+        Chunks.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
             if (protectionFile.getOther().getBucketFill().isClaimed() && forbidden(event.getPlayer(), chunk)) {
                 event.setCancelled(true);
             }
@@ -35,7 +35,7 @@ public class InteractProtectListener extends EntityListeners {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handleBucketEmpty(PlayerBucketEmptyEvent event) {
-        ChunkUtil.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
+        Chunks.getChunk(event.getBlock().getChunk(), dataService).ifClaimedOr(chunk -> {
             if (protectionFile.getOther().getBucketEmpty().isClaimed() && forbidden(event.getPlayer(), chunk)) {
                 event.setCancelled(true);
             }
@@ -49,7 +49,7 @@ public class InteractProtectListener extends EntityListeners {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void handlePlayerInteractEntity(PlayerInteractEntityEvent event) {
-        ChunkUtil.getChunk(event.getRightClicked().getChunk(), dataService).ifClaimedOr(chunk -> {
+        Chunks.getChunk(event.getRightClicked().getChunk(), dataService).ifClaimedOr(chunk -> {
             if (entitiesConfiguration.getProtection(event.getRightClicked().getType()).getPlayerInteract().isClaimed() && forbidden(event.getPlayer(), chunk)) {
                 event.setCancelled(true);
             }
@@ -71,7 +71,7 @@ public class InteractProtectListener extends EntityListeners {
                     && event.getClickedBlock().getType().isInteractable()
                     && event.useInteractedBlock() == Event.Result.ALLOW)
                 && event.getClickedBlock().getType() != Material.ENDER_CHEST)
-                && !EventUtil.isBucketEvent(event)
+                && !Events.isBucketEvent(event)
                 || event.getAction() == Action.PHYSICAL)) {
 
             if(handleBlock(protectionFile.getBlock().getPlayerInteract(), event.getPlayer(), event.getClickedBlock().getChunk())) {

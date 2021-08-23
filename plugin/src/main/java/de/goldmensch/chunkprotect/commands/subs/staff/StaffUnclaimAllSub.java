@@ -2,7 +2,7 @@ package de.goldmensch.chunkprotect.commands.subs.staff;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -20,8 +20,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class StaffUnclaimAllSub extends ChunkProtectSubCommand {
-    public StaffUnclaimAllSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
-        super(ExecutorLevel.CONSOLE_PLAYER, chunkProtect.getPermission("staff", "unclaimAll"), chunkProtect, command);
+    public StaffUnclaimAllSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand command) {
+        super(ExecutorLevel.CONSOLE_PLAYER, chunkProtectPlugin.getPermission("staff", "unclaimAll"), chunkProtectPlugin, command);
     }
 
     @Override

@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "de.goldmensch.chunkprotect"
-version = "0.1.3"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -11,8 +11,8 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":api"))
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
-    implementation("com.jsoniter", "jsoniter", "0.9.19")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")

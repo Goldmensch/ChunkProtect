@@ -1,6 +1,6 @@
 name: ChunkProtect
 author: goldmensch
-main: de.goldmensch.chunkprotect.core.ChunkProtect
+main: de.goldmensch.chunkprotect.ChunkProtectPlugin
 version: ${version}
 api-version: 1.16
 

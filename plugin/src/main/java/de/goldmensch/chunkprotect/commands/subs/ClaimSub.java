@@ -1,10 +1,10 @@
 package de.goldmensch.chunkprotect.commands.subs;
 
+import de.goldmensch.chunkprotect.Borders;
+import de.goldmensch.chunkprotect.ChunkLocation;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
-import de.goldmensch.chunkprotect.ChunkLocation;
-import de.goldmensch.chunkprotect.utils.Util;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
 import org.bukkit.Chunk;
@@ -18,8 +18,8 @@ import java.util.List;
 
 public class ClaimSub extends ChunkProtectSubCommand {
 
-    public ClaimSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
-        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("claim"), chunkProtect, command);
+    public ClaimSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand command) {
+        super(ExecutorLevel.PLAYER, chunkProtectPlugin.getPermission("claim"), chunkProtectPlugin, command);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ClaimSub extends ChunkProtectSubCommand {
         ChunkLocation location = ChunkLocation.fromChunk(chunk);
         if (getDataService().claimChunk(location, player.getUniqueId())) {
             getMessenger().send(sender, "chunk-claimed");
-            Util.showChunkBorders(player, getChunkProtect());
+            Borders.showChunkBorders(player, getChunkProtect());
         } else {
             getMessenger().send(sender, "chunk-already-claimed", Replacement.create("holder",
                     getDataService().getChunkAt(location).getChunk().getHolder().getName()));

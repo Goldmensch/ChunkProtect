@@ -1,10 +1,10 @@
-package de.goldmensch.chunkprotect.core;
+package de.goldmensch.chunkprotect;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class ProtectionBypass {
+public class ChunkProtectionBypass implements ProtectionBypass{
     private final Set<UUID> players = new HashSet<>();
 
     public boolean toggle(UUID uuid) {
@@ -20,7 +20,12 @@ public class ProtectionBypass {
         return players.contains(uuid);
     }
 
-    public void remove(UUID uuid) {
-        players.remove(uuid);
+    public boolean remove(UUID uuid) {
+        return players.remove(uuid);
+    }
+
+    @Override
+    public boolean add(UUID uuid) {
+        return players.add(uuid);
     }
 }

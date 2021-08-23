@@ -39,14 +39,6 @@ public final class ChunkHolder {
     }
 
     // Getter/Setter
-    public Set<UUID> getTrustedAllChunks() {
-        return trustedAllChunks;
-    }
-
-    public Set<ChunkLocation> getClaimedChunks() {
-        return claimedChunks;
-    }
-
     public String getName() {
         return name;
     }
@@ -63,11 +55,6 @@ public final class ChunkHolder {
         this.uuid = uuid;
     }
 
-    @JsonIgnore
-    public int getClaimAmount() {
-        return claimedChunks.size();
-    }
-
     public boolean isPlayer() {
         return isPlayer;
     }
@@ -76,8 +63,37 @@ public final class ChunkHolder {
         isPlayer = player;
     }
 
+    public Set<UUID> getTrustedAllChunks() {
+        return trustedAllChunks;
+    }
+
+    public void setTrustedAllChunks(Set<UUID> trustedAllChunks) {
+        this.trustedAllChunks = trustedAllChunks;
+    }
+
+    public Set<ChunkLocation> getClaimedChunks() {
+        return claimedChunks;
+    }
+
+    public void setClaimedChunks(Set<ChunkLocation> claimedChunks) {
+        this.claimedChunks = claimedChunks;
+    }
+
+    public boolean isFallback() {
+        return fallback;
+    }
+
+    public void setFallback(boolean fallback) {
+        this.fallback = fallback;
+    }
+
     public boolean isNoFallback() {
         return !fallback;
+    }
+
+    @JsonIgnore
+    public int getClaimAmount() {
+        return claimedChunks.size();
     }
 
     @Override

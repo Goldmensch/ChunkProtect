@@ -1,4 +1,4 @@
-package de.goldmensch.chunkprotect.utils.functions;
+package de.goldmensch.chunkprotect.functions;
 
 @FunctionalInterface
 public interface ThrowingFunction<E extends Exception> {

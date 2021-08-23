@@ -1,7 +1,7 @@
-package de.goldmensch.chunkprotect.utils;
+package de.goldmensch.chunkprotect;
 
-import de.goldmensch.chunkprotect.utils.functions.ReturnThrowingFunction;
-import de.goldmensch.chunkprotect.utils.functions.ThrowingFunction;
+import de.goldmensch.chunkprotect.functions.ReturnThrowingFunction;
+import de.goldmensch.chunkprotect.functions.ThrowingFunction;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;

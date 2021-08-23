@@ -4,8 +4,8 @@ import de.goldmensch.chunkprotect.commands.subs.*;
 import de.goldmensch.chunkprotect.commands.subs.staff.BypassSub;
 import de.goldmensch.chunkprotect.commands.subs.staff.StaffUnclaimAllSub;
 import de.goldmensch.chunkprotect.commands.subs.staff.StaffUnclaimSub;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
-import de.goldmensch.chunkprotect.utils.message.MessageBuilder;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
+import de.goldmensch.chunkprotect.message.MessageBuilder;
 import de.goldmensch.commanddispatcher.command.ArgValuedSubCommand;
 import de.goldmensch.commanddispatcher.command.SmartCommand;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -18,23 +18,23 @@ import org.bukkit.command.CommandSender;
 
 public class ChunkProtectCommand extends SmartCommand {
 
-    private final ChunkProtect chunkProtect;
+    private final ChunkProtectPlugin chunkProtectPlugin;
 
-    public ChunkProtectCommand(ChunkProtect chunkProtect) {
-        this.chunkProtect = chunkProtect;
+    public ChunkProtectCommand(ChunkProtectPlugin chunkProtectPlugin) {
+        this.chunkProtectPlugin = chunkProtectPlugin;
 
-        registerSubCommand(AboutSub.newAboutSub(chunkProtect, this), "about");
-        registerSubCommand(new ClaimSub(chunkProtect, this), "claim");
-        registerSubCommand(new InfoSub(chunkProtect, this), "info");
-        registerSubCommand(new UnclaimSub(chunkProtect, this), "unclaim");
-        registerSubCommand(new TrustSub(chunkProtect, this), "trust");
-        registerSubCommand(new UntrustSub(chunkProtect, this), "untrust");
-        registerSubCommand(new UnclaimAllSub(chunkProtect, this), "unclaimAll");
-        registerSubCommand(new HelpSub(chunkProtect, this), "help");
+        registerSubCommand(AboutSub.newAboutSub(chunkProtectPlugin, this), "about");
+        registerSubCommand(new ClaimSub(chunkProtectPlugin, this), "claim");
+        registerSubCommand(new InfoSub(chunkProtectPlugin, this), "info");
+        registerSubCommand(new UnclaimSub(chunkProtectPlugin, this), "unclaim");
+        registerSubCommand(new TrustSub(chunkProtectPlugin, this), "trust");
+        registerSubCommand(new UntrustSub(chunkProtectPlugin, this), "untrust");
+        registerSubCommand(new UnclaimAllSub(chunkProtectPlugin, this), "unclaimAll");
+        registerSubCommand(new HelpSub(chunkProtectPlugin, this), "help");
 
-        registerSubCommand(new StaffUnclaimAllSub(chunkProtect, this), staff("unclaimAll"));
-        registerSubCommand(new BypassSub(chunkProtect, this), staff("bypass"));
-        registerSubCommand(new StaffUnclaimSub(chunkProtect, this), staff("unclaim"));
+        registerSubCommand(new StaffUnclaimAllSub(chunkProtectPlugin, this), staff("unclaimAll"));
+        registerSubCommand(new BypassSub(chunkProtectPlugin, this), staff("bypass"));
+        registerSubCommand(new StaffUnclaimSub(chunkProtectPlugin, this), staff("unclaim"));
     }
 
     private String[] staff(String... sub) {
@@ -59,15 +59,15 @@ public class ChunkProtectCommand extends SmartCommand {
 
     @Override
     public void noPermission(ArgValuedSubCommand argValuedSubCommand, CommandSender commandSender) {
-        String msg = chunkProtect.getServer().spigot().getPaperConfig().getString("messages.no-permission");
+        String msg = chunkProtectPlugin.getServer().spigot().getPaperConfig().getString("messages.no-permission");
         commandSender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(msg != null ? msg : "no message found"));
     }
 
     public void sendHelp(CommandSender sender) {
         MessageBuilder builder = MessageBuilder.builder();
-        builder.appendLine(chunkProtect.getMessenger().prepare("help-header"));
+        builder.appendLine(chunkProtectPlugin.getMessenger().prepare("help-header"));
         getAllSubFor(sender).keySet().forEach(cmd ->
-                builder.appendLine(chunkProtect.getMessenger()
+                builder.appendLine(chunkProtectPlugin.getMessenger()
                         .prepare("help-entry",
                                 Replacement.create("command",
                                         "/" + de.goldmensch.commanddispatcher.util.ArrayUtils.buildString(cmd))))

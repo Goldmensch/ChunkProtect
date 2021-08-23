@@ -2,7 +2,7 @@ package de.goldmensch.chunkprotect.commands.subs.staff;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,8 +14,8 @@ import java.util.List;
 
 public class BypassSub extends ChunkProtectSubCommand {
 
-    public BypassSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
-        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("stuff", "bypass"), chunkProtect, command);
+    public BypassSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand command) {
+        super(ExecutorLevel.PLAYER, chunkProtectPlugin.getPermission("stuff", "bypass"), chunkProtectPlugin, command);
     }
 
     @Override

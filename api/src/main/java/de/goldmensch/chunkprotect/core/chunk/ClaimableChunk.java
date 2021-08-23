@@ -4,16 +4,18 @@ import de.goldmensch.chunkprotect.ChunkLocation;
 
 import java.util.function.Consumer;
 
-public class ClaimableChunk {
+public final class ClaimableChunk {
 
     private final ClaimedChunk chunk;
+    private final ChunkLocation location;
 
-    public ClaimableChunk(ClaimedChunk chunk) {
+    public ClaimableChunk(ClaimedChunk chunk, ChunkLocation location) {
         this.chunk = chunk;
+        this.location = location;
     }
 
     public static ClaimableChunk forceClaimed(ChunkLocation location) {
-        return new ClaimableChunk(ClaimedChunk.forceClaimed(location));
+        return new ClaimableChunk(ClaimedChunk.forceClaimed(location), location);
     }
 
     public boolean isClaimed() {
@@ -36,5 +38,17 @@ public class ClaimableChunk {
 
     public ClaimedChunk getChunk() {
         return chunk;
+    }
+
+    public ChunkLocation getLocation() {
+        return location;
+    }
+
+    @Override
+    public String toString() {
+        return "ClaimableChunk{" +
+                "chunk=" + chunk +
+                ", location=" + location +
+                '}';
     }
 }

@@ -17,13 +17,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-package de.goldmensch.chunkprotect.utils.message;
+package de.goldmensch.chunkprotect.message;
 
 import java.util.List;
 
-public final class MessageUtils {
+public final class Messages {
 
-    private MessageUtils() {
+    private Messages() {
     }
 
     public static String formatList(List<String> list) {

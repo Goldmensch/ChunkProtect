@@ -2,9 +2,9 @@ package de.goldmensch.chunkprotect.commands.subs;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
-import de.goldmensch.chunkprotect.utils.message.MessageBuilder;
-import de.goldmensch.chunkprotect.utils.message.MessageUtils;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
+import de.goldmensch.chunkprotect.message.MessageBuilder;
+import de.goldmensch.chunkprotect.message.Messages;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
 import net.kyori.adventure.text.Component;
@@ -19,20 +19,20 @@ public final class AboutSub extends ChunkProtectSubCommand {
 
     private final Component message;
 
-    private AboutSub(ChunkProtect chunkProtect, ChunkProtectCommand chunkProtectCommand, Component message) {
-        super(ExecutorLevel.CONSOLE_PLAYER, "", chunkProtect, chunkProtectCommand);
+    private AboutSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand chunkProtectCommand, Component message) {
+        super(ExecutorLevel.CONSOLE_PLAYER, "", chunkProtectPlugin, chunkProtectCommand);
         this.message = message;
     }
 
-    public static AboutSub newAboutSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
-        return new AboutSub(chunkProtect, command, MessageBuilder.builder()
-                .appendLine(chunkProtect.getMessenger()
-                        .prepare("about-name", Replacement.create("name", chunkProtect.getName())))
-                .appendLine(chunkProtect.getMessenger()
-                        .prepare("about-version", Replacement.create("version", chunkProtect.getDescription().getVersion())))
-                .appendLine(chunkProtect.getMessenger()
+    public static AboutSub newAboutSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand command) {
+        return new AboutSub(chunkProtectPlugin, command, MessageBuilder.builder()
+                .appendLine(chunkProtectPlugin.getMessenger()
+                        .prepare("about-name", Replacement.create("name", chunkProtectPlugin.getName())))
+                .appendLine(chunkProtectPlugin.getMessenger()
+                        .prepare("about-version", Replacement.create("version", chunkProtectPlugin.getDescription().getVersion())))
+                .appendLine(chunkProtectPlugin.getMessenger()
                         .prepare("about-authors", Replacement.create("authors",
-                                MessageUtils.formatList(chunkProtect.getDescription().getAuthors()))))
+                                Messages.formatList(chunkProtectPlugin.getDescription().getAuthors()))))
                 .build()
         );
     }

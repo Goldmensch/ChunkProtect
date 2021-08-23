@@ -2,7 +2,7 @@ package de.goldmensch.chunkprotect.commands.subs;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -16,8 +16,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class UnclaimAllSub extends ChunkProtectSubCommand {
 
-    public UnclaimAllSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
-        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("unclaimAll"), chunkProtect, command);
+    public UnclaimAllSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand command) {
+        super(ExecutorLevel.PLAYER, chunkProtectPlugin.getPermission("unclaimAll"), chunkProtectPlugin, command);
     }
 
     @Override

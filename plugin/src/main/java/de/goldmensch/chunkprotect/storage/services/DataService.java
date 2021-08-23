@@ -1,7 +1,7 @@
 package de.goldmensch.chunkprotect.storage.services;
 
 import com.jsoniter.spi.JsoniterSpi;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.storage.cache.Cache;
 import de.goldmensch.chunkprotect.storage.dao.chunk.ChunkDao;
 import de.goldmensch.chunkprotect.storage.dao.chunk.JsonChunkDao;
@@ -20,7 +20,7 @@ public class DataService extends ChunkService {
         super(cache, holderDao, chunkDao);
     }
 
-    public static DataService loadService(ChunkProtect protect) throws IOException {
+    public static DataService loadService(ChunkProtectPlugin protect) throws IOException {
         Path path = protect.getDataFolder().toPath().resolve("data");
         JsoniterSpi.registerTypeEncoder(UUID.class, (obj, stream) -> stream.writeVal(obj.toString()));
         JsoniterSpi.registerTypeDecoder(UUID.class, iter -> UUID.fromString(iter.readString()));
@@ -33,7 +33,9 @@ public class DataService extends ChunkService {
     }
 
     private void initWriteScheduler(Plugin plugin, int interval) {
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> saveAll(false), 0, interval * 60 * 20L);
+        plugin.getServer()
+                .getScheduler()
+                .runTaskTimerAsynchronously(plugin, () -> saveAll(false), 0, interval * 60 * 20L);
     }
 
     public void saveAll(boolean invalidate) {
@@ -41,7 +43,7 @@ public class DataService extends ChunkService {
             if (invalidate) {
                 writeAndInvalidate(entry.getKey());
             } else {
-                write(entry.getValue(), entry.getKey());
+                write(entry.getValue());
             }
         });
 
@@ -53,5 +55,9 @@ public class DataService extends ChunkService {
                 cache.invalidate(entry.getKey());
             }
         });
+    }
+
+    public Cache getCache() {
+        return cache;
     }
 }

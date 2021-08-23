@@ -16,17 +16,18 @@ public class HolderService {
         this.holderDao = holderDao;
     }
 
-    public void setupHolder(UUID uuid, String name, boolean player) {
+    public boolean setupHolder(UUID uuid, String name, boolean player) {
         ChunkHolder holder;
 
         var holderOptional = holderDao.read(uuid);
         if (holderOptional.isPresent()) {
             holder = holderOptional.get();
-            holder.setName(name);
+            if(name != null) holder.setName(name);
         } else {
             holder = new ChunkHolder(name, uuid, player);
         }
-        updateHolder(holder);
+        cache.set(holder);
+        return holderOptional.isEmpty();
     }
 
     public void saveHolder(UUID uuid) {
@@ -34,10 +35,6 @@ public class HolderService {
         if (holder.isNoFallback()) {
             holderDao.write(holder);
         }
-    }
-
-    public void updateHolder(ChunkHolder holder) {
-        cache.set(holder);
     }
 
     public ChunkHolder holderFromUUID(UUID uuid) {

@@ -1,9 +1,9 @@
 package de.goldmensch.chunkprotect.listener.protect;
 
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 
 public class ProtectListeners extends InteractProtectListener {
-    public ProtectListeners(ChunkProtect chunkProtect) {
-        super(chunkProtect.getDataService(), chunkProtect);
+    public ProtectListeners(ChunkProtectPlugin chunkProtectPlugin) {
+        super(chunkProtectPlugin.getDataService(), chunkProtectPlugin);
     }
 }

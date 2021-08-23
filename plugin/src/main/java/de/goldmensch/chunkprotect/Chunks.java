@@ -1,7 +1,5 @@
-package de.goldmensch.chunkprotect.utils;
+package de.goldmensch.chunkprotect;
 
-import de.goldmensch.chunkprotect.core.ChunkProtect;
-import de.goldmensch.chunkprotect.ChunkLocation;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.message.Messenger;
@@ -13,9 +11,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public final class ChunkUtil {
+public final class Chunks {
 
-    private ChunkUtil() {
+    private Chunks() {
     }
 
     public static boolean isHolder(ClaimedChunk chunk, UUID holder) {
@@ -43,14 +41,14 @@ public final class ChunkUtil {
         return first.getHolderUUID().equals(second.getHolderUUID());
     }
 
-    public static boolean isClaimedAndHolder(ClaimableChunk chunk, Player sender, ChunkProtect protect) {
+    public static boolean isClaimedAndHolder(ClaimableChunk chunk, Player sender, ChunkProtectPlugin protect) {
         Messenger messenger = protect.getMessenger();
         if (!chunk.isClaimed()) {
             messenger.send(sender, "chunk-not-claimed");
             return true;
         }
         ClaimedChunk claimedChunk = chunk.getChunk();
-        if (!ChunkUtil.isHolder(claimedChunk, sender.getUniqueId())) {
+        if (!Chunks.isHolder(claimedChunk, sender.getUniqueId())) {
             messenger.send(sender, "not-owner-from-chunk", Replacement.create("holder",
                     claimedChunk.getHolder().getName()));
             return true;

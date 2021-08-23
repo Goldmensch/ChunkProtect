@@ -1,6 +1,6 @@
 package de.goldmensch.chunkprotect.listener;
 
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.ChunkLocation;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import org.bukkit.event.EventHandler;
@@ -15,7 +15,7 @@ public class ChunkLoadListener implements Listener {
     private final ExecutorService executorService;
     private final DataService dataService;
 
-    public ChunkLoadListener(ChunkProtect protect) {
+    public ChunkLoadListener(ChunkProtectPlugin protect) {
         executorService = protect.getService();
         dataService = protect.getDataService();
     }

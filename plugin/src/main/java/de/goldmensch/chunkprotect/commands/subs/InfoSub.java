@@ -2,12 +2,12 @@ package de.goldmensch.chunkprotect.commands.subs;
 
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
-import de.goldmensch.chunkprotect.utils.ChunkUtil;
-import de.goldmensch.chunkprotect.utils.message.MessageBuilder;
+import de.goldmensch.chunkprotect.Chunks;
+import de.goldmensch.chunkprotect.message.MessageBuilder;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
 import org.bukkit.Bukkit;
@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 
 public class InfoSub extends ChunkProtectSubCommand {
 
-    public InfoSub(ChunkProtect chunkProtect, ChunkProtectCommand command) {
-        super(ExecutorLevel.PLAYER, chunkProtect.getPermission("info"), chunkProtect, command);
+    public InfoSub(ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand command) {
+        super(ExecutorLevel.PLAYER, chunkProtectPlugin.getPermission("info"), chunkProtectPlugin, command);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class InfoSub extends ChunkProtectSubCommand {
             return true;
         }
 
-        ClaimableChunk claimableChunk = ChunkUtil.chunkFromSenderUnsafe(sender, getDataService());
+        ClaimableChunk claimableChunk = Chunks.chunkFromSenderUnsafe(sender, getDataService());
         if (claimableChunk.isClaimed()) {
             ClaimedChunk chunk = claimableChunk.getChunk();
 

@@ -1,6 +1,6 @@
 package de.goldmensch.chunkprotect.listener;
 
-import de.goldmensch.chunkprotect.core.ChunkProtect;
+import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.storage.services.DataService;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,9 +14,9 @@ public class PlayerJoinQuitListener implements Listener {
 
     private final DataService dataService;
     private final ExecutorService executorService;
-    private final ChunkProtect protect;
+    private final ChunkProtectPlugin protect;
 
-    public PlayerJoinQuitListener(ChunkProtect protect) {
+    public PlayerJoinQuitListener(ChunkProtectPlugin protect) {
         this.dataService = protect.getDataService();
         this.executorService = protect.getService();
         this.protect = protect;

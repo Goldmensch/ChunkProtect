@@ -1,4 +1,4 @@
-package de.goldmensch.chunkprotect.utils.message;
+package de.goldmensch.chunkprotect.message;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
