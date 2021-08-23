@@ -9,6 +9,7 @@ import de.goldmensch.chunkprotect.configuration.plugin.PluginConfig;
 import de.goldmensch.chunkprotect.configuration.protection.ProtectionConfig;
 import de.goldmensch.chunkprotect.listener.ChunkLoadListener;
 import de.goldmensch.chunkprotect.listener.PlayerJoinQuitListener;
+import de.goldmensch.chunkprotect.listener.PlayerMoveListener;
 import de.goldmensch.chunkprotect.listener.protect.ProtectListeners;
 import de.goldmensch.chunkprotect.message.IMessenger;
 import de.goldmensch.chunkprotect.message.Messenger;
@@ -43,7 +44,8 @@ public class ChunkProtectPlugin extends SmartPlugin {
 
         registerListener(new PlayerJoinQuitListener(this),
                 new ProtectListeners(this),
-                new ChunkLoadListener(this));
+                new ChunkLoadListener(this),
+                new PlayerMoveListener(this));
 
         registerCommand("chunkprotect", new ChunkProtectCommand(this));
 

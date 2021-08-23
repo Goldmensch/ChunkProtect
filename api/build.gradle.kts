@@ -14,7 +14,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
     implementation("com.jsoniter", "jsoniter", "0.9.19")
-    implementation("de.goldmensch.smartutils", "core", "1.1-DEV")
+    implementation("de.goldmensch.smartutils", "core", "1.1.1-DEV")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")

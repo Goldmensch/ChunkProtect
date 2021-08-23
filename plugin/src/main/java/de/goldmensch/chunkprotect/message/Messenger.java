@@ -43,7 +43,7 @@ public final class Messenger implements IMessenger {
 
         SmartLocalizer<Component> localizer = SmartLocalizer.newLocalizer(Locale.ENGLISH, adapter)
                 .fromReader(ResourceBundleReader.fromPropertiesFile(path));
-
+        localizer.getLocalizationMap().entrySet().forEach(System.out::println);
         return new Messenger(localizer.localize("prefix"), localizer, actionBar);
     }
 
