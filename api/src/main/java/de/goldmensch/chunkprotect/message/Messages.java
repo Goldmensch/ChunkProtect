@@ -23,18 +23,18 @@ import java.util.List;
 
 public final class Messages {
 
-    private Messages() {
-    }
+  private Messages() {
+  }
 
-    public static String formatList(List<String> list) {
-        StringBuilder formattedList = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            formattedList.append(list.get(i));
-            if ((i + 1) != list.size()) {
-                formattedList.append(", ");
-            }
-        }
-        return formattedList.toString();
+  public static String formatList(List<String> list) {
+    var formattedList = new StringBuilder();
+    for (var i = 0; i < list.size(); i++) {
+      formattedList.append(list.get(i));
+      if ((i + 1) != list.size()) {
+        formattedList.append(", ");
+      }
     }
+    return formattedList.toString();
+  }
 
 }

@@ -8,29 +8,31 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TestPlugin extends JavaPlugin implements Listener {
-    private ChunkProtect chunkProtect;
 
-    @Override
-    public void onEnable() {
-        RegisteredServiceProvider<ChunkProtect> chunkProtectProvider = getServer().getServicesManager().getRegistration(ChunkProtect.class);
+  private ChunkProtect chunkProtect;
 
-        if(chunkProtectProvider == null) {
-            getLogger().severe("API not found!");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-        chunkProtect = chunkProtectProvider.getProvider();
+  @Override
+  public void onEnable() {
+    RegisteredServiceProvider<ChunkProtect> chunkProtectProvider = getServer().getServicesManager()
+        .getRegistration(ChunkProtect.class);
 
-        getCommand("testChunk").setExecutor(new TestCommand(this));
-        getServer().getPluginManager().registerEvents(this, this);
+    if (chunkProtectProvider == null) {
+      getLogger().severe("API not found!");
+      getServer().getPluginManager().disablePlugin(this);
+      return;
     }
+    chunkProtect = chunkProtectProvider.getProvider();
 
-    public ChunkProtect getChunkProtect() {
-        return chunkProtect;
-    }
+    getCommand("testChunk").setExecutor(new TestCommand(this));
+    getServer().getPluginManager().registerEvents(this, this);
+  }
 
-    @EventHandler
-    public void handleClaim(ChunkClaimEvent event) {
-        event.setCancelled(true);
-    }
+  public ChunkProtect getChunkProtect() {
+    return chunkProtect;
+  }
+
+  @EventHandler
+  public void handleClaim(ChunkClaimEvent event) {
+    event.setCancelled(true);
+  }
 }

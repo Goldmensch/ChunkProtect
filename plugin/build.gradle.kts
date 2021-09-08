@@ -11,14 +11,14 @@ java.targetCompatibility = JavaVersion.VERSION_16
 
 repositories {
     mavenCentral()
-    maven("https://eldonexus.de/repository/maven-public")
+    maven("https://eldonexus.de/repository/maven-public/")
     maven("https://papermc.io/repo/repository/maven-public/")
 }
 
 dependencies {
     implementation(project(":api"))
+
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
-    implementation("com.jsoniter", "jsoniter", "0.9.19")
     implementation("de.goldmensch.smartutils", "core", "1.1.1-DEV")
     implementation("de.goldmensch", "SmartCommandDispatcher", "1.0.5-DEV")
     implementation("de.goldmensch.smartutils", "minimessage-adapter", "1.1-DEV")
@@ -28,6 +28,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("com.google.code.gson:gson:2.8.7")
     testImplementation("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    testImplementation("com.fasterxml.jackson.dataformat", "jackson-dataformat-yaml", "2.11.1")
 }
 
 tasks {
@@ -46,7 +47,8 @@ tasks {
 
     shadowJar {
         archiveBaseName.set("ChunkProtect")
-        relocateAll("de.goldmensch.smartutils.core",
+        relocateAll(
+                "de.goldmensch.smartutils.core",
                 "de.goldmensch.commanddispatcher",
                 "de.goldmensch.smartutils",
                 "com.fasterxml.jackson",

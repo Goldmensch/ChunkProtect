@@ -5,24 +5,25 @@ import de.goldmensch.chunkprotect.configuration.protection.elements.Entity;
 import de.goldmensch.chunkprotect.configuration.protection.elements.Other;
 
 public class ProtectionFile {
-    private int version = 1;
-    private Block block = new Block();
-    private Entity entity = new Entity();
-    private Other other = new Other();
 
-    public Block getBlock() {
-        return block;
-    }
+  private int version = 1;
+  private Block block = new Block();
+  private Entity entity = new Entity();
+  private Other other = new Other();
 
-    public Entity getEntity() {
-        return entity;
-    }
+  public Block getBlock() {
+    return block;
+  }
 
-    public Other getOther() {
-        return other;
-    }
+  public Entity getEntity() {
+    return entity;
+  }
 
-    public int getVersion() {
-        return version;
-    }
+  public Other getOther() {
+    return other;
+  }
+
+  public int getVersion() {
+    return version;
+  }
 }

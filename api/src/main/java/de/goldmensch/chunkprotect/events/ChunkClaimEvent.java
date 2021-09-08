@@ -6,29 +6,30 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 public class ChunkClaimEvent extends ChunkEvent {
-    private static final HandlerList handlerList = new HandlerList();
-    private final ChunkHolder holder;
-    private final ChunkLocation location;
 
-    public ChunkClaimEvent(ChunkHolder holder, ChunkLocation location) {
-        this.holder = holder;
-        this.location = location;
-    }
+  private static final HandlerList handlerList = new HandlerList();
+  private final ChunkHolder holder;
+  private final ChunkLocation location;
 
-    public ChunkHolder getHolder() {
-        return holder;
-    }
+  public ChunkClaimEvent(ChunkHolder holder, ChunkLocation location) {
+    this.holder = holder;
+    this.location = location;
+  }
 
-    public ChunkLocation getLocation() {
-        return location;
-    }
+  public static HandlerList getHandlerList() {
+    return handlerList;
+  }
 
-    @Override
-    public @NotNull HandlerList getHandlers() {
-        return handlerList;
-    }
+  public ChunkHolder getHolder() {
+    return holder;
+  }
 
-    public static HandlerList getHandlerList() {
-        return handlerList;
-    }
+  public ChunkLocation getLocation() {
+    return location;
+  }
+
+  @Override
+  public @NotNull HandlerList getHandlers() {
+    return handlerList;
+  }
 }

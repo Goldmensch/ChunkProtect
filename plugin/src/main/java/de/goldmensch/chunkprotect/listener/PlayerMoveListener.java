@@ -11,30 +11,35 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class PlayerMoveListener implements Listener {
-    private final ChunkProtectPlugin chunkProtect;
 
-    public PlayerMoveListener(ChunkProtectPlugin chunkProtectPlugin) {
-        this.chunkProtect = chunkProtectPlugin;
-    }
+  private final ChunkProtectPlugin chunkProtect;
 
-    @EventHandler
-    public void handlePlayerMove(PlayerMoveEvent event) {
-        if(event.getFrom().getChunk() != event.getTo().getChunk()
-                && chunkProtect.getConfigFile().getNotification().isOnEnterClaim()) {
+  public PlayerMoveListener(ChunkProtectPlugin chunkProtectPlugin) {
+    this.chunkProtect = chunkProtectPlugin;
+  }
 
-            Player player = event.getPlayer();
-            ClaimableChunk from = Chunks.getChunk(event.getFrom().getChunk(), chunkProtect.getDataService());
-            ClaimableChunk to = Chunks.getChunk(event.getTo().getChunk(), chunkProtect.getDataService());
+  @EventHandler
+  public void handlePlayerMove(PlayerMoveEvent event) {
+    if (event.getFrom().getChunk() != event.getTo().getChunk()
+        && chunkProtect.getConfigFile().getNotification().isOnEnterClaim()) {
 
-            if(to.isClaimed()) {
-                ClaimedChunk toChunk = to.getChunk();
-                if(from.isClaimed() && Chunks.sameHolder(toChunk, from.getChunk())) return;
-                sendEnterMessage(player, toChunk.getHolder().getName());
-             }
+      var player = event.getPlayer();
+      ClaimableChunk from = Chunks.getChunk(event.getFrom().getChunk(),
+          chunkProtect.getDataService());
+      ClaimableChunk to = Chunks.getChunk(event.getTo().getChunk(), chunkProtect.getDataService());
+
+      if (to.isClaimed()) {
+        ClaimedChunk toChunk = to.getChunk();
+        if (from.isClaimed() && Chunks.sameHolder(toChunk, from.getChunk())) {
+          return;
         }
+        sendEnterMessage(player, toChunk.getHolder().getName());
+      }
     }
+  }
 
-    private void sendEnterMessage(Player player, String holder) {
-        player.sendActionBar(chunkProtect.getMessenger().prepare("player.enterChunk", Replacement.create("player", holder)));
-    }
+  private void sendEnterMessage(Player player, String holder) {
+    player.sendActionBar(chunkProtect.getMessenger()
+        .prepare("player.enterChunk", Replacement.create("player", holder)));
+  }
 }

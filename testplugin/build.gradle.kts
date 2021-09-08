@@ -8,6 +8,7 @@ version = "1.0"
 repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://eldonexus.de/repository/maven-public")
 }
 
 dependencies {

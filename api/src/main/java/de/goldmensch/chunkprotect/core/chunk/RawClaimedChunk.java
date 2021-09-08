@@ -1,70 +1,71 @@
 package de.goldmensch.chunkprotect.core.chunk;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Sets;
 import de.goldmensch.chunkprotect.ChunkLocation;
-
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 public class RawClaimedChunk {
-    private ChunkLocation location; // no default value
-    private UUID holderUUID; // no default value
-    private Set<UUID> trustedPlayer = new HashSet<>(); //default empty list
 
-    public RawClaimedChunk(ChunkLocation location, UUID holderUUID, Set<UUID> trustedPlayer) {
-        this.location = location;
-        this.holderUUID = holderUUID;
-        this.trustedPlayer = trustedPlayer;
-    }
+  private final ChunkLocation location;
+  private final UUID holderUUID;
+  private final Set<UUID> trustedPlayer;
 
-    public RawClaimedChunk() {
-    }
+  @JsonCreator
+  @ApiStatus.AvailableSince("1.0")
+  public RawClaimedChunk(@JsonProperty("location") @NotNull ChunkLocation location,
+                         @JsonProperty("holderUUID") @NotNull UUID holderUUID,
+                         @JsonProperty("trustedPlayer") Set<UUID> trustedPlayer) {
 
-    // Getter/Setter
-    public ChunkLocation getLocation() {
-        return location;
-    }
+    Objects.requireNonNull(location);
+    Objects.requireNonNull(holderUUID);
 
-    public void setLocation(ChunkLocation location) {
-        this.location = location;
-    }
+    this.location = location;
+    this.holderUUID = holderUUID;
+    this.trustedPlayer = Objects.requireNonNullElse(Sets.newConcurrentHashSet(trustedPlayer),
+        Sets.newConcurrentHashSet());
+  }
 
-    public Set<UUID> getTrustedPlayer() {
-        return trustedPlayer;
-    }
+  public @NotNull ChunkLocation getLocation() {
+    return location;
+  }
 
-    public void setTrustedPlayer(Set<UUID> trustedPlayer) {
-        this.trustedPlayer = trustedPlayer;
-    }
+  public @NotNull Set<UUID> getTrustedPlayer() {
+    return trustedPlayer;
+  }
 
-    public UUID getHolderUUID() {
-        return holderUUID;
-    }
+  public @NotNull UUID getHolderUUID() {
+    return holderUUID;
+  }
 
-    public void setHolderUUID(UUID holder) {
-        this.holderUUID = holder;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    var that = (RawClaimedChunk) o;
+    return Objects.equals(location, that.location) &&
+        Objects.equals(holderUUID, that.holderUUID) &&
+        Objects.equals(trustedPlayer, that.trustedPlayer);
+  }
 
-    //Object stuff
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var rawClaimedChunk = (RawClaimedChunk) obj;
-        return Objects.equals(this.location, rawClaimedChunk.location) &&
-                Objects.equals(this.holderUUID, rawClaimedChunk.holderUUID);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(location, holderUUID, trustedPlayer);
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(location, holderUUID);
-    }
-
-    @Override
-    public String toString() {
-        return "ClaimedChunk[" +
-                "location=" + location + ", " +
-                "holder=" + holderUUID + ']';
-    }
+  @Override
+  public String toString() {
+    return "ClaimedChunk[" +
+        "location=" + location + ", " +
+        "holder=" + holderUUID + ']';
+  }
 }

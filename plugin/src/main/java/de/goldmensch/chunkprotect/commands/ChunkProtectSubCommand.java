@@ -10,32 +10,34 @@ import org.bukkit.entity.Player;
 
 public abstract class ChunkProtectSubCommand extends SmartSubCommand {
 
-    private final ChunkProtectPlugin chunkProtectPlugin;
-    private final ChunkProtectCommand chunkProtectCommand;
+  private final ChunkProtectPlugin chunkProtectPlugin;
+  private final ChunkProtectCommand chunkProtectCommand;
 
-    protected ChunkProtectSubCommand(ExecutorLevel executorLevel, String permission, ChunkProtectPlugin chunkProtectPlugin, ChunkProtectCommand chunkProtectCommand) {
-        super(executorLevel, permission);
-        this.chunkProtectPlugin = chunkProtectPlugin;
-        this.chunkProtectCommand = chunkProtectCommand;
-    }
+  protected ChunkProtectSubCommand(ExecutorLevel executorLevel, String permission,
+                                   ChunkProtectPlugin chunkProtectPlugin,
+                                   ChunkProtectCommand chunkProtectCommand) {
+    super(executorLevel, permission);
+    this.chunkProtectPlugin = chunkProtectPlugin;
+    this.chunkProtectCommand = chunkProtectCommand;
+  }
 
-    public ChunkProtectPlugin getChunkProtect() {
-        return chunkProtectPlugin;
-    }
+  public ChunkProtectPlugin getChunkProtect() {
+    return chunkProtectPlugin;
+  }
 
-    public DataService getDataService() {
-        return chunkProtectPlugin.getDataService();
-    }
+  public DataService getDataService() {
+    return chunkProtectPlugin.getDataService();
+  }
 
-    public IMessenger getMessenger() {
-        return chunkProtectPlugin.getMessenger();
-    }
+  public IMessenger getMessenger() {
+    return chunkProtectPlugin.getMessenger();
+  }
 
-    public Player toPlayer(CommandSender sender) {
-        return (Player) sender;
-    }
+  public Player toPlayer(CommandSender sender) {
+    return (Player) sender;
+  }
 
-    public ChunkProtectCommand getChunkProtectCommand() {
-        return chunkProtectCommand;
-    }
+  public ChunkProtectCommand getChunkProtectCommand() {
+    return chunkProtectCommand;
+  }
 }
