@@ -1,0 +1,11 @@
+name: ChunkProtect
+author: goldmensch
+main: de.goldmensch.chunkprotect.ChunkProtectPlugin
+version: ${version}
+api-version: 1.16
+
+commands:
+  chunkprotect:
+    description: Main command of the ChunkProtect Plugin
+    aliases:
+      - chunk

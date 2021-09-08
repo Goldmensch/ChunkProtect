@@ -1,0 +1,9 @@
+name: ChunkProtectTestPlugin
+main: de.goldmensch.chunkprotect.testplugin.TestPlugin
+version: 1.0
+depend:
+  - ChunkProtect
+
+commands:
+  testChunk:
+    description: Test command for the ChunkProtect API
