@@ -1,94 +1,89 @@
 package de.goldmensch.chunkprotect.core.holder;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Sets;
 import de.goldmensch.chunkprotect.ChunkLocation;
-import java.util.HashSet;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public final class ChunkHolder {
 
-  private String name; // no default value
-  private UUID uuid; // no default value
-  private boolean isPlayer; // no default value
-  private Set<UUID> trustedAllChunks = new HashSet<>();
-  private Set<ChunkLocation> claimedChunks = ConcurrentHashMap.newKeySet();
-  @JsonIgnore
-  private boolean fallback;
+  private String name;
+  private final UUID uuid;
+  private final boolean isPlayer;
+  private final Set<UUID> trustedAllChunks = Sets.newConcurrentHashSet();
+  private final Set<ChunkLocation> claimedChunks = Sets.newConcurrentHashSet();
+  private final boolean fallback;
 
-  public ChunkHolder(String name, UUID uuid, boolean isPlayer) {
-    this.name = name;
-    this.uuid = uuid;
-    this.isPlayer = isPlayer;
+  @JsonCreator
+  public ChunkHolder(@JsonProperty("name") String name,
+                     @JsonProperty("uuid") UUID uuid,
+                     @JsonProperty("isPlayer") boolean isPlayer) {
+
+    this(name, uuid, isPlayer, false);
   }
 
-  public ChunkHolder(String name, UUID uuid, boolean isPlayer, boolean fallback) {
+  public ChunkHolder(@NotNull String name, @NotNull UUID uuid, boolean isPlayer, boolean fallback) {
+    Objects.requireNonNull(name);
+    Objects.requireNonNull(uuid);
+
     this.name = name;
     this.uuid = uuid;
     this.isPlayer = isPlayer;
     this.fallback = fallback;
   }
-
-  public ChunkHolder() {
-  } // for json
 
   public static ChunkHolder fallback(UUID uuid) {
     return new ChunkHolder(uuid.toString(), uuid, false, true);
   }
 
-  // Getter/Setter
+  public boolean updateName(@NotNull String newName) {
+    Objects.requireNonNull(newName);
+    var updated = !newName.equals(name);
+    if (updated) {
+      name = newName;
+    }
+    return updated;
+  }
+
+  @NotNull
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
+  @NotNull
   public UUID getUuid() {
     return uuid;
   }
 
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
-  }
-
+  @JsonProperty("isPlayer")
   public boolean isPlayer() {
     return isPlayer;
   }
 
-  public void setPlayer(boolean player) {
-    isPlayer = player;
-  }
-
-  public Set<UUID> getTrustedAllChunks() {
-    return trustedAllChunks;
-  }
-
-  public void setTrustedAllChunks(Set<UUID> trustedAllChunks) {
-    this.trustedAllChunks = trustedAllChunks;
-  }
-
-  public Set<ChunkLocation> getClaimedChunks() {
-    return claimedChunks;
-  }
-
-  public void setClaimedChunks(Set<ChunkLocation> claimedChunks) {
-    this.claimedChunks = claimedChunks;
-  }
-
+  @JsonIgnore
   public boolean isFallback() {
     return fallback;
   }
 
-  public void setFallback(boolean fallback) {
-    this.fallback = fallback;
+  @JsonIgnore
+  public boolean noFallback() {
+    return !fallback;
   }
 
-  public boolean isNoFallback() {
-    return !fallback;
+  @NotNull
+  public Set<UUID> getTrustedAllChunks() {
+    return trustedAllChunks;
+  }
+
+  @NotNull
+  public Set<ChunkLocation> getClaimedChunks() {
+    return claimedChunks;
   }
 
   @JsonIgnore
@@ -104,17 +99,18 @@ public final class ChunkHolder {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChunkHolder that = (ChunkHolder) o;
-    return isPlayer == that.isPlayer && fallback == that.fallback && Objects.equals(name, that.name)
-        &&
-        Objects.equals(uuid, that.uuid) && Objects.equals(trustedAllChunks, that.trustedAllChunks)
-        &&
-        Objects.equals(claimedChunks, that.claimedChunks);
+    var that = (ChunkHolder) o;
+    return isPlayer == that.isPlayer &&
+            fallback == that.fallback &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(uuid, that.uuid) &&
+            Objects.equals(trustedAllChunks, that.trustedAllChunks) &&
+            Objects.equals(claimedChunks, that.claimedChunks);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, uuid, isPlayer, trustedAllChunks, claimedChunks);
+    return Objects.hash(name, uuid, isPlayer, trustedAllChunks, claimedChunks, fallback);
   }
 
   @Override

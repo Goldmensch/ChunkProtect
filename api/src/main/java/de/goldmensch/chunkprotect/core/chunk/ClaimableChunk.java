@@ -1,6 +1,8 @@
 package de.goldmensch.chunkprotect.core.chunk;
 
 import de.goldmensch.chunkprotect.ChunkLocation;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Consumer;
 
 public final class ClaimableChunk {
@@ -35,6 +37,7 @@ public final class ClaimableChunk {
     }
   }
 
+  @NotNull
   public ClaimedChunk getChunk() {
     return chunk;
   }

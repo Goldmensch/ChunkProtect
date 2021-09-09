@@ -6,6 +6,10 @@ import de.goldmensch.smartutils.localizer.SmartLocalizer;
 import de.goldmensch.smartutils.localizer.adapter.ComponentLocalizerAdapter;
 import de.goldmensch.smartutils.localizer.adapter.LocalizerAdapter;
 import de.goldmensch.smartutils.localizer.reader.resourcebundle.ResourceBundleReader;
+import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,9 +17,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.stream.Collectors;
-import net.kyori.adventure.text.Component;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
 
 public final class Messenger implements IMessenger {
 
@@ -44,20 +45,24 @@ public final class Messenger implements IMessenger {
 
     SmartLocalizer<Component> localizer = SmartLocalizer.newLocalizer(Locale.ENGLISH, adapter)
         .fromReader(ResourceBundleReader.fromPropertiesFile(path));
-    localizer.getLocalizationMap().entrySet().forEach(System.out::println);
     return new Messenger(localizer.localize("prefix"), localizer, actionBar);
   }
 
   private static void updateResources(Path path, String resource) throws IOException {
+
+    if (Files.notExists(path)) {
+      Files.createFile(path);
+    }
+
     Map<String, String> oldLocalizations = ResourceBundleReader.fromPropertiesFile(path)
-        .getLocalizations();
+            .getLocalizations();
     Map<String, String> newLocalizations = ResourceBundleReader.fromBundle(
-            new PropertyResourceBundle(Messenger.class.getResourceAsStream("/messages.properties")))
-        .getLocalizations();
+                    new PropertyResourceBundle(Messenger.class.getResourceAsStream("/messages.properties")))
+            .getLocalizations();
 
     oldLocalizations.entrySet()
-        .stream()
-        .filter(entry -> newLocalizations.containsKey(entry.getKey()))
+            .stream()
+            .filter(entry -> newLocalizations.containsKey(entry.getKey()))
         .forEach(entry -> newLocalizations.put(entry.getKey(), entry.getValue()));
 
     Files.write(path, newLocalizations.entrySet()

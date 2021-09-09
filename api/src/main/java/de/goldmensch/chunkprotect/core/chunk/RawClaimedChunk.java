@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
 import de.goldmensch.chunkprotect.ChunkLocation;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 public class RawClaimedChunk {
 
@@ -17,7 +17,6 @@ public class RawClaimedChunk {
   private final Set<UUID> trustedPlayer;
 
   @JsonCreator
-  @ApiStatus.AvailableSince("1.0")
   public RawClaimedChunk(@JsonProperty("location") @NotNull ChunkLocation location,
                          @JsonProperty("holderUUID") @NotNull UUID holderUUID,
                          @JsonProperty("trustedPlayer") Set<UUID> trustedPlayer) {
@@ -28,18 +27,21 @@ public class RawClaimedChunk {
     this.location = location;
     this.holderUUID = holderUUID;
     this.trustedPlayer = Objects.requireNonNullElse(Sets.newConcurrentHashSet(trustedPlayer),
-        Sets.newConcurrentHashSet());
+            Sets.newConcurrentHashSet());
   }
 
-  public @NotNull ChunkLocation getLocation() {
+  @NotNull
+  public ChunkLocation getLocation() {
     return location;
   }
 
-  public @NotNull Set<UUID> getTrustedPlayer() {
+  @NotNull
+  public Set<UUID> getTrustedPlayer() {
     return trustedPlayer;
   }
 
-  public @NotNull UUID getHolderUUID() {
+  @NotNull
+  public UUID getHolderUUID() {
     return holderUUID;
   }
 
@@ -64,8 +66,10 @@ public class RawClaimedChunk {
 
   @Override
   public String toString() {
-    return "ClaimedChunk[" +
-        "location=" + location + ", " +
-        "holder=" + holderUUID + ']';
+    return "RawClaimedChunk{" +
+            "location=" + location +
+            ", holderUUID=" + holderUUID +
+            ", trustedPlayer=" + trustedPlayer +
+            '}';
   }
 }
