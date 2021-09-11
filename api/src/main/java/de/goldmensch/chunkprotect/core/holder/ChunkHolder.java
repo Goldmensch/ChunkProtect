@@ -4,36 +4,33 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
+import de.goldmensch.chunkprotect.Checks;
 import de.goldmensch.chunkprotect.ChunkLocation;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public final class ChunkHolder {
 
-  private String name;
   private final UUID uuid;
   private final boolean isPlayer;
   private final Set<UUID> trustedAllChunks = Sets.newConcurrentHashSet();
   private final Set<ChunkLocation> claimedChunks = Sets.newConcurrentHashSet();
   private final boolean fallback;
+  private String name;
 
   @JsonCreator
-  public ChunkHolder(@JsonProperty("name") String name,
-                     @JsonProperty("uuid") UUID uuid,
+  public ChunkHolder(@JsonProperty("name") @NotNull String name,
+                     @JsonProperty("uuid") @NotNull UUID uuid,
                      @JsonProperty("isPlayer") boolean isPlayer) {
 
     this(name, uuid, isPlayer, false);
   }
 
   public ChunkHolder(@NotNull String name, @NotNull UUID uuid, boolean isPlayer, boolean fallback) {
-    Objects.requireNonNull(name);
-    Objects.requireNonNull(uuid);
-
-    this.name = name;
-    this.uuid = uuid;
+    this.name = Checks.notNull(name, "name");
+    this.uuid = Checks.notNull(uuid, "uuid");
     this.isPlayer = isPlayer;
     this.fallback = fallback;
   }
@@ -101,11 +98,11 @@ public final class ChunkHolder {
     }
     var that = (ChunkHolder) o;
     return isPlayer == that.isPlayer &&
-            fallback == that.fallback &&
-            Objects.equals(name, that.name) &&
-            Objects.equals(uuid, that.uuid) &&
-            Objects.equals(trustedAllChunks, that.trustedAllChunks) &&
-            Objects.equals(claimedChunks, that.claimedChunks);
+        fallback == that.fallback &&
+        Objects.equals(name, that.name) &&
+        Objects.equals(uuid, that.uuid) &&
+        Objects.equals(trustedAllChunks, that.trustedAllChunks) &&
+        Objects.equals(claimedChunks, that.claimedChunks);
   }
 
   @Override

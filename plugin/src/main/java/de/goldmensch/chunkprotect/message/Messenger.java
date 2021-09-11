@@ -6,10 +6,6 @@ import de.goldmensch.smartutils.localizer.SmartLocalizer;
 import de.goldmensch.smartutils.localizer.adapter.ComponentLocalizerAdapter;
 import de.goldmensch.smartutils.localizer.adapter.LocalizerAdapter;
 import de.goldmensch.smartutils.localizer.reader.resourcebundle.ResourceBundleReader;
-import net.kyori.adventure.text.Component;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,6 +13,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.stream.Collectors;
+import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
 
 public final class Messenger implements IMessenger {
 
@@ -55,14 +54,14 @@ public final class Messenger implements IMessenger {
     }
 
     Map<String, String> oldLocalizations = ResourceBundleReader.fromPropertiesFile(path)
-            .getLocalizations();
+        .getLocalizations();
     Map<String, String> newLocalizations = ResourceBundleReader.fromBundle(
-                    new PropertyResourceBundle(Messenger.class.getResourceAsStream("/messages.properties")))
-            .getLocalizations();
+            new PropertyResourceBundle(Messenger.class.getResourceAsStream("/messages.properties")))
+        .getLocalizations();
 
     oldLocalizations.entrySet()
-            .stream()
-            .filter(entry -> newLocalizations.containsKey(entry.getKey()))
+        .stream()
+        .filter(entry -> newLocalizations.containsKey(entry.getKey()))
         .forEach(entry -> newLocalizations.put(entry.getKey(), entry.getValue()));
 
     Files.write(path, newLocalizations.entrySet()

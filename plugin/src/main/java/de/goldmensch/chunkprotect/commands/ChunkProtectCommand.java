@@ -13,6 +13,7 @@ import de.goldmensch.chunkprotect.commands.subs.staff.BypassSub;
 import de.goldmensch.chunkprotect.commands.subs.staff.StaffUnclaimAllSub;
 import de.goldmensch.chunkprotect.commands.subs.staff.StaffUnclaimSub;
 import de.goldmensch.chunkprotect.message.MessageBuilder;
+import de.goldmensch.chunkprotect.message.Messages;
 import de.goldmensch.commanddispatcher.command.ArgValuedSubCommand;
 import de.goldmensch.commanddispatcher.command.SmartCommand;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -75,7 +76,7 @@ public class ChunkProtectCommand extends SmartCommand {
   }
 
   public void sendHelp(CommandSender sender) {
-    MessageBuilder builder = MessageBuilder.builder();
+    MessageBuilder builder = Messages.builder();
     builder.appendLine(chunkProtectPlugin.getMessenger().prepare("help.header"));
     getAllSubFor(sender).keySet().forEach(cmd ->
         builder.appendLine(chunkProtectPlugin.getMessenger()

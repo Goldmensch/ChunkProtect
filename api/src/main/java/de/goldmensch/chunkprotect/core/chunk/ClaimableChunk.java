@@ -1,18 +1,19 @@
 package de.goldmensch.chunkprotect.core.chunk;
 
+import de.goldmensch.chunkprotect.Checks;
 import de.goldmensch.chunkprotect.ChunkLocation;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class ClaimableChunk {
 
   private final ClaimedChunk chunk;
   private final ChunkLocation location;
 
-  public ClaimableChunk(ClaimedChunk chunk, ChunkLocation location) {
+  public ClaimableChunk(@Nullable ClaimedChunk chunk, @NotNull ChunkLocation location) {
     this.chunk = chunk;
-    this.location = location;
+    this.location = Checks.notNull(location, "location");
   }
 
   public static ClaimableChunk forceClaimed(ChunkLocation location) {
@@ -23,18 +24,21 @@ public final class ClaimableChunk {
     return chunk != null;
   }
 
-  public void ifClaimed(Consumer<ClaimedChunk> function) {
+  public boolean ifClaimed(Consumer<ClaimedChunk> function) {
     if (isClaimed()) {
       function.accept(chunk);
+      return true;
     }
+    return false;
   }
 
-  public void ifClaimedOr(Consumer<ClaimedChunk> function, Runnable or) {
+  public boolean ifClaimedOr(Consumer<ClaimedChunk> function, Runnable or) {
     if (isClaimed()) {
       function.accept(chunk);
-    } else {
-      or.run();
+      return true;
     }
+    or.run();
+    return false;
   }
 
   @NotNull
@@ -42,6 +46,7 @@ public final class ClaimableChunk {
     return chunk;
   }
 
+  @NotNull
   public ChunkLocation getLocation() {
     return location;
   }

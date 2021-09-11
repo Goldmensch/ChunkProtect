@@ -1,41 +1,41 @@
 package de.goldmensch.chunkprotect.core.chunk;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.goldmensch.chunkprotect.Checks;
 import de.goldmensch.chunkprotect.ChunkLocation;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public final class ClaimedChunk extends RawClaimedChunk {
 
   private static final ChunkHolder FORCE_HOLDER = new ChunkHolder("chunk_forceClaimed",
-          UUID.fromString("8534a7ba-9aa6-4bbe-a93a-3632a9781f53"),
-          false,
-          true);
+      UUID.fromString("8534a7ba-9aa6-4bbe-a93a-3632a9781f53"),
+      false,
+      true);
 
   private final ChunkHolder holder;
   private final boolean forceClaimed;
 
-  public ClaimedChunk(RawClaimedChunk chunk, ChunkHolder holder) {
-    super(chunk.getLocation(), chunk.getHolderUUID(), chunk.getTrustedPlayer());
-    this.holder = holder;
-    forceClaimed = false;
-  }
-
-  private ClaimedChunk(RawClaimedChunk chunk, ChunkHolder holder, boolean forceClaimed) {
-    super(chunk.getLocation(), chunk.getHolderUUID(), chunk.getTrustedPlayer());
-    this.holder = holder;
+  private ClaimedChunk(@NotNull RawClaimedChunk chunk, @NotNull ChunkHolder holder,
+                       boolean forceClaimed) {
+    super(Checks.notNull(chunk, "chunk").getLocation(), chunk.getHolderUUID(),
+        chunk.getTrustedPlayer());
+    this.holder = Checks.notNull(holder, "holder");
     this.forceClaimed = forceClaimed;
   }
 
-  public static ClaimedChunk forceClaimed(ChunkLocation location) {
+  public ClaimedChunk(@NotNull RawClaimedChunk chunk,
+                      @NotNull ChunkHolder holder) {
+    this(chunk, holder, false);
+  }
+
+  public static ClaimedChunk forceClaimed(@NotNull ChunkLocation location) {
     return new ClaimedChunk(
-            new RawClaimedChunk(location, FORCE_HOLDER.getUuid(), new HashSet<>()),
-            FORCE_HOLDER,
-            true
+        new RawClaimedChunk(location, FORCE_HOLDER.getUuid(), null),
+        FORCE_HOLDER,
+        true
     );
   }
 
@@ -63,7 +63,7 @@ public final class ClaimedChunk extends RawClaimedChunk {
     }
     var that = (ClaimedChunk) o;
     return forceClaimed == that.forceClaimed &&
-            Objects.equals(holder, that.holder);
+        Objects.equals(holder, that.holder);
   }
 
   @Override
@@ -74,8 +74,8 @@ public final class ClaimedChunk extends RawClaimedChunk {
   @Override
   public String toString() {
     return "ClaimedChunk{" +
-            "holder=" + holder +
-            ", forceClaimed=" + forceClaimed +
-            '}';
+        "holder=" + holder +
+        ", forceClaimed=" + forceClaimed +
+        '}';
   }
 }

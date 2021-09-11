@@ -7,7 +7,7 @@ import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
 import de.goldmensch.chunkprotect.core.chunk.ClaimableChunk;
 import de.goldmensch.chunkprotect.core.chunk.ClaimedChunk;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
-import de.goldmensch.chunkprotect.message.MessageBuilder;
+import de.goldmensch.chunkprotect.message.Messages;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
 import java.util.List;
@@ -40,7 +40,7 @@ public class InfoSub extends ChunkProtectSubCommand {
               getDataService().holderFromUUID(uuid).getName()).collect(Collectors.toSet()));
         }).thenAccept(infoValue -> {
           ChunkHolder holder = infoValue.getHolder();
-          sender.sendMessage(MessageBuilder.builder()
+          sender.sendMessage(Messages.builder()
               .appendLine(getMessenger()
                   .prepare("player.info.name", Replacement.create("name", holder.getName())))
               .appendLine(getMessenger()
@@ -69,7 +69,7 @@ public class InfoSub extends ChunkProtectSubCommand {
               chunk.getTrustedPlayer().stream().map(uuid ->
                   getDataService().holderFromUUID(uuid).getName()).collect(Collectors.toSet()),
           getChunkProtect().getService()).thenAccept(chunkHolders ->
-          sender.sendMessage(MessageBuilder.builder()
+          sender.sendMessage(Messages.builder()
               .appendLine(getMessenger()
                   .prepare("chunk.info.location",
                       Replacement.create("x", String.valueOf(chunk.getLocation().getX())),

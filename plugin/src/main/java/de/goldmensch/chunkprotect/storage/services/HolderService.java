@@ -3,7 +3,6 @@ package de.goldmensch.chunkprotect.storage.services;
 import de.goldmensch.chunkprotect.core.holder.ChunkHolder;
 import de.goldmensch.chunkprotect.storage.cache.Cache;
 import de.goldmensch.chunkprotect.storage.dao.holder.HolderDao;
-
 import java.util.UUID;
 
 public class HolderService {

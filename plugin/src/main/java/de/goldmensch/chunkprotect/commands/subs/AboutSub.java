@@ -3,7 +3,6 @@ package de.goldmensch.chunkprotect.commands.subs;
 import de.goldmensch.chunkprotect.ChunkProtectPlugin;
 import de.goldmensch.chunkprotect.commands.ChunkProtectCommand;
 import de.goldmensch.chunkprotect.commands.ChunkProtectSubCommand;
-import de.goldmensch.chunkprotect.message.MessageBuilder;
 import de.goldmensch.chunkprotect.message.Messages;
 import de.goldmensch.commanddispatcher.ExecutorLevel;
 import de.goldmensch.smartutils.localizer.Replacement;
@@ -26,7 +25,7 @@ public final class AboutSub extends ChunkProtectSubCommand {
 
   public static AboutSub newAboutSub(ChunkProtectPlugin chunkProtectPlugin,
                                      ChunkProtectCommand command) {
-    return new AboutSub(chunkProtectPlugin, command, MessageBuilder.builder()
+    return new AboutSub(chunkProtectPlugin, command, Messages.builder()
         .appendLine(chunkProtectPlugin.getMessenger()
             .prepare("about.name", Replacement.create("name", chunkProtectPlugin.getName())))
         .appendLine(chunkProtectPlugin.getMessenger()

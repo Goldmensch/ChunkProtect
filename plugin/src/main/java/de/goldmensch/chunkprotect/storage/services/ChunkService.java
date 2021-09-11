@@ -12,7 +12,6 @@ import de.goldmensch.chunkprotect.events.ChunkUnclaimEvent;
 import de.goldmensch.chunkprotect.storage.cache.Cache;
 import de.goldmensch.chunkprotect.storage.dao.chunk.ChunkDao;
 import de.goldmensch.chunkprotect.storage.dao.holder.HolderDao;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;

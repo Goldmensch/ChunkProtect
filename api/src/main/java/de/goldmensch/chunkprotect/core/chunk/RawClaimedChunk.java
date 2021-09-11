@@ -3,12 +3,12 @@ package de.goldmensch.chunkprotect.core.chunk;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
+import de.goldmensch.chunkprotect.Checks;
 import de.goldmensch.chunkprotect.ChunkLocation;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import org.jetbrains.annotations.NotNull;
 
 public class RawClaimedChunk {
 
@@ -20,14 +20,11 @@ public class RawClaimedChunk {
   public RawClaimedChunk(@JsonProperty("location") @NotNull ChunkLocation location,
                          @JsonProperty("holderUUID") @NotNull UUID holderUUID,
                          @JsonProperty("trustedPlayer") Set<UUID> trustedPlayer) {
-
-    Objects.requireNonNull(location);
-    Objects.requireNonNull(holderUUID);
-
-    this.location = location;
-    this.holderUUID = holderUUID;
-    this.trustedPlayer = Objects.requireNonNullElse(Sets.newConcurrentHashSet(trustedPlayer),
-            Sets.newConcurrentHashSet());
+    this.location = Checks.notNull(location, "location");
+    this.holderUUID = Checks.notNull(holderUUID, "holder uuid");
+    this.trustedPlayer = trustedPlayer != null
+        ? Sets.newConcurrentHashSet(trustedPlayer)
+        : Sets.newConcurrentHashSet();
   }
 
   @NotNull
@@ -67,9 +64,9 @@ public class RawClaimedChunk {
   @Override
   public String toString() {
     return "RawClaimedChunk{" +
-            "location=" + location +
-            ", holderUUID=" + holderUUID +
-            ", trustedPlayer=" + trustedPlayer +
-            '}';
+        "location=" + location +
+        ", holderUUID=" + holderUUID +
+        ", trustedPlayer=" + trustedPlayer +
+        '}';
   }
 }

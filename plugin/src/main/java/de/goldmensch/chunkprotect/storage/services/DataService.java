@@ -6,11 +6,10 @@ import de.goldmensch.chunkprotect.storage.dao.chunk.ChunkDao;
 import de.goldmensch.chunkprotect.storage.dao.chunk.JsonChunkDao;
 import de.goldmensch.chunkprotect.storage.dao.holder.HolderDao;
 import de.goldmensch.chunkprotect.storage.dao.holder.JsonHolderDao;
-import org.bukkit.plugin.Plugin;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.bukkit.plugin.Plugin;
 
 public class DataService extends ChunkService {
 

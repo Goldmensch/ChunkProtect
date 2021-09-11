@@ -5,10 +5,9 @@ import net.kyori.adventure.text.TextComponent;
 
 public class MessageBuilder {
 
-  private final TextComponent.Builder builder = Component.empty().toBuilder();
+  private final TextComponent.Builder builder = Component.text();
 
-  public static MessageBuilder builder() {
-    return new MessageBuilder();
+  MessageBuilder() {
   }
 
   public MessageBuilder appendLine(Component component) {

@@ -37,4 +37,7 @@ public final class Messages {
     return formattedList.toString();
   }
 
+  public static MessageBuilder builder() {
+    return new MessageBuilder();
+  }
 }

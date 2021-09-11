@@ -1,53 +1,44 @@
 package de.goldmensch.chunkprotect;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import org.bukkit.Chunk;
+import org.jetbrains.annotations.NotNull;
 
 public final class ChunkLocation {
 
-  private int x; // no default value
-  private int z; // no default value
-  private String world;
+  private final int x;
+  private final int z;
+  private final String world;
 
-  public ChunkLocation(int x, int z, String world) {
+  @JsonCreator
+  public ChunkLocation(@JsonProperty("x") int x,
+                       @JsonProperty("z") int z,
+                       @JsonProperty("world") @NotNull String world) {
     this.x = x;
     this.z = z;
-    this.world = world;
+    this.world = Checks.notNull(world, "world");
   }
 
-  public ChunkLocation() {
-  } // for json
-
-  public static ChunkLocation fromChunk(Chunk chunk) {
+  public static ChunkLocation fromChunk(@NotNull Chunk chunk) {
+    Checks.notNull(chunk, "chunk");
     return new ChunkLocation(chunk.getX(), chunk.getZ(), chunk.getWorld().getName());
   }
 
-  //Getter/Setter
   public int getX() {
     return x;
-  }
-
-  public void setX(int x) {
-    this.x = x;
   }
 
   public int getZ() {
     return z;
   }
 
-  public void setZ(int z) {
-    this.z = z;
-  }
-
+  @NotNull
   public String getWorld() {
     return world;
   }
 
-  public void setWorld(String world) {
-    this.world = world;
-  }
-
-  // Object stuff
   @Override
   public boolean equals(Object obj) {
     if (obj == this) {
@@ -64,7 +55,7 @@ public final class ChunkLocation {
 
   @Override
   public int hashCode() {
-    return Objects.hash(x, z);
+    return Objects.hash(x, z, world);
   }
 
   @Override
